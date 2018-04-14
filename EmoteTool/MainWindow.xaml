@@ -5,9 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmoteTool"
         mc:Ignorable="d"
+        WindowStyle="None"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
         <Button Click="ButtonBase_OnClick"/>
-        
+        <Border Grid.Row="1" BorderThickness="5" BorderBrush="Black">
+            <Canvas Name="TestCanvas" Margin="30">
+                <Image Source="Emoji.jpg" />
+            </Canvas>
+        </Border>
+
     </Grid>
 </Window>

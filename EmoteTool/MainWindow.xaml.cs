@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,10 +25,48 @@ namespace EmoteTool
         {
             InitializeComponent();
         }
+        public static void CopyCanvasToRTbitmap(Window window, Canvas canvas, int dpi)
+        {
+            var size = new Size(window.Width, window.Height);
+            canvas.Measure(size); //canvas.Arrange(new Rect(size));
 
+            var rtb = new RenderTargetBitmap(
+                (int)window.Width,
+                (int)window.Height, 
+                dpi, //dpi X
+                dpi, //dpi Y
+                PixelFormats.Pbgra32 
+            );
+            rtb.Render(canvas);
+
+            CopyRtbToClipboard(rtb);
+        }
+
+
+        private static void CopyRtbToClipboard(BitmapSource bmp)
+        {
+            var croppedBmp = new CroppedBitmap(bmp, new Int32Rect(35,35,225,225));
+            var enc = new PngBitmapEncoder();
+            enc.Frames.Add(BitmapFrame.Create(croppedBmp));
+            
+            //convert rtb to BitmapImage
+            var btmp = new BitmapImage();
+            using (var stream = new MemoryStream())
+            {
+                enc.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                btmp.BeginInit();
+                btmp.CacheOption = BitmapCacheOption.OnLoad;
+                btmp.StreamSource = stream;
+                btmp.EndInit();
+            }
+
+            Clipboard.SetImage(btmp);
+        }
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            CopyCanvasToRTbitmap(this, TestCanvas, 96);
         }
     }
 }
