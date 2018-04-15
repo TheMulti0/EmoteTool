@@ -6,17 +6,24 @@
         xmlns:local="clr-namespace:EmoteTool"
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow">
+        WindowStyle="SingleBorderWindow"
+        Title="MainWindow" Height="450" Width="800">
     
-   
-    <Window.Height>
-        <Binding Path="height" />
-    </Window.Height>
-    <Window.Width>
-        <Binding Path="width" />
-    </Window.Width>
-
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
+    
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
+        <Button Click="ButtonBase_OnClick"/>
+        <Border Grid.Row="1" BorderThickness="5" BorderBrush="Black">
+            <Canvas Name="TestCanvas" Margin="30">
+                <Image Source="../Emoji.jpg" />
+            </Canvas>
+        </Border>
+
     </Grid>
 </Window>
