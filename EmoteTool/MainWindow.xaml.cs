@@ -21,18 +21,25 @@ namespace EmoteTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainWindowViewModel _vm;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _vm = (MainWindowViewModel) DataContext;
+
         }
-        public static void CopyCanvasToRTbitmap(Window window, Canvas canvas, int dpi)
+        
+
+        public  void CopyCanvasToRTbitmap(Window window, Canvas canvas, int dpi)
         {
             var size = new Size(window.Width, window.Height);
             canvas.Measure(size); //canvas.Arrange(new Rect(size));
 
             var rtb = new RenderTargetBitmap(
-                (int)window.Width,
-                (int)window.Height, 
+                (int)_vm.WindowWidth,
+                (int)_vm.WindowHeight, 
                 dpi, //dpi X
                 dpi, //dpi Y
                 PixelFormats.Pbgra32 
@@ -41,9 +48,7 @@ namespace EmoteTool
 
             CopyRtbToClipboard(rtb);
         }
-
-
-        private static void CopyRtbToClipboard(BitmapSource bmp)
+        private void CopyRtbToClipboard(BitmapSource bmp)
         {
             var croppedBmp = new CroppedBitmap(bmp, new Int32Rect(35,35,225,225));
             var enc = new PngBitmapEncoder();
@@ -64,6 +69,8 @@ namespace EmoteTool
 
             Clipboard.SetImage(btmp);
         }
+        
+        //INPUT
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             CopyCanvasToRTbitmap(this, TestCanvas, 96);
