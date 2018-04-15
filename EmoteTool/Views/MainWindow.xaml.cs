@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmoteTool
+namespace EmoteTool.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
