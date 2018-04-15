@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmoteTool", "EmoteTool\EmoteTool.csproj", "{332B3C31-5312-4765-AC1A-593C3D9A9130}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmoteTool", "EmoteTool\EmoteTool.csproj", "{A8A76BA5-CD30-450F-9080-DC55E907EF88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{332B3C31-5312-4765-AC1A-593C3D9A9130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{332B3C31-5312-4765-AC1A-593C3D9A9130}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{332B3C31-5312-4765-AC1A-593C3D9A9130}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{332B3C31-5312-4765-AC1A-593C3D9A9130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A76BA5-CD30-450F-9080-DC55E907EF88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A76BA5-CD30-450F-9080-DC55E907EF88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A76BA5-CD30-450F-9080-DC55E907EF88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A76BA5-CD30-450F-9080-DC55E907EF88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
