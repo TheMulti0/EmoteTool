@@ -1,8 +1,22 @@
-﻿namespace EmoteTool.ViewModels
+﻿using System.Collections.Generic;
+
+namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel
     {
-        public int height { get; set; } = 1000;
-        public int width { get; set; } = 300;
+        //Window Size
+        public double WindowHeight { get; set; } = 500;
+        public double WindowWidth { get; set; } = 300;
+        
+        public Dictionary<string, int> Numbers { get; set; }
+
+        public MainWindowViewModel()
+        {
+            Numbers = new Dictionary<string, int>
+            {
+                {"One", 1},
+                {"Two", 2},
+            };
+        }
     }
 }
