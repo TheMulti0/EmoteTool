@@ -7,7 +7,13 @@
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow">
+    <Window.Width>
+        <Binding Path="WindowWidth"/>
+    </Window.Width>
+    <Window.Height>
+        <Binding Path="WindowHeight"/>
+    </Window.Height>
     
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
