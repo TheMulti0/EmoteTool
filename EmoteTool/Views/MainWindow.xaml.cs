@@ -29,7 +29,6 @@ namespace EmoteTool.Views
             InitializeComponent();
 
             _vm = (MainWindowViewModel) DataContext;
-
         }
         
 

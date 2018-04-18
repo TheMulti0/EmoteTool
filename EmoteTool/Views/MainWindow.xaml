@@ -7,18 +7,20 @@
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        Title="MainWindow">
-    <Window.Width>
-        <Binding Path="WindowWidth"/>
-    </Window.Width>
-    <Window.Height>
-        <Binding Path="WindowHeight"/>
-    </Window.Height>
-    
+        Title="MainWindow" >
+
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
-    
+
+    <Window.Width>
+        <Binding Path="WindowWidth" />
+    </Window.Width>
+
+    <Window.Height>
+        <Binding Path="WindowHeight" />
+    </Window.Height>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
