@@ -6,7 +6,7 @@ namespace EmoteTool.ViewModels
     {
         //Window Size
         public double WindowHeight { get; set; } = 500;
-        public double WindowWidth { get; set; } = 300;
+        public double WindowWidth { get; set; } = 800;
         
         public Dictionary<string, int> Numbers { get; set; }
 
