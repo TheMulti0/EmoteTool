@@ -31,10 +31,10 @@
                   ItemTemplate="{StaticResource ImageTemplate}"
                   ItemsPanel="{StaticResource ItemsPanelTemplate}"
                   SelectedItem="{Binding SelectedItem}" />
-        <Button Height="30"
-                Command="{Binding AddCommand}" />
         <Button Content="Open"
-                Command="{Binding OpenCommand}"></Button>
+                Command="{Binding AddCommand}" />
+        <Button Content="Remove"
+                Command="{Binding RemoveCommand}" />
 
     </StackPanel>
 </Window>

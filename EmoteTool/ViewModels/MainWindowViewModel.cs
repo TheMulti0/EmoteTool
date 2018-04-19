@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 
@@ -13,8 +16,8 @@ namespace EmoteTool.ViewModels
 
         public ICommand AddCommand { get; set; }
 
-        public ICommand OpenCommand { get; set; }
-
+        public ICommand RemoveCommand { get; set; }
+        
         public BitmapImage ImageSource { get; set; }
 
         public Collection<BitmapImage> Images { get; set; }
@@ -23,24 +26,23 @@ namespace EmoteTool.ViewModels
 
         public MainWindowViewModel()
         {
-            CopyCommand = new Command(() => Clipboard.SetImage(SelectedItem));
+            CopyCommand = new Command(() => Clipboard.SetImage(SetSize(SelectedItem)));
 
-            AddCommand = new Command(image => Images.Add((BitmapImage) image));
+            AddCommand = new Command(Open);
 
-            OpenCommand = new Command(Open);
+            RemoveCommand = new Command(() => Images.Remove(SelectedItem));
 
             ImageSource = new BitmapImage(new Uri("../Emoji.jpg", UriKind.Relative));
 
             Images = new ObservableCollection<BitmapImage>
             {
-                ImageSource
+                ImageSource, ImageSource, ImageSource
             };
         }
 
         public void Open()
         {
-            BitmapImage img = null;
-            OpenFileDialog op = new OpenFileDialog
+            var op = new OpenFileDialog
             {
                 Title = "Select an image",
                 Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
@@ -49,9 +51,17 @@ namespace EmoteTool.ViewModels
             };
             if (op.ShowDialog() == true)
             {
-                img = new BitmapImage(new Uri(op.FileName));
-                AddCommand.Execute(img);
+                var image = new BitmapImage(new Uri(op.FileName));
+                Images.Add(image);
             }
+        }
+
+        public BitmapImage SetSize(BitmapImage image)
+        {
+            image.Clone();
+            image.BeginInit();
+            image.EndInit();
+            return image;
         }
     }
 }
