@@ -13,24 +13,28 @@
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
 
+    <Window.Resources>
+        <DataTemplate x:Key="ImageTemplate">
+            <Image Height="30" Width="30" Source="{Binding}" />
+        </DataTemplate>
+
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
+            <StackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+    </Window.Resources>
+
     <StackPanel Orientation="Vertical">
-        <Button Height="30" Command="{Binding ButtonCommand}" />
-        <Image Name="Image" Source="{Binding ImageSource}" />
+
+        <Button Content="Copy" Height="30"
+                Command="{Binding CopyCommand}" />
+        <ListView ItemsSource="{Binding Images}"
+                  ItemTemplate="{StaticResource ImageTemplate}"
+                  ItemsPanel="{StaticResource ItemsPanelTemplate}"
+                  SelectedItem="{Binding SelectedItem}" />
+        <Button Height="30"
+                Command="{Binding AddCommand}" />
+        <Button Content="Open"
+                Command="{Binding OpenCommand}"></Button>
 
     </StackPanel>
 </Window>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
