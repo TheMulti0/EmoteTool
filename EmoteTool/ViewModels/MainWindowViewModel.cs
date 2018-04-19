@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel
     {
-        //Window Size
-        public double WindowHeight { get; set; } = 500;
-        public double WindowWidth { get; set; } = 800;
-        
-        public Dictionary<string, int> Numbers { get; set; }
+        public ICommand ButtonCommand { get; set; }
+
+        public BitmapImage ImageSource { get; set; }
 
         public MainWindowViewModel()
         {
-            Numbers = new Dictionary<string, int>
-            {
-                {"One", 1},
-                {"Two", 2},
-            };
+            ButtonCommand = new Command(() => Clipboard.SetImage(ImageSource));
+
+            ImageSource = new BitmapImage(new Uri("../Emoji.jpg", UriKind.Relative));
         }
     }
 }

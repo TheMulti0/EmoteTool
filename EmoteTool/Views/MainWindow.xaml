@@ -3,35 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EmoteTool"
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        Title="MainWindow">
-    
+        Title="MainWindow"
+        Width="800" Height="500">
+
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
 
-    <Window.Width>
-        <Binding Path="WindowWidth" />
-    </Window.Width>
+    <StackPanel Orientation="Vertical">
+        <Button Height="30" Command="{Binding ButtonCommand}" />
+        <Image Name="Image" Source="{Binding ImageSource}" />
 
-    <Window.Height>
-        <Binding Path="WindowHeight" />
-    </Window.Height>
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="9*"/>
-        </Grid.RowDefinitions>
-        <Button Click="ButtonBase_OnClick"/>
-        <Border Grid.Row="1" BorderThickness="5" BorderBrush="Black">
-            <Canvas Name="TestCanvas" Margin="30">
-                <Image Source="../Emoji.jpg" />
-            </Canvas>
-        </Border>
-
-    </Grid>
+    </StackPanel>
 </Window>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
