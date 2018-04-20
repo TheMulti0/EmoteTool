@@ -14,27 +14,46 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <DataTemplate x:Key="ImageTemplate">
-            <Image Height="30" Width="30" Source="{Binding}" />
+        
+        <viewModels:MainWindowViewModel x:Key="ViewModel" />
+
+        <DataTemplate x:Key="ImageTemplate" DataType="viewModels:EmoteItem">
+
+            <StackPanel Orientation="Vertical">
+                
+                <StackPanel.InputBindings>
+                    <MouseBinding Command="{Binding CopyCommand, Source={StaticResource ViewModel}}"
+                                  CommandParameter="{Binding}"
+                                  MouseAction="LeftDoubleClick" />
+                </StackPanel.InputBindings>
+
+                <Image Height="30" Width="30" Source="{Binding Image}" />
+                <Label Content="{Binding Name}" />
+
+            </StackPanel>
+
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
             <StackPanel Orientation="Horizontal" />
         </ItemsPanelTemplate>
+
     </Window.Resources>
 
     <StackPanel Orientation="Vertical">
 
         <Button Content="Copy" Height="30" 
                 Command="{Binding CopyCommand}" />
-        <ListView ItemsSource="{Binding Images}"
+        <ListView ItemsSource="{Binding Emotes}"
                   ItemTemplate="{StaticResource ImageTemplate}"
                   ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                  SelectedItem="{Binding SelectedItem}" />
+                  SelectedItem="{x:Static viewModels:MainWindowViewModel.SelectedItem}" />
         <Button Content="Remove"
                 Command="{Binding RemoveCommand}" />
-        <Button Content="Open"
+        <Button Content="Add"
                 Command="{Binding AddCommand}" />
+        
+        <TextBox Text="{Binding EmoteName}" />
 
     </StackPanel>
 </Window>
