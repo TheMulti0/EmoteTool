@@ -38,9 +38,7 @@ namespace EmoteTool.ViewModels
 
             RemoveCommand = new Command(() => Emotes.Remove(SelectedItem));
 
-            CopyCommand = new Command((item) => {
-                                                    CopyImage(item);
-            });
+            CopyCommand = new Command(CopyImage);
 
             Emotes = new ObservableCollection<EmoteItem>();
 
@@ -74,13 +72,14 @@ namespace EmoteTool.ViewModels
             };
             if (dialog.ShowDialog() == true)
             {
-                var image = Image.FromFile(dialog.FileName);
-                var resized = ResizeBitmap(image, IconSize);
-                var bitmapSource = BitmapToBitmapSource(resized);
+                Image image = Image.FromFile(dialog.FileName);
+                Bitmap resized = ResizeBitmap(image, IconSize);
+                BitmapSource bitmapSource = BitmapToBitmapSource(resized);
 
-                if (Emotes.Any(emote => EmoteName == emote.Name))
+                bool listContainsName = Emotes.Any(emote => EmoteName == emote.Name);
+                if (EmoteName == null || listContainsName)
                 {
-                    var number = Emotes.Count + 1;
+                    int number = Emotes.Count + 1;
                     EmoteName = "Emote #" + number;
                 }
 
