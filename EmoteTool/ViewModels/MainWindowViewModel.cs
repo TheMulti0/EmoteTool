@@ -26,6 +26,8 @@ namespace EmoteTool.ViewModels
 
         public BitmapSource SelectedItem { get; set; }
 
+        public Size IconSize { get; set; }
+
         public MainWindowViewModel()
         {
             CopyCommand = new Command(() => Clipboard.SetImage(SelectedItem));
@@ -40,6 +42,8 @@ namespace EmoteTool.ViewModels
             {
                 ImageSource, ImageSource, ImageSource
             };
+
+            IconSize = new Size();
         }
 
         public void Open()
@@ -54,13 +58,13 @@ namespace EmoteTool.ViewModels
             if (op.ShowDialog() == true)
             {
                 Image bitmap = Image.FromFile(op.FileName);
-                Bitmap resized = ResizeImage(bitmap, new Size(35, 35));
-                BitmapSource bitmapSource = ToBitmapSource(resized);
+                Bitmap resized = ResizeImage(bitmap, IconSize));
+                BitmapSource bitmapSource = BitmapToBitmapSource(resized);
                 Images.Add(bitmapSource);
             }
         }
 
-        public BitmapSource ToBitmapSource(Bitmap bitmap)
+        public BitmapSource BitmapToBitmapSource(Bitmap bitmap)
         {
             using (MemoryStream stream = new MemoryStream())
             {
