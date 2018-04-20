@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -52,23 +53,30 @@ namespace EmoteTool.ViewModels
             };
             if (op.ShowDialog() == true)
             {
-                var bitmap = Image.FromFile(op.FileName);
-                var resized = ResizeImage(bitmap, new Size(35, 35));
-                var bitmapSource = ToBitmapSource(resized);
+                Image bitmap = Image.FromFile(op.FileName);
+                Bitmap resized = ResizeImage(bitmap, new Size(35, 35));
+                BitmapSource bitmapSource = ToBitmapSource(resized);
                 Images.Add(bitmapSource);
             }
         }
 
-        public BitmapSource ToBitmapSource(Bitmap src)
+        public BitmapSource ToBitmapSource(Bitmap bitmap)
         {
-            var ms = new MemoryStream();
-            ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            ms.Seek(0, SeekOrigin.Begin);
-            image.StreamSource = ms;
-            image.EndInit();
-            return image;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+
+                var result = new BitmapImage();
+
+                result.BeginInit();
+                result.CacheOption = BitmapCacheOption.OnLoad;
+                result.StreamSource = stream;
+                result.EndInit();
+                result.Freeze();
+
+                return result;
+            }
         }
 
         public static Bitmap ResizeImage(Image imgToResize, Size size)
