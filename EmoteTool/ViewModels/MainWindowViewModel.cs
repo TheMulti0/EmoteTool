@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Size = System.Drawing.Size;
@@ -41,7 +43,7 @@ namespace EmoteTool.ViewModels
                 ImageSource, ImageSource, ImageSource
             };
 
-            IconSize = new Size(35, 35);
+            IconSize = new Size();
         }
 
         public void Open()
@@ -55,10 +57,29 @@ namespace EmoteTool.ViewModels
             };
             if (op.ShowDialog() == true)
             {
-                Image image = Image.FromFile(op.FileName);
-                Bitmap resized = ResizeImage(image, IconSize);
+                Image bitmap = Image.FromFile(op.FileName);
+                Bitmap resized = ResizeImage(bitmap, IconSize));
                 BitmapSource bitmapSource = BitmapToBitmapSource(resized);
                 Images.Add(bitmapSource);
+            }
+        }
+
+        public BitmapSource BitmapToBitmapSource(Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+
+                var result = new BitmapImage();
+
+                result.BeginInit();
+                result.CacheOption = BitmapCacheOption.OnLoad;
+                result.StreamSource = stream;
+                result.EndInit();
+                result.Freeze();
+
+                return result;
             }
         }
 
@@ -66,7 +87,7 @@ namespace EmoteTool.ViewModels
         {
             try
             {
-                var b = new Bitmap(size.Width, size.Height);
+                Bitmap b = new Bitmap(size.Width, size.Height);
                 using (Graphics g = Graphics.FromImage(b))
                 {
                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
@@ -79,19 +100,5 @@ namespace EmoteTool.ViewModels
                 return null;
             }
         }
-
-        public BitmapSource BitmapToBitmapSource(Bitmap src)
-        {
-            var ms = new MemoryStream();
-            src.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            var image = new BitmapImage();
-            image.BeginInit();
-            ms.Seek(0, SeekOrigin.Begin);
-            image.StreamSource = ms;
-            image.EndInit();
-
-            return image;
-        }
-
     }
 }
