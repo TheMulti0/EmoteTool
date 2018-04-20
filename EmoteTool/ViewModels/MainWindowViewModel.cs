@@ -58,7 +58,7 @@ namespace EmoteTool.ViewModels
             if (op.ShowDialog() == true)
             {
                 Image bitmap = Image.FromFile(op.FileName);
-                Bitmap resized = ResizeImage(bitmap, IconSize));
+                Bitmap resized = ResizeImage(bitmap, IconSize);
                 BitmapSource bitmapSource = BitmapToBitmapSource(resized);
                 Images.Add(bitmapSource);
             }
