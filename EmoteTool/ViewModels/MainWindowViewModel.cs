@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -29,7 +30,6 @@ namespace EmoteTool.ViewModels
 
         public Size IconSize { get; set; }
 
-        private readonly string _emoteDefault;
 
 
         public MainWindowViewModel()
@@ -38,21 +38,29 @@ namespace EmoteTool.ViewModels
 
             RemoveCommand = new Command(() => Emotes.Remove(SelectedItem));
 
-            CopyCommand = new Command((item) =>
+            CopyCommand = new Command((item) => {
+                                                    CopyImage(item);
+            });
+
+            Emotes = new ObservableCollection<EmoteItem>();
+
+            IconSize = new Size(35, 35);
+        }
+
+        private void CopyImage(object item)
+        {
+            try
             {
                 if (SelectedItem == null)
                 {
                     SelectedItem = (EmoteItem) item;
                 }
                 Clipboard.SetImage(SelectedItem.Image);
-            });
-
-            Emotes = new ObservableCollection<EmoteItem>();
-
-            _emoteDefault = "Enter an emote string here";
-            EmoteName = _emoteDefault;
-
-            IconSize = new Size(35, 35);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         public void SelectImage()
@@ -70,7 +78,7 @@ namespace EmoteTool.ViewModels
                 var resized = ResizeBitmap(image, IconSize);
                 var bitmapSource = BitmapToBitmapSource(resized);
 
-                if (EmoteName == _emoteDefault || Emotes.Any(emote => EmoteName == emote.Name))
+                if (Emotes.Any(emote => EmoteName == emote.Name))
                 {
                     var number = Emotes.Count + 1;
                     EmoteName = "Emote #" + number;

@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         mc:Ignorable="d"
-        WindowStyle="SingleBorderWindow"
         Title="MainWindow"
         Width="800" Height="500">
 
@@ -14,8 +13,9 @@
     </Window.DataContext>
 
     <Window.Resources>
-        
+
         <viewModels:MainWindowViewModel x:Key="ViewModel" />
+        <viewModels:TextStateToVisibility x:Key="TextToVisibility" />
 
         <DataTemplate x:Key="ImageTemplate" DataType="viewModels:EmoteItem">
 
@@ -40,20 +40,52 @@
 
     </Window.Resources>
 
-    <StackPanel Orientation="Vertical">
-
-        <Button Content="Copy" Height="30" 
-                Command="{Binding CopyCommand}" />
-        <ListView ItemsSource="{Binding Emotes}"
-                  ItemTemplate="{StaticResource ImageTemplate}"
-                  ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                  SelectedItem="{x:Static viewModels:MainWindowViewModel.SelectedItem}" />
-        <Button Content="Remove"
-                Command="{Binding RemoveCommand}" />
-        <Button Content="Add"
-                Command="{Binding AddCommand}" />
+    <Grid>
         
-        <TextBox Text="{Binding EmoteName}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition />    
+        </Grid.RowDefinitions>
 
-    </StackPanel>
+        <WrapPanel Grid.Row="0" 
+                   ItemWidth="100" ItemHeight="40"
+                   HorizontalAlignment="Center"
+                   Orientation="Horizontal">
+            
+            <Button Content="Add" Margin="0, 0, 10, 0"
+                    Command="{Binding AddCommand}" />
+            
+            <Button Content="Remove"
+                    Command="{Binding RemoveCommand}" />
+
+            <Button Content="Copy" Margin="10, 0, 0, 0"
+                    Command="{Binding CopyCommand}" />
+
+        </WrapPanel>
+
+        <StackPanel Grid.Row="1" 
+                    Orientation="Vertical">
+
+            <Grid>
+                <TextBlock Text="Enter text for emote name" Foreground="LightSteelBlue">
+                    <TextBlock.Visibility>
+                        <MultiBinding Converter="{StaticResource TextToVisibility}">
+                            <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
+                            <Binding ElementName="EmoteName" Path="IsFocused" />
+                        </MultiBinding>
+                    </TextBlock.Visibility>
+                </TextBlock>
+                
+                <TextBox Name="EmoteName" Background="Transparent" />
+            </Grid>
+
+            <ListView ItemsSource="{Binding Emotes}"
+                      ItemTemplate="{StaticResource ImageTemplate}"
+                      ItemsPanel="{StaticResource ItemsPanelTemplate}"
+                      SelectedItem="{x:Static viewModels:MainWindowViewModel.SelectedItem}" />
+
+        </StackPanel>
+        
+
+    </Grid>
 </Window>
