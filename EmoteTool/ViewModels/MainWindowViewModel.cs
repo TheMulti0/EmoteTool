@@ -13,7 +13,7 @@ namespace EmoteTool.ViewModels
     internal class MainWindowViewModel
     {
         public ICommand CopyCommand { get; set; }
-
+         
         public ICommand AddCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }

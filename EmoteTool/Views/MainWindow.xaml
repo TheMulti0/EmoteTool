@@ -25,16 +25,16 @@
 
     <StackPanel Orientation="Vertical">
 
-        <Button Content="Copy" Height="30"
+        <Button Content="Copy" Height="30" 
                 Command="{Binding CopyCommand}" />
         <ListView ItemsSource="{Binding Images}"
                   ItemTemplate="{StaticResource ImageTemplate}"
                   ItemsPanel="{StaticResource ItemsPanelTemplate}"
                   SelectedItem="{Binding SelectedItem}" />
-        <Button Content="Open"
-                Command="{Binding AddCommand}" />
         <Button Content="Remove"
                 Command="{Binding RemoveCommand}" />
+        <Button Content="Open"
+                Command="{Binding AddCommand}" />
 
     </StackPanel>
 </Window>
