@@ -24,7 +24,7 @@ namespace EmoteTool.ViewModels
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
-        public static EmoteItem SelectedItem { get; set; }
+        public EmoteItem SelectedItem { get; set; }
 
         public string EmoteName { get; set; }
 
@@ -76,14 +76,15 @@ namespace EmoteTool.ViewModels
                 Bitmap resized = ResizeBitmap(image, IconSize);
                 BitmapSource bitmapSource = BitmapToBitmapSource(resized);
 
+                string name = EmoteName;
                 bool listContainsName = Emotes.Any(emote => EmoteName == emote.Name);
-                if (EmoteName == null || listContainsName)
+                if (string.IsNullOrEmpty(EmoteName) || listContainsName)
                 {
                     int number = Emotes.Count + 1;
-                    EmoteName = "Emote #" + number;
+                    name = "Emote #" + number;
                 }
 
-                Emotes.Add(new EmoteItem(EmoteName, bitmapSource));
+                Emotes.Add(new EmoteItem(name, bitmapSource));
             }
         }
 

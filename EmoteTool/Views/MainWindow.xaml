@@ -76,13 +76,14 @@
                     </TextBlock.Visibility>
                 </TextBlock>
                 
-                <TextBox Name="EmoteName" Background="Transparent" />
+                <TextBox Name="EmoteName" Background="Transparent"
+                         Text="{Binding EmoteName}" />
             </Grid>
 
             <ListView ItemsSource="{Binding Emotes}"
                       ItemTemplate="{StaticResource ImageTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{x:Static viewModels:MainWindowViewModel.SelectedItem}" />
+                      SelectedItem="{Binding SelectedItem}" />
 
         </StackPanel>
         
