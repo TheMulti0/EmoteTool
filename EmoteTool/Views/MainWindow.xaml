@@ -78,7 +78,7 @@
                 </TextBlock>
                 
                 <TextBox Name="EmoteName" Background="Transparent"
-                         Text="{Binding EmoteName}" />
+                         Text="{Binding EmoteName, Mode=OneWayToSource}" />
             </Grid>
 
             <ListView x:Name="Emotes"

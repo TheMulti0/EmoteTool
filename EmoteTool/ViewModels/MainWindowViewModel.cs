@@ -47,7 +47,7 @@ namespace EmoteTool.ViewModels
 
         public void SelectImage()
         {
-            var dialog = new OpenFileDialog
+            OpenFileDialog dialog = new OpenFileDialog
             {
                 Title = "Select an image",
                 Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
@@ -61,24 +61,23 @@ namespace EmoteTool.ViewModels
 
             Image image = Image.FromFile(dialog.FileName);
             Bitmap resized = ImageToResizedBitmap(image, IconSize);
-            BitmapSource bitmapSource = BitmapToBitmapSource(resized);
+            BitmapSource bitmapSource = ImageToBitmapSource(resized);
 
-            string name = SortEmptyName();
+            SortEmptyName();
 
-            Emotes.Add(new EmoteItem(name, bitmapSource));
+            Emotes.Add(new EmoteItem(EmoteName, bitmapSource));
         }
 
-        private string SortEmptyName()
+        private void SortEmptyName()
         {
-            string name = EmoteName;
             bool listContainsName = Emotes.Any(emote => EmoteName == emote.Name);
-            if (string.IsNullOrEmpty(EmoteName) || listContainsName)
+            if (!string.IsNullOrEmpty(EmoteName) && !listContainsName)
             {
-                int number = Emotes.Count + 1;
-                name = "Emote #" + number;
+                return;
             }
 
-            return name;
+            int number = Emotes.Count + 1;
+            EmoteName = "Emote #" + number;
         }
 
         private static Bitmap ImageToResizedBitmap(Image imageToResize, Size size)
@@ -93,7 +92,7 @@ namespace EmoteTool.ViewModels
             return bitmap;
         }
 
-        private static BitmapSource BitmapToBitmapSource(Bitmap bitmap)
+        private static BitmapSource ImageToBitmapSource(Image bitmap)
         {
             using (var stream = new MemoryStream())
             {
