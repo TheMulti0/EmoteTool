@@ -116,19 +116,15 @@ namespace EmoteTool.ViewModels
             if (item == null)
             {
                 CopySelectedImage();
+                return;
             }
-            else
+            if (SelectedItem != item)
             {
-                if (SelectedItem != item)
-                {
-                    SelectedItem = (EmoteItem) item;
-                    CopySelectedImage();
-                }
-                else
-                {
-                    CopySelectedImage();
-                }
+                SelectedItem = (EmoteItem) item;
+                CopySelectedImage();
+                return;
             }
+            CopySelectedImage();
 
             void CopySelectedImage() 
                 => Clipboard.SetImage(SelectedItem.Image);
