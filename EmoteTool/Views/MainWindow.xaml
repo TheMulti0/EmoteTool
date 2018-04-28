@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         xmlns:material="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:properties="clr-namespace:EmoteTool.Properties"
         mc:Ignorable="d"
         Title="MainWindow"
         Width="800" Height="500">

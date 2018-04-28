@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -10,6 +11,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+
+using static EmoteTool.Properties.Settings;
 using Size = System.Drawing.Size;
 
 namespace EmoteTool.ViewModels
@@ -43,29 +46,72 @@ namespace EmoteTool.ViewModels
             Emotes = new ObservableCollection<EmoteItem>();
 
             IconSize = new Size(35, 35);
+
+            ReadSavedEmotes();
+        }
+
+        private void ReadSavedEmotes()
+        {
+            if (Default.SavedEmotes == null)
+            {
+                Default.SavedEmotes = new StringDictionary();
+                return;
+            }
+
+            StringDictionary dictionary = Default.SavedEmotes;
+
+            foreach (string key in dictionary.Keys)
+            {
+                BitmapSource bitmapSource = SetUpImage(dictionary[key]);
+
+                var uriSource = new Uri(dictionary[key]);
+                BitmapSource bitmapImage = new BitmapImage(uriSource);
+                var emoteItem = new EmoteItem(key, bitmapImage);
+
+                Emotes.Add(emoteItem);
+            }
         }
 
         public void SelectImage()
         {
-            OpenFileDialog dialog = new OpenFileDialog
-            {
-                Title = "Select an image",
-                Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-                         "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                         "Portable Network Graphic (*.png)|*.png"
-            };
-            if (dialog.ShowDialog() != true)
+            if (ChooseFile(out string fileName))
             {
                 return;
             }
 
-            Image image = Image.FromFile(dialog.FileName);
-            Bitmap resized = ImageToResizedBitmap(image, IconSize);
-            BitmapSource bitmapSource = ImageToBitmapSource(resized);
+            BitmapSource bitmapSource = SetUpImage(fileName);
 
             SortEmptyName();
 
-            Emotes.Add(new EmoteItem(EmoteName, bitmapSource));
+            var emoteItem = new EmoteItem(EmoteName, bitmapSource);
+            Emotes.Add(emoteItem);
+
+            Default.SavedEmotes.Add(emoteItem.Name, fileName);
+        }
+
+        private static bool ChooseFile(out string fileName)
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Select an image",
+                Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+                        "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                        "Portable Network Graphic (*.png)|*.png"
+            };
+            bool? nullDialogChosen = dialog.ShowDialog();
+
+            fileName = dialog.FileName;
+
+            bool dialogChosen = nullDialogChosen ?? false;
+            return dialogChosen != true;
+        }
+
+        private BitmapSource SetUpImage(string fileName)
+        {
+            Image image = Image.FromFile(fileName);
+            Bitmap resized = ImageToResizedBitmap(image, IconSize);
+            BitmapSource bitmapSource = ImageToBitmapSource(resized);
+            return bitmapSource;
         }
 
         private void SortEmptyName()
