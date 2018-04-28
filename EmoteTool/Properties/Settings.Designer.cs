@@ -25,9 +25,9 @@ namespace EmoteTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringDictionary SavedEmotes {
+        public global::System.Collections.Specialized.StringCollection SavedEmotes {
             get {
-                return ((global::System.Collections.Specialized.StringDictionary)(this["SavedEmotes"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["SavedEmotes"]));
             }
             set {
                 this["SavedEmotes"] = value;

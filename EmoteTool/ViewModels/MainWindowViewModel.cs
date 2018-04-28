@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -19,6 +21,9 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel
     {
+
+        private readonly string _seperator;
+
         public ICommand AddCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
@@ -33,10 +38,12 @@ namespace EmoteTool.ViewModels
 
         public Size IconSize { get; set; }
 
-
+        
 
         public MainWindowViewModel()
         {
+            _seperator = ";;;;;;";
+
             AddCommand = new Command(SelectImage);
 
             RemoveCommand = new Command(() => Emotes.Remove(SelectedItem));
@@ -54,19 +61,23 @@ namespace EmoteTool.ViewModels
         {
             if (Default.SavedEmotes == null)
             {
-                Default.SavedEmotes = new StringDictionary();
+                Default.SavedEmotes = new StringCollection();
                 return;
             }
 
-            StringDictionary dictionary = Default.SavedEmotes;
+            List<string> savedEmotes = Default.SavedEmotes.Cast<string>().ToList();
 
-            foreach (string key in dictionary.Keys)
+            foreach (string emote in savedEmotes)
             {
-                BitmapSource bitmapSource = SetUpImage(dictionary[key]);
+                string[] splitted = emote.Split(_seperator.Split(' '), StringSplitOptions.None);
+                string name = splitted[0];
+                string fileName = splitted[1];
 
-                var uriSource = new Uri(dictionary[key]);
+                BitmapSource bitmapSource = SetUpImage(fileName);
+
+                var uriSource = new Uri(fileName);
                 BitmapSource bitmapImage = new BitmapImage(uriSource);
-                var emoteItem = new EmoteItem(key, bitmapImage);
+                var emoteItem = new EmoteItem(name, bitmapImage);
 
                 Emotes.Add(emoteItem);
             }
@@ -81,12 +92,12 @@ namespace EmoteTool.ViewModels
 
             BitmapSource bitmapSource = SetUpImage(fileName);
 
-            SortEmptyName();
+            SortName();
 
             var emoteItem = new EmoteItem(EmoteName, bitmapSource);
             Emotes.Add(emoteItem);
 
-            Default.SavedEmotes.Add(emoteItem.Name, fileName);
+            Default.SavedEmotes.Add(EmoteName + _seperator + fileName);
         }
 
         private static bool ChooseFile(out string fileName)
@@ -114,10 +125,12 @@ namespace EmoteTool.ViewModels
             return bitmapSource;
         }
 
-        private void SortEmptyName()
+        private void SortName()
         {
             bool listContainsName = Emotes.Any(emote => EmoteName == emote.Name);
-            if (!string.IsNullOrEmpty(EmoteName) && !listContainsName)
+            if (!string.IsNullOrEmpty(EmoteName) 
+                && !listContainsName 
+                && EmoteName == _seperator)
             {
                 return;
             }
