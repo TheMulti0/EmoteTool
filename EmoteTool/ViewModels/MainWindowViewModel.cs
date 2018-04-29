@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using EmoteTool.Annotations;
 using Microsoft.Win32;
 
 using static EmoteTool.Properties.Settings;
@@ -19,10 +22,10 @@ using Size = System.Drawing.Size;
 
 namespace EmoteTool.ViewModels
 {
-    internal class MainWindowViewModel
+    internal class MainWindowViewModel : INotifyPropertyChanged
     {
-
         private readonly string _seperator;
+        private EmoteItem _selectedItem;
 
         public ICommand AddCommand { get; set; }
 
@@ -32,7 +35,20 @@ namespace EmoteTool.ViewModels
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
-        public EmoteItem SelectedItem { get; set; }
+        public EmoteItem SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (value == _selectedItem && value == null)
+                {
+                    return;
+                }
+
+                _selectedItem = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string EmoteName { get; set; }
 
@@ -46,7 +62,14 @@ namespace EmoteTool.ViewModels
 
             AddCommand = new Command(SelectImage);
 
-            RemoveCommand = new Command(() => Emotes.Remove(SelectedItem));
+            RemoveCommand = new Command(() =>
+            {
+                Emotes.Remove(SelectedItem);
+
+                List<string> list = Default.SavedEmotes.Cast<string>().ToList();
+                string match = list.Find(s => s.StartsWith(EmoteName + _seperator));
+                Default.SavedEmotes.Remove(match);
+            });
 
             CopyCommand = new Command(CopyImage);
 
@@ -65,9 +88,7 @@ namespace EmoteTool.ViewModels
                 return;
             }
 
-            List<string> savedEmotes = Default.SavedEmotes.Cast<string>().ToList();
-
-            foreach (string emote in savedEmotes)
+            foreach (string emote in Default.SavedEmotes)
             {
                 string[] splitted = emote.Split(_seperator.Split(' '), StringSplitOptions.None);
                 string name = splitted[0];
@@ -188,5 +209,15 @@ namespace EmoteTool.ViewModels
             void CopySelectedImage() 
                 => Clipboard.SetImage(SelectedItem.Image);
         }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }
