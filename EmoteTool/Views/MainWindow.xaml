@@ -86,7 +86,7 @@
                       ItemsSource="{Binding Emotes}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         </StackPanel>
         
