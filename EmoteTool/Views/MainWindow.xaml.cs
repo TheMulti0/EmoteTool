@@ -20,11 +20,9 @@ namespace EmoteTool.Views
             Closing += OnClosing;
         }
 
-        private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+        private static void OnClosing(object sender, CancelEventArgs cancelEventArgs)
         {
             Settings.Default.Save();
-            
-
         }
 
     }
