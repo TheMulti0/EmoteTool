@@ -40,11 +40,10 @@ namespace EmoteTool.ViewModels
             get => _selectedItem;
             set
             {
-                if (value == _selectedItem && value == null)
+                if (value == _selectedItem || value == null)
                 {
                     return;
                 }
-
                 _selectedItem = value;
                 OnPropertyChanged();
             }
@@ -148,10 +147,10 @@ namespace EmoteTool.ViewModels
 
         private void SortName()
         {
-            bool listContainsName = Emotes.Any(emote => EmoteName == emote.Name);
+            bool isInList = Emotes.Any(emote => EmoteName == emote.Name);
             if (!string.IsNullOrEmpty(EmoteName) 
-                && !listContainsName 
-                && EmoteName == _seperator)
+                && !isInList 
+                && EmoteName != _seperator)
             {
                 return;
             }

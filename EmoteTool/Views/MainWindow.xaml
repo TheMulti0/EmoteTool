@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         xmlns:material="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:properties="clr-namespace:EmoteTool.Properties"
@@ -22,12 +23,6 @@
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
 
             <StackPanel Orientation="Vertical">
-
-                <StackPanel.InputBindings>
-                    <MouseBinding Command="{Binding CopyCommand, Source={StaticResource ViewModel}}"
-                                  CommandParameter="{Binding}"
-                                  MouseAction="LeftClick" />
-                </StackPanel.InputBindings>
 
                 <Image Height="30" Width="30" Source="{Binding Image}" />
                 <Label Content="{Binding Name}" />
@@ -86,7 +81,14 @@
                       ItemsSource="{Binding Emotes}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding CopyCommand, Mode=OneWay}"
+                                               CommandParameter="{Binding SelectedItem, ElementName=Emotes}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
 
         </StackPanel>
         
