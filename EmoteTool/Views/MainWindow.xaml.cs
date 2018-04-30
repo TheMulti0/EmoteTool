@@ -23,7 +23,7 @@ namespace EmoteTool.Views
         private static void OnClosing(object sender, CancelEventArgs cancelEventArgs)
         {
             Settings.Default.Save();
-            Settings.Default.Reload();
+            //Settings.Default.Reload();
         }
 
     }
