@@ -62,14 +62,7 @@ namespace EmoteTool.ViewModels
 
             AddCommand = new AddCommand(this);
 
-            RemoveCommand = new Command(() =>
-            {
-                Emotes.Remove(SelectedItem);
-
-                List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-                string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
-                Default.SavedEmotes.Remove(match);
-            });
+            RemoveCommand = new Command(RemoveImage);
 
             CopyCommand = new Command(CopyImage);
 
@@ -78,6 +71,15 @@ namespace EmoteTool.ViewModels
             IconSize = new Size(35, 35);
 
             ReadSavedEmotes();
+        }
+
+        private void RemoveImage()
+        {
+            Emotes.Remove(SelectedItem);
+
+            List<string> list = Default.SavedEmotes.Cast<string>().ToList();
+            string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
+            Default.SavedEmotes.Remove(match);
         }
 
         private void ReadSavedEmotes()
@@ -90,7 +92,8 @@ namespace EmoteTool.ViewModels
 
             foreach (string emote in Default.SavedEmotes)
             {
-                string[] splitted = emote.Split(MainWindowViewModel.Seperator.Split(' '), StringSplitOptions.None);
+                string[] splitted = emote.Split(MainWindowViewModel.Seperator.Split(' '),
+                                                StringSplitOptions.None);
                 string name = splitted[0];
                 string fileName = splitted[1];
 
