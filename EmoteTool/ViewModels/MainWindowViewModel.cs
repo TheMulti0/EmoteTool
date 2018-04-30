@@ -66,7 +66,7 @@ namespace EmoteTool.ViewModels
                 Emotes.Remove(SelectedItem);
 
                 List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-                string match = list.Find(s => s.StartsWith(EmoteName + _seperator));
+                string match = list.Find(s => s.StartsWith(SelectedItem.Name + _seperator));
                 Default.SavedEmotes.Remove(match);
             });
 
