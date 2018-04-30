@@ -81,6 +81,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AddCommand.cs" />
     <Compile Include="ViewModels\Command.cs" />
     <Compile Include="ViewModels\EmoteItem.cs" />
     <Compile Include="ViewModels\TextStateToVisibility.cs" />

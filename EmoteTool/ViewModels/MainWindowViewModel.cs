@@ -24,14 +24,15 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-        private readonly string _seperator;
         private EmoteItem _selectedItem;
 
-        public ICommand AddCommand { get; set; }
+        public AddCommand AddCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
 
         public ICommand CopyCommand { get; set; }
+
+        public static string Seperator { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
@@ -57,16 +58,16 @@ namespace EmoteTool.ViewModels
 
         public MainWindowViewModel()
         {
-            _seperator = ";;;;;;";
+            Seperator = ";;;;;;";
 
-            AddCommand = new Command(SelectImage);
+            AddCommand = new AddCommand(this);
 
             RemoveCommand = new Command(() =>
             {
                 Emotes.Remove(SelectedItem);
 
                 List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-                string match = list.Find(s => s.StartsWith(SelectedItem.Name + _seperator));
+                string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
                 Default.SavedEmotes.Remove(match);
             });
 
@@ -89,100 +90,14 @@ namespace EmoteTool.ViewModels
 
             foreach (string emote in Default.SavedEmotes)
             {
-                string[] splitted = emote.Split(_seperator.Split(' '), StringSplitOptions.None);
+                string[] splitted = emote.Split(MainWindowViewModel.Seperator.Split(' '), StringSplitOptions.None);
                 string name = splitted[0];
                 string fileName = splitted[1];
 
-                BitmapSource bitmapSource = SetUpImage(fileName);
+                BitmapSource bitmapSource = AddCommand.SetUpImage(fileName);
                 var emoteItem = new EmoteItem(name, bitmapSource);
 
                 Emotes.Add(emoteItem);
-            }
-        }
-
-        public void SelectImage()
-        {
-            if (ChooseFile(out string fileName))
-            {
-                return;
-            }
-
-            BitmapSource bitmapSource = SetUpImage(fileName);
-
-            SortName();
-
-            var emoteItem = new EmoteItem(EmoteName, bitmapSource);
-            Emotes.Add(emoteItem);
-
-            Default.SavedEmotes.Add(EmoteName + _seperator + fileName);
-        }
-
-        private static bool ChooseFile(out string fileName)
-        {
-            var dialog = new OpenFileDialog
-            {
-                Title = "Select an image",
-                Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-                        "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                        "Portable Network Graphic (*.png)|*.png"
-            };
-            bool? nullDialogChosen = dialog.ShowDialog();
-
-            fileName = dialog.FileName;
-
-            bool dialogChosen = nullDialogChosen ?? false;
-            return dialogChosen != true;
-        }
-
-        private BitmapSource SetUpImage(string fileName)
-        {
-            Image image = Image.FromFile(fileName);
-            Bitmap resized = ImageToResizedBitmap(image, IconSize);
-            BitmapSource bitmapSource = ImageToBitmapSource(resized);
-            return bitmapSource;
-        }
-
-        private void SortName()
-        {
-            bool isInList = Emotes.Any(emote => EmoteName == emote.Name);
-            if (!string.IsNullOrEmpty(EmoteName) 
-                && !isInList 
-                && EmoteName != _seperator)
-            {
-                return;
-            }
-
-            int number = Emotes.Count + 1;
-            EmoteName = "Emote #" + number;
-        }
-
-        private static Bitmap ImageToResizedBitmap(Image imageToResize, Size size)
-        {
-            var bitmap = new Bitmap(size.Width, size.Height);
-            using (Graphics g = Graphics.FromImage(bitmap))
-            {
-                g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.DrawImage(imageToResize, 0, 0, size.Width, size.Height);
-            }
-            return bitmap;
-        }
-
-        private static BitmapSource ImageToBitmapSource(Image bitmap)
-        {
-            using (var stream = new MemoryStream())
-            {
-                bitmap.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-
-                var result = new BitmapImage();
-
-                result.BeginInit();
-                result.CacheOption = BitmapCacheOption.OnLoad;
-                result.StreamSource = stream;
-                result.EndInit();
-                result.Freeze();
-
-                return result;
             }
         }
 
