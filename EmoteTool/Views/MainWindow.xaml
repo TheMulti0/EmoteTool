@@ -8,7 +8,7 @@
         xmlns:material="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:properties="clr-namespace:EmoteTool.Properties"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="EmoteTool"
         Width="800" Height="500">
 
     <Window.DataContext>
@@ -19,6 +19,16 @@
 
         <viewModels:MainWindowViewModel x:Key="ViewModel" />
         <viewModels:TextStateToVisibility x:Key="TextToVisibility" />
+        
+        <ControlTemplate x:Key="EmotesTemplate" 
+                         TargetType="ListView">
+
+            <StackPanel Orientation="Horizontal">
+                <ItemsPresenter />
+                <Button Content="+" FontSize="30" Style="{DynamicResource MaterialDesignFlatButton}" Height="80" Width="80" Command="{Binding AddCommand}" />
+            </StackPanel>
+
+        </ControlTemplate>
 
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
 
@@ -78,16 +88,19 @@
             </Grid>
 
             <ListView x:Name="Emotes"
+                      Template="{StaticResource EmotesTemplate}"
                       ItemsSource="{Binding Emotes}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding CopyCommand, Mode=OneWay}"
                                                CommandParameter="{Binding SelectedItem, ElementName=Emotes}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+
             </ListView>
 
         </StackPanel>
