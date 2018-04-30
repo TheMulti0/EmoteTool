@@ -94,10 +94,7 @@ namespace EmoteTool.ViewModels
                 string fileName = splitted[1];
 
                 BitmapSource bitmapSource = SetUpImage(fileName);
-
-                var uriSource = new Uri(fileName);
-                BitmapSource bitmapImage = new BitmapImage(uriSource);
-                var emoteItem = new EmoteItem(name, bitmapImage);
+                var emoteItem = new EmoteItem(name, bitmapSource);
 
                 Emotes.Add(emoteItem);
             }
@@ -164,10 +161,9 @@ namespace EmoteTool.ViewModels
             var bitmap = new Bitmap(size.Width, size.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
                 g.DrawImage(imageToResize, 0, 0, size.Width, size.Height);
             }
-
             return bitmap;
         }
 
