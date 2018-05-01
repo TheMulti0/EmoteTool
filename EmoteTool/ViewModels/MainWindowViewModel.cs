@@ -25,12 +25,15 @@ namespace EmoteTool.ViewModels
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
         private EmoteItem _selectedItem;
+        private bool _isAddDialogOpen;
 
         public AddCommand AddCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
 
         public ICommand CopyCommand { get; set; }
+
+        public ICommand AddDialogCommand { get; set; }
 
         public static string Seperator { get; private set; }
 
@@ -52,7 +55,22 @@ namespace EmoteTool.ViewModels
 
         public string EmoteName { get; set; }
 
-        public Size IconSize { get; set; }
+        public bool IsAddDialogOpen
+        {
+            get => _isAddDialogOpen;
+            set
+            {
+                if (value == _isAddDialogOpen)
+                {
+                    return;
+                }
+
+                _isAddDialogOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Size IconSize { get; private set; }
 
         
 
@@ -66,20 +84,13 @@ namespace EmoteTool.ViewModels
 
             CopyCommand = new Command(CopyImage);
 
+            AddDialogCommand = new Command(() => IsAddDialogOpen = !IsAddDialogOpen);
+
             Emotes = new ObservableCollection<EmoteItem>();
 
             IconSize = new Size(35, 35);
 
             ReadSavedEmotes();
-        }
-
-        private void RemoveImage()
-        {
-            Emotes.Remove(SelectedItem);
-
-            List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-            string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
-            Default.SavedEmotes.Remove(match);
         }
 
         private void ReadSavedEmotes()
@@ -97,30 +108,65 @@ namespace EmoteTool.ViewModels
                 string name = splitted[0];
                 string fileName = splitted[1];
 
-                BitmapSource bitmapSource = AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapSource);
+                BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
+                var emoteItem = new EmoteItem(name, bitmapImage);
 
                 Emotes.Add(emoteItem);
             }
         }
 
-        private void CopyImage(object item)
+        private void RemoveImage()
         {
-            if (item == null)
+            if (SelectedItem == null)
             {
-                CopySelectedImage();
-                return;
-            }
-            if (SelectedItem != item)
-            {
-                SelectedItem = (EmoteItem) item;
-                CopySelectedImage();
-                return;
-            }
-            CopySelectedImage();
+                try
+                {
+                    EmoteItem item = Emotes.FirstOrDefault(emote => emote.Name == EmoteName);
+                    RemoveEmote(item);
+                }
+                catch (Exception)
+                {
+                }
 
-            void CopySelectedImage() 
-                => Clipboard.SetImage(SelectedItem.Image);
+                IsAddDialogOpen = false;
+                return; 
+            }
+
+            RemoveEmote(SelectedItem);
+        }
+
+        private void RemoveEmote(EmoteItem item)
+        {
+            Emotes.Remove(item);
+
+            try
+            {
+                List<string> list = Default.SavedEmotes.Cast<string>().ToList();
+                string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
+
+                Default.SavedEmotes.Remove(match);
+            }
+            catch (NullReferenceException)
+            {
+                Default.SavedEmotes.Remove(
+                    item.Name 
+                    + Seperator 
+                    + item.Image.BaseUri.AbsolutePath);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error adding to saved file " + e);
+                throw;
+            }
+        }
+
+        private void CopyImage()
+        {
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            Clipboard.SetImage(SelectedItem.Image);
         }
 
 

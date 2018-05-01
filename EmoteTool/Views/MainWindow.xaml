@@ -17,15 +17,21 @@
 
     <Window.Resources>
 
-        <viewModels:MainWindowViewModel x:Key="ViewModel" />
         <viewModels:TextStateToVisibility x:Key="TextToVisibility" />
-        
-        <ControlTemplate x:Key="EmotesTemplate" 
+        <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
+
+        <ControlTemplate x:Key="EmotesTemplate"
                          TargetType="ListView">
 
             <StackPanel Orientation="Horizontal">
+
                 <ItemsPresenter />
-                <Button Content="+" FontSize="30" Style="{DynamicResource MaterialDesignFlatButton}" Height="80" Width="80" Command="{Binding AddCommand}" />
+
+                <Button Width="80" Height="80"
+                        Content="+" FontSize="30"
+                        Style="{DynamicResource MaterialDesignFlatButton}"
+                        Command="{Binding AddDialogCommand}" />
+
             </StackPanel>
 
         </ControlTemplate>
@@ -34,7 +40,8 @@
 
             <StackPanel Orientation="Vertical">
 
-                <Image Height="30" Width="30" Source="{Binding Image}" />
+                <Image Width="35" Height="35"
+                       Source="{Binding Image}" />
                 <Label Content="{Binding Name}" />
 
             </StackPanel>
@@ -48,63 +55,98 @@
     </Window.Resources>
 
     <Grid>
+
+        <Rectangle x:Name="DialogShade"
+                   Panel.ZIndex="10" 
+                   IsHitTestVisible="{Binding IsOpen, ElementName=AddDialog}"
+                   Fill="Black"
+                   IsEnabled="{Binding IsOpen, ElementName=AddDialog}"
+                   Opacity="{Binding IsOpen, ElementName=AddDialog, Converter={StaticResource BoolToOpacity}}" />
+
+        <StackPanel Orientation="Vertical"
+                    Margin="15, 15">
+            
+            <TextBlock Text="EmoteTool." FontWeight="DemiBold" FontSize="48" />
         
-        <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
-            <RowDefinition />    
-        </Grid.RowDefinitions>
+            <Button Height="45" Width="130" 
+                    Margin="0, 15"
+                    HorizontalAlignment="Left"
+                    Content="Remove"
+                    Command="{Binding RemoveCommand}"
+                    Style="{DynamicResource MaterialDesignFlatButton}" />
 
-        <WrapPanel Grid.Row="0" 
-                   ItemWidth="100" ItemHeight="40"
-                   HorizontalAlignment="Center"
-                   Orientation="Horizontal">
-            
-            <Button Content="Add" Margin="0, 0, 10, 0"
-                    Command="{Binding AddCommand}" />
-            
-            <Button Content="Remove"
-                    Command="{Binding RemoveCommand}" />
+            <material:DialogHost x:Name="AddDialog" 
+                                 CloseOnClickAway="True"
+                                 IsOpen="{Binding IsAddDialogOpen, Mode=TwoWay}">
 
-            <Button Content="Copy" Margin="10, 0, 0, 0"
-                    Command="{Binding CopyCommand}" />
+                <material:DialogHost.DialogContent>
+                    <StackPanel Orientation="Vertical">
 
-        </WrapPanel>
+                        <Grid Width="200" Margin="15, 15">
 
-        <StackPanel Grid.Row="1" 
-                    Orientation="Vertical">
+                            <TextBlock Text="Enter text for emote name"
+                                       Foreground="LightSteelBlue"
+                                       Padding="4">
+                                <TextBlock.Visibility>
+                                    <MultiBinding Converter="{StaticResource TextToVisibility}">
+                                        <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
+                                        <Binding ElementName="EmoteName" Path="IsFocused" />
+                                    </MultiBinding>
+                                </TextBlock.Visibility>
+                            </TextBlock>
 
-            <Grid>
-                <TextBlock Text="Enter text for emote name" Foreground="LightSteelBlue">
-                    <TextBlock.Visibility>
-                        <MultiBinding Converter="{StaticResource TextToVisibility}">
-                            <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
-                            <Binding ElementName="EmoteName" Path="IsFocused" />
-                        </MultiBinding>
-                    </TextBlock.Visibility>
-                </TextBlock>
-                
-                <TextBox Name="EmoteName" Background="Transparent"
-                         Text="{Binding EmoteName, Mode=OneWayToSource}" />
-            </Grid>
+                            <TextBox Name="EmoteName" Background="Transparent"
+                                     Text="{Binding EmoteName, Mode=OneWayToSource}" />
+                        </Grid>
+                        
+                        <StackPanel Orientation="Horizontal" Margin="0, 5">
+                            
+                            <Label x:Name="ImagePath" />
+                            
+                            <Button Content="Browse"
+                                    Style="{DynamicResource MaterialDesignFlatButton}" />
+
+                        </StackPanel>
+
+                        <Image Source="{Binding Content, ElementName=ImagePath}" />
+                        
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Margin="0, 5">
+
+                            <Button Content="Cancel" 
+                                    Command="{Binding RemoveCommand}" 
+                                    Style="{DynamicResource MaterialDesignFlatButton}" />
+
+                            <Button Content="Accept"
+                                    Command="{Binding AddCommand}"
+                                    Style="{DynamicResource MaterialDesignFlatButton}" />
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </material:DialogHost.DialogContent>
+
+            </material:DialogHost>
 
             <ListView x:Name="Emotes"
+                      Margin="0, 15"
                       Template="{StaticResource EmotesTemplate}"
                       ItemsSource="{Binding Emotes}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                      SelectedItem="{Binding SelectedItem}">
 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding CopyCommand, Mode=OneWay}"
-                                               CommandParameter="{Binding SelectedItem, ElementName=Emotes}" />
+                        <i:InvokeCommandAction Command="{Binding CopyCommand, Mode=OneWay}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
             </ListView>
 
         </StackPanel>
-        
+
     </Grid>
 
 </Window>

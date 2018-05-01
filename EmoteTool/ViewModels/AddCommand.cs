@@ -37,12 +37,12 @@ namespace EmoteTool.ViewModels
 
         public void SelectImage()
         {
-            if (ChooseFile(out string fileName))
+            if (!ChooseFile(out string fileName))
             {
                 return;
             }
 
-            BitmapSource bitmapSource = SetUpImage(fileName);
+            BitmapImage bitmapSource = SetUpImage(fileName);
 
             SortName();
 
@@ -50,38 +50,39 @@ namespace EmoteTool.ViewModels
             _vm.Emotes.Add(emoteItem);
 
             Default.SavedEmotes.Add(_vm.EmoteName + Seperator + fileName);
+            //_vm.IsAddDialogOpen = false;
         }
 
-        public BitmapSource SetUpImage(string fileName)
+        public BitmapImage SetUpImage(string fileName)
         {
             Image image = Image.FromFile(fileName);
             Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize);
-            BitmapSource bitmapSource = ImageToBitmapSource(resized);
-            return bitmapSource;
+            BitmapImage bitmapImage = ImageToBitmapImage(resized);
+            return bitmapImage;
         }
 
         private static bool ChooseFile(out string fileName)
         {
             var dialog = new OpenFileDialog
-                         {
-                             Title = "Select an image",
-                             Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-                                      "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                                      "Portable Network Graphic (*.png)|*.png"
-                         };
+            {
+                Title = "Select an image",
+                Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+                        "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                        "Portable Network Graphic (*.png)|*.png"
+            };
             bool? nullDialogChosen = dialog.ShowDialog();
 
             fileName = dialog.FileName;
 
             bool dialogChosen = nullDialogChosen ?? false;
-            return dialogChosen != true;
+            return dialogChosen == true;
         }
 
         private void SortName()
         {
             bool isInList = _vm.Emotes.Any(emote => _vm.EmoteName == emote.Name);
-            if (!string.IsNullOrEmpty(_vm.EmoteName)
-                && !isInList
+            if (!string.IsNullOrEmpty(_vm.EmoteName) 
+                && !isInList 
                 && _vm.EmoteName != Seperator)
             {
                 return;
@@ -91,8 +92,13 @@ namespace EmoteTool.ViewModels
             _vm.EmoteName = "Emote #" + number;
         }
 
-        private static Bitmap ImageToResizedBitmap(Image imageToResize, Size size)
+        private Bitmap ImageToResizedBitmap(Image imageToResize, Size size = default(Size))
         {
+            if (size == default(Size))
+            {
+                size = _vm.IconSize;
+            }
+
             var bitmap = new Bitmap(size.Width, size.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -103,11 +109,11 @@ namespace EmoteTool.ViewModels
             return bitmap;
         }
 
-        private static BitmapSource ImageToBitmapSource(Image bitmap)
+        private static BitmapImage ImageToBitmapImage(Image image)
         {
             using (var stream = new MemoryStream())
             {
-                bitmap.Save(stream, ImageFormat.Png);
+                image.Save(stream, ImageFormat.Png);
                 stream.Position = 0;
 
                 var result = new BitmapImage();

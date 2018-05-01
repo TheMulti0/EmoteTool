@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using EmoteTool.Properties;
 using EmoteTool.ViewModels;
+using MaterialDesignThemes.Wpf;
 
 namespace EmoteTool.Views
 {
@@ -25,6 +26,5 @@ namespace EmoteTool.Views
             Settings.Default.Save();
             //Settings.Default.Reload();
         }
-
     }
 }

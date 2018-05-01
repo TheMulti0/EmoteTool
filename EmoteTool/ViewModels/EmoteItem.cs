@@ -6,10 +6,10 @@ namespace EmoteTool.ViewModels
     {
         public string Name { get; set; }
 
-        public BitmapSource Image { get; set; }
+        public BitmapImage Image { get; set; }
 
 
-        public EmoteItem(string name, BitmapSource image)
+        public EmoteItem(string name, BitmapImage image)
         {
             Name = name;
             Image = image;
