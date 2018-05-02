@@ -18,7 +18,6 @@
 
     <Window.Resources>
 
-        <viewModels:TextStateToVisibility x:Key="TextToVisibility" />
         <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
 
         <ControlTemplate x:Key="EmotesTemplate"
