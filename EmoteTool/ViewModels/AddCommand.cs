@@ -39,8 +39,13 @@ namespace EmoteTool.ViewModels
         {
             if (parameter == "Accept")
             {
-                AddToCollections(_browsedItem);
-                _vm.IsAddDialogOpen = false;
+                if (string.IsNullOrWhiteSpace(_vm.FilePath)
+                    || _browsedItem == null)
+                {
+                    return;
+                }
+
+                AcceptImage();
                 return;
             }
 
@@ -63,6 +68,16 @@ namespace EmoteTool.ViewModels
             }
 
             AddToCollections(emoteItem);
+        }
+
+        private void AcceptImage()
+        {
+            AddToCollections(_browsedItem);
+
+            _vm.IsAddDialogOpen = false;
+            _vm.EmoteName = "";
+            _vm.FilePath = "";
+            _browsedItem = null;
         }
 
         private void AddToCollections(EmoteItem item)
@@ -114,7 +129,7 @@ namespace EmoteTool.ViewModels
         private void SortName()
         {
             bool isInList = _vm.Emotes.Any(emote => _vm.EmoteName == emote.Name);
-            if (!string.IsNullOrEmpty(_vm.EmoteName) 
+            if (!string.IsNullOrWhiteSpace(_vm.EmoteName) 
                 && !isInList 
                 && _vm.EmoteName != Seperator)
             {

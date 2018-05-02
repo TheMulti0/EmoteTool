@@ -27,6 +27,7 @@ namespace EmoteTool.ViewModels
         private EmoteItem _selectedItem;
         private bool _isAddDialogOpen;
         private string _filePath;
+        private string _emoteName;
 
         public AddCommand AddCommand { get; set; }
 
@@ -54,7 +55,20 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public string EmoteName { get; set; }
+        public string EmoteName
+        {
+            get => _emoteName;
+            set
+            {
+                if (value == _emoteName)
+                {
+                    return;
+                }
+
+                _emoteName = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string FilePath
         {
@@ -95,7 +109,7 @@ namespace EmoteTool.ViewModels
             Seperator = ";;;;;;";
             
             AddCommand = new AddCommand(this);
-
+            Default.Reset();
             RemoveCommand = new Command(RemoveImage);
 
             CopyCommand = new Command(CopyImage);
