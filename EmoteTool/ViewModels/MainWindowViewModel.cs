@@ -26,6 +26,7 @@ namespace EmoteTool.ViewModels
     {
         private EmoteItem _selectedItem;
         private bool _isAddDialogOpen;
+        private string _filePath;
 
         public AddCommand AddCommand { get; set; }
 
@@ -55,6 +56,21 @@ namespace EmoteTool.ViewModels
 
         public string EmoteName { get; set; }
 
+        public string FilePath
+        {
+            get => _filePath;
+            set
+            {
+                if (value == _filePath)
+                {
+                    return;
+                }
+
+                _filePath = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsAddDialogOpen
         {
             get => _isAddDialogOpen;
@@ -77,14 +93,18 @@ namespace EmoteTool.ViewModels
         public MainWindowViewModel()
         {
             Seperator = ";;;;;;";
-
+            
             AddCommand = new AddCommand(this);
 
             RemoveCommand = new Command(RemoveImage);
 
             CopyCommand = new Command(CopyImage);
 
-            AddDialogCommand = new Command(() => IsAddDialogOpen = !IsAddDialogOpen);
+            AddDialogCommand = new Command(() =>
+            {
+                IsAddDialogOpen = !IsAddDialogOpen;
+                FilePath = "";
+            });
 
             Emotes = new ObservableCollection<EmoteItem>();
 
@@ -119,45 +139,15 @@ namespace EmoteTool.ViewModels
         {
             if (SelectedItem == null)
             {
-                try
-                {
-                    EmoteItem item = Emotes.FirstOrDefault(emote => emote.Name == EmoteName);
-                    RemoveEmote(item);
-                }
-                catch (Exception)
-                {
-                }
-
-                IsAddDialogOpen = false;
                 return; 
             }
 
-            RemoveEmote(SelectedItem);
-        }
+            Emotes.Remove(SelectedItem);
 
-        private void RemoveEmote(EmoteItem item)
-        {
-            Emotes.Remove(item);
+            List<string> list = Default.SavedEmotes.Cast<string>().ToList();
+            string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
 
-            try
-            {
-                List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-                string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
-
-                Default.SavedEmotes.Remove(match);
-            }
-            catch (NullReferenceException)
-            {
-                Default.SavedEmotes.Remove(
-                    item.Name 
-                    + Seperator 
-                    + item.Image.BaseUri.AbsolutePath);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Error adding to saved file " + e);
-                throw;
-            }
+            Default.SavedEmotes.Remove(match);
         }
 
         private void CopyImage()

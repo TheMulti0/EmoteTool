@@ -96,14 +96,17 @@
                             </TextBlock>
 
                             <TextBox Name="EmoteName" Background="Transparent"
-                                     Text="{Binding EmoteName, Mode=OneWayToSource}" />
+                                     Text="{Binding EmoteName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                         
                         <StackPanel Orientation="Horizontal" Margin="0, 5">
                             
-                            <Label x:Name="ImagePath" />
+                            <Label x:Name="ImagePath"
+                                   Content="{Binding FilePath}" />
                             
                             <Button Content="Browse"
+                                    Command="{Binding AddCommand}"
+                                    CommandParameter="Browse"
                                     Style="{DynamicResource MaterialDesignFlatButton}" />
 
                         </StackPanel>
@@ -115,11 +118,12 @@
                                     Margin="0, 5">
 
                             <Button Content="Cancel" 
-                                    Command="{Binding RemoveCommand}" 
+                                    Command="{x:Static material:DialogHost.CloseDialogCommand}" 
                                     Style="{DynamicResource MaterialDesignFlatButton}" />
 
                             <Button Content="Accept"
                                     Command="{Binding AddCommand}"
+                                    CommandParameter="Accept"
                                     Style="{DynamicResource MaterialDesignFlatButton}" />
 
                         </StackPanel>

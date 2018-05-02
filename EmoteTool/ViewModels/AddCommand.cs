@@ -17,6 +17,7 @@ namespace EmoteTool.ViewModels
     internal class AddCommand : ICommand
     {
         private readonly MainWindowViewModel _vm;
+        private EmoteItem _browsedItem;
 
         public event EventHandler CanExecuteChanged;
 
@@ -30,27 +31,58 @@ namespace EmoteTool.ViewModels
 
         public void Execute(object parameter)
         {
-            SelectImage();
+            string value = parameter as string;
+            SelectImage(value);
         }
 
-        
-
-        public void SelectImage()
+        public void SelectImage(string parameter = "")
         {
+            if (parameter == "Accept")
+            {
+                AddToCollections(_browsedItem);
+                _vm.IsAddDialogOpen = false;
+                return;
+            }
+
             if (!ChooseFile(out string fileName))
             {
                 return;
             }
 
-            BitmapImage bitmapSource = SetUpImage(fileName);
+            BitmapImage bitmapImage = SetUpImage(fileName);
 
             SortName();
 
-            var emoteItem = new EmoteItem(_vm.EmoteName, bitmapSource);
-            _vm.Emotes.Add(emoteItem);
+            var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage);
 
-            Default.SavedEmotes.Add(_vm.EmoteName + Seperator + fileName);
-            //_vm.IsAddDialogOpen = false;
+            if (parameter == "Browse")
+            {
+                _browsedItem = new EmoteItem(_vm.EmoteName, bitmapImage);
+                _vm.FilePath = fileName;
+                return;
+            }
+
+            AddToCollections(emoteItem);
+        }
+
+        private void AddToCollections(EmoteItem item)
+        {
+            _vm.Emotes.Add(item);
+            try
+            {
+                Default.SavedEmotes.Add(item.Name + Seperator + item.Image.UriSource.AbsolutePath);
+            }
+            catch (NullReferenceException)
+            {
+                try
+                {
+                    Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.Image.UriSource.AbsolutePath);
+                }
+                catch
+                {
+                    Default.SavedEmotes.Add(item.Name + Seperator + _vm.FilePath);
+                }
+            }
         }
 
         public BitmapImage SetUpImage(string fileName)
@@ -58,6 +90,7 @@ namespace EmoteTool.ViewModels
             Image image = Image.FromFile(fileName);
             Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize);
             BitmapImage bitmapImage = ImageToBitmapImage(resized);
+
             return bitmapImage;
         }
 
