@@ -7,6 +7,7 @@
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
         xmlns:material="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:properties="clr-namespace:EmoteTool.Properties"
+        xmlns:views="clr-namespace:EmoteTool.Views"
         mc:Ignorable="d"
         Title="EmoteTool"
         Width="800" Height="500">
@@ -75,63 +76,7 @@
                     Command="{Binding RemoveCommand}"
                     Style="{DynamicResource MaterialDesignFlatButton}" />
 
-            <material:DialogHost x:Name="AddDialog" 
-                                 CloseOnClickAway="True"
-                                 IsOpen="{Binding IsAddDialogOpen, Mode=TwoWay}">
-
-                <material:DialogHost.DialogContent>
-                    <StackPanel Orientation="Vertical">
-
-                        <Grid Width="200" Margin="15, 15">
-
-                            <TextBlock Text="Enter text for emote name"
-                                       Foreground="LightSteelBlue"
-                                       Padding="4">
-                                <TextBlock.Visibility>
-                                    <MultiBinding Converter="{StaticResource TextToVisibility}">
-                                        <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
-                                        <Binding ElementName="EmoteName" Path="IsFocused" />
-                                    </MultiBinding>
-                                </TextBlock.Visibility>
-                            </TextBlock>
-
-                            <TextBox Name="EmoteName" Background="Transparent"
-                                     Text="{Binding EmoteName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
-                        
-                        <StackPanel Orientation="Horizontal" Margin="0, 5">
-                            
-                            <Label x:Name="ImagePath"
-                                   Content="{Binding FilePath}" />
-                            
-                            <Button Content="Browse"
-                                    Command="{Binding AddCommand}"
-                                    CommandParameter="Browse"
-                                    Style="{DynamicResource MaterialDesignFlatButton}" />
-
-                        </StackPanel>
-
-                        <Image Source="{Binding Content, ElementName=ImagePath}" />
-                        
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Margin="0, 5">
-
-                            <Button Content="Cancel" 
-                                    Command="{x:Static material:DialogHost.CloseDialogCommand}" 
-                                    Style="{DynamicResource MaterialDesignFlatButton}" />
-
-                            <Button Content="Accept"
-                                    Command="{Binding AddCommand}"
-                                    CommandParameter="Accept"
-                                    Style="{DynamicResource MaterialDesignFlatButton}" />
-
-                        </StackPanel>
-
-                    </StackPanel>
-                </material:DialogHost.DialogContent>
-
-            </material:DialogHost>
+            <views:AddDialog x:Name="AddDialog" />
 
             <ListView x:Name="Emotes"
                       Margin="0, 15"
