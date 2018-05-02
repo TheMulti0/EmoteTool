@@ -29,6 +29,7 @@
 
                 <Button Width="80" Height="80"
                         Content="+" FontSize="30"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                         Style="{DynamicResource MaterialDesignFlatButton}"
                         Command="{Binding AddDialogCommand}" />
 
@@ -42,7 +43,8 @@
 
                 <Image Width="35" Height="35"
                        Source="{Binding Image}" />
-                <Label Content="{Binding Name}" />
+                <TextBlock Text="{Binding Name}"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
             </StackPanel>
 

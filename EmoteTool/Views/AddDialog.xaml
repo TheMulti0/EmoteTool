@@ -20,7 +20,7 @@
             <Grid Width="200" Margin="15, 15">
 
                 <TextBlock Text="Enter text for emote name"
-                           Foreground="LightSteelBlue"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}"
                            Padding="4">
                     <TextBlock.Visibility>
                         <MultiBinding Converter="{StaticResource TextStateToVisibility}">
