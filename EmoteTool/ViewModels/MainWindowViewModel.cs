@@ -139,7 +139,11 @@ namespace EmoteTool.ViewModels
         {
             if (SelectedItem == null)
             {
-                return; 
+                if (Emotes.Count == 1)
+                {
+                    Emotes.Clear();
+                    return;
+                }
             }
 
             Emotes.Remove(SelectedItem);
