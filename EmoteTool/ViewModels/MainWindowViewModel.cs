@@ -28,6 +28,7 @@ namespace EmoteTool.ViewModels
         private bool _isAddDialogOpen;
         private string _filePath;
         private string _emoteName;
+        private string _errorLabel;
 
         public AddCommand AddCommand { get; set; }
 
@@ -96,6 +97,21 @@ namespace EmoteTool.ViewModels
                 }
 
                 _isAddDialogOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ErrorLabel
+        {
+            get => _errorLabel;
+            set
+            {
+                if (value == _errorLabel)
+                {
+                    return;
+                }
+
+                _errorLabel = value;
                 OnPropertyChanged();
             }
         }
