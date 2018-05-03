@@ -89,7 +89,8 @@
     <Compile Include="ViewModels\BoolToOpacityConverter.cs" />
     <Compile Include="ViewModels\Command.cs" />
     <Compile Include="ViewModels\EmoteItem.cs" />
-    <Compile Include="ViewModels\TextStateToVisibility.cs" />
+    <Compile Include="ViewModels\StringToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\TextStateToVisibilityConverter.cs" />
     <Compile Include="Views\AddDialog.xaml.cs">
       <DependentUpon>AddDialog.xaml</DependentUpon>
     </Compile>

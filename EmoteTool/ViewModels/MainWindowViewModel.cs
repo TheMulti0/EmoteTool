@@ -109,7 +109,7 @@ namespace EmoteTool.ViewModels
             Seperator = ";;;;;;";
             
             AddCommand = new AddCommand(this);
-            Default.Reset();
+            
             RemoveCommand = new Command(RemoveImage);
 
             CopyCommand = new Command(CopyImage);

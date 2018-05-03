@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace EmoteTool.ViewModels
 {
-    internal class TextStateToVisibility : IMultiValueConverter
+    internal class TextStateToVisibilityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

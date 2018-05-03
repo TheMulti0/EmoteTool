@@ -11,11 +11,16 @@
              IsOpen="{Binding Path=IsAddDialogOpen, Mode=TwoWay}">
 
     <material:DialogHost.Resources>
-        <viewModels:TextStateToVisibility x:Key="TextStateToVisibility" />
+
+        <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
+        <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
+
     </material:DialogHost.Resources>
 
     <material:DialogHost.DialogContent>
         <StackPanel Orientation="Vertical">
+            
+            <TextBlock Foreground="DarkGray" />
 
             <Grid Width="200" Margin="15, 15">
 
@@ -36,10 +41,23 @@
 
             <StackPanel Orientation="Horizontal" Margin="0, 5">
 
-                <TextBlock x:Name="ImagePath"
-                           Text="{Binding FilePath}" />
+                <Grid Margin="5, 5">
 
-                <Button Content="Browse" HorizontalAlignment="Left"
+                    <Rectangle RadiusX="7.5" RadiusY="7.5"
+                               Height="32"
+                               Fill="{DynamicResource PrimaryHueMidBrush}"
+                               Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" />
+
+                    <TextBlock x:Name="ImagePath" Panel.ZIndex="2"
+                               VerticalAlignment="Center" Margin="5, 5"
+                               Text="{Binding FilePath}"
+                               FontSize="14" FontWeight="Medium"
+                               Foreground="White" />
+
+                </Grid>
+                
+                <Button Content="Browse" 
+                        Margin="5, 0" HorizontalAlignment="Right"
                         Command="{Binding AddCommand}"
                         CommandParameter="Browse"
                         Style="{DynamicResource MaterialDesignFlatButton}" />
@@ -53,8 +71,8 @@
                         Margin="0, 5">
 
                 <Button Content="Cancel" 
-                                Command="{x:Static material:DialogHost.CloseDialogCommand}" 
-                                Style="{DynamicResource MaterialDesignFlatButton}" />
+                        Command="{x:Static material:DialogHost.CloseDialogCommand}" 
+                        Style="{DynamicResource MaterialDesignFlatButton}" />
 
                 <Button Content="Accept"
                         Command="{Binding AddCommand}"
