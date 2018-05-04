@@ -20,10 +20,7 @@
     <material:DialogHost.DialogContent>
         <StackPanel Orientation="Vertical">
             
-            <TextBlock Margin="5, 5"
-                       Foreground="Red"
-                       Text="{Binding ErrorLabel, Mode=TwoWay}" 
-                       FontWeight="Light" />
+            <TextBlock Foreground="DarkGray" />
 
             <Grid Width="200" Margin="15, 15">
 

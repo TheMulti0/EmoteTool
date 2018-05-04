@@ -37,18 +37,10 @@ namespace EmoteTool.ViewModels
 
         public void SelectImage(string parameter = "")
         {
-            string emoteName = _vm.EmoteName;
-
             if (parameter == "Accept")
             {
                 if (string.IsNullOrWhiteSpace(_vm.FilePath)
                     || _browsedItem == null)
-                {
-                    _vm.ErrorLabel = "Insert a path to your image";
-                    return;
-                }
-
-                if (!CheckName(ref emoteName))
                 {
                     return;
                 }
@@ -64,17 +56,12 @@ namespace EmoteTool.ViewModels
 
             BitmapImage bitmapImage = SetUpImage(fileName);
 
-            
-            if (!CheckName(ref emoteName))
-            {
-                return;
-            }
+            SortName();
 
             var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage);
 
             if (parameter == "Browse")
             {
-                _vm.ErrorLabel = "";
                 _browsedItem = new EmoteItem(_vm.EmoteName, bitmapImage);
                 _vm.FilePath = fileName;
                 return;
@@ -90,7 +77,6 @@ namespace EmoteTool.ViewModels
             _vm.IsAddDialogOpen = false;
             _vm.EmoteName = "";
             _vm.FilePath = "";
-            _vm.ErrorLabel = "";
             _browsedItem = null;
         }
 
@@ -140,31 +126,18 @@ namespace EmoteTool.ViewModels
             return dialogChosen == true;
         }
 
-        private bool CheckName(ref string name)
+        private void SortName()
         {
-            string s = name;
-            bool isInList = _vm.Emotes.Any(emote => s == emote.Name);
-
-            if (name.Contains(Seperator))
+            bool isInList = _vm.Emotes.Any(emote => _vm.EmoteName == emote.Name);
+            if (!string.IsNullOrWhiteSpace(_vm.EmoteName) 
+                && !isInList 
+                && _vm.EmoteName != Seperator)
             {
-                _vm.ErrorLabel = "Emote name can't be this name";
-                return false;
-            }
-            if (!string.IsNullOrWhiteSpace(name) 
-                && !isInList)
-            {
-                return true;
+                return;
             }
 
-            SortName(ref name);
-
-            return true;
-        }
-
-        private void SortName(ref string name)
-        {
             int number = _vm.Emotes.Count + 1;
-            name = "Emote #" + number;
+            _vm.EmoteName = "Emote #" + number;
         }
 
         private Bitmap ImageToResizedBitmap(Image imageToResize, Size size = default(Size))
