@@ -44,6 +44,10 @@ namespace EmoteTool.ViewModels
                 {
                     return;
                 }
+                if (_vm.EmoteName != _browsedItem.Name)
+                {
+                    _browsedItem.Name = _vm.EmoteName;
+                }
 
                 AcceptImage();
                 return;
@@ -85,18 +89,18 @@ namespace EmoteTool.ViewModels
             _vm.Emotes.Add(item);
             try
             {
-                Default.SavedEmotes.Add(item.Name + Seperator + item.Image.UriSource.AbsolutePath);
-            }
-            catch (NullReferenceException)
-            {
                 try
-                {
-                    Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.Image.UriSource.AbsolutePath);
-                }
-                catch
                 {
                     Default.SavedEmotes.Add(item.Name + Seperator + _vm.FilePath);
                 }
+                catch
+                {
+                    Default.SavedEmotes.Add(item.Name + Seperator + item.Image.UriSource.AbsolutePath);
+                }
+            }
+            catch
+            {
+                Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.Image.UriSource.AbsolutePath);
             }
         }
 
