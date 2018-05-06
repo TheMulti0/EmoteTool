@@ -37,20 +37,37 @@
 
         </ControlTemplate>
 
+        <Style x:Key="HoverButton" 
+               TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignFlatButton}">
+
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+
+        </Style>
+
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
+            <Grid>
 
-            <StackPanel Orientation="Vertical">
+                <Button Style="{StaticResource HoverButton}" Content="4" Width="15" Height="15" />
 
-                <Image Width="35" Height="35"
-                       Source="{Binding Image}" />
+                <StackPanel Orientation="Vertical">
 
-                <TextBlock Margin="0, 5" 
-                           Text="{Binding Name}"
-                           FontWeight="Medium"
-                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                    <Image Width="35" Height="35"
+                           Source="{Binding Image}" />
 
-            </StackPanel>
+                    <TextBlock Margin="0, 5"
+                               Text="{Binding Name}"
+                               FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
+                </StackPanel>
+
+            </Grid>
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
