@@ -38,38 +38,8 @@
 
         </ControlTemplate>
 
-        <Style x:Key="HoverButtonsStyle" TargetType="Panel">
-
-            <Setter Property="Visibility" Value="Collapsed" />
-
-            <Style.Triggers>
-                <DataTrigger Value="True">
-
-                    <DataTrigger.Binding>
-                        <Binding Path="IsMouseOver"
-                                 RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}" />
-                    </DataTrigger.Binding>
-
-                    <Setter Property="Visibility" Value="Visible" />
-
-                </DataTrigger>
-            </Style.Triggers>
-
-        </Style>
-
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
             <StackPanel Orientation="Vertical">
-
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Top" HorizontalAlignment="Right"
-                            Style="{StaticResource HoverButtonsStyle}">
-
-                    <Button Foreground="Black" Height="15" Width="14"
-                            Command="{Binding RemoveCommand ,Source={StaticResource ViewModel}}"
-                            CommandParameter="{Binding}" />
-
-                </StackPanel>
-                
 
                 <StackPanel Orientation="Vertical">
 
