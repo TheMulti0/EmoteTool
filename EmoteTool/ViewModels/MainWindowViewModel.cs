@@ -28,7 +28,8 @@ namespace EmoteTool.ViewModels
         private bool _isAddDialogOpen;
         private string _filePath;
         private string _emoteName;
-        private ObservableCollection<EmoteItem> _emotes;
+        private bool _isEditDialogOpen;
+        private bool _isAnyDialogOpen;
 
         public AddCommand AddCommand { get; set; }
 
@@ -38,17 +39,11 @@ namespace EmoteTool.ViewModels
 
         public ICommand AddDialogCommand { get; set; }
 
+        public ICommand EditDialogCommand { get; set; }
+
         public static string Seperator { get; private set; }
 
-        public ObservableCollection<EmoteItem> Emotes
-        {
-            get => _emotes;
-            set
-            {
-                _emotes = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<EmoteItem> Emotes { get; set; }
 
         public EmoteItem SelectedItem
         {
@@ -109,6 +104,35 @@ namespace EmoteTool.ViewModels
             }
         }
 
+        public bool IsEditDialogOpen
+        {
+            get => _isEditDialogOpen;
+            set
+            {
+                if (value == _isEditDialogOpen)
+                {
+                    return;
+                }
+                _isEditDialogOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsAnyDialogOpen
+        {
+            get => _isAnyDialogOpen;
+            set
+            {
+                if (value == _isAnyDialogOpen)
+                {
+                    return;
+                }
+                _isEditDialogOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public Size IconSize { get; private set; }
 
         public MainWindowViewModel()
@@ -124,6 +148,14 @@ namespace EmoteTool.ViewModels
             AddDialogCommand = new Command(() =>
             {
                 IsAddDialogOpen = !IsAddDialogOpen;
+                IsAnyDialogOpen = !IsAnyDialogOpen;
+                FilePath = "";
+            });
+
+            EditDialogCommand = new Command(() =>
+            {
+                IsEditDialogOpen = !IsAddDialogOpen;
+                IsAnyDialogOpen = !IsAnyDialogOpen;
                 FilePath = "";
             });
 

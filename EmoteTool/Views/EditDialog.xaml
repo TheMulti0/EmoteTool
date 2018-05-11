@@ -1,0 +1,65 @@
+﻿<material:DialogHost x:Class="EmoteTool.Views.EditDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EmoteTool.Views"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
+             mc:Ignorable="d"
+             CloseOnClickAway="True" 
+             IsOpen="{Binding Path=IsEditDialogOpen, Mode=TwoWay}">
+
+    <material:DialogHost.Resources>
+
+        <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
+        <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
+
+    </material:DialogHost.Resources>
+
+    <material:DialogHost.DialogContent>
+        <StackPanel Orientation="Vertical">
+            
+            <TextBlock Foreground="DarkGray" />
+
+            <Grid Width="200" Margin="15, 15">
+
+                <TextBlock Text="Rename emote"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}"
+                           Padding="4">
+                    <TextBlock.Visibility>
+                        <MultiBinding Converter="{StaticResource TextStateToVisibility}">
+                            <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
+                            <Binding ElementName="EmoteName" Path="IsFocused" />
+                        </MultiBinding>
+                    </TextBlock.Visibility>
+                </TextBlock>
+
+                <TextBox Name="EmoteName" Background="Transparent"
+                         Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <Image Source="{Binding SelectedItem.Image}" />
+            
+            <TextBlock Text="{Binding SelectedItem.Name}"></TextBlock>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Margin="0, 5">
+
+                <Button Content="Cancel" 
+                        Command="{x:Static material:DialogHost.CloseDialogCommand}" 
+                        Style="{DynamicResource MaterialDesignFlatButton}" />
+
+                <Button Content="Accept"
+                        Command="{Binding AddCommand}"
+                        CommandParameter="Accept"
+                        Style="{DynamicResource MaterialDesignFlatButton}" />
+
+            </StackPanel>
+
+        </StackPanel>
+    </material:DialogHost.DialogContent>
+
+</material:DialogHost>
+

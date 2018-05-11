@@ -66,10 +66,10 @@
 
         <Rectangle x:Name="DialogShade"
                    Panel.ZIndex="10" 
-                   IsHitTestVisible="{Binding IsOpen, ElementName=AddDialog}"
+                   IsHitTestVisible="{Binding IsAnyDialogOpen}"
                    Fill="Black"
-                   IsEnabled="{Binding IsOpen, ElementName=AddDialog}"
-                   Opacity="{Binding IsOpen, ElementName=AddDialog, Converter={StaticResource BoolToOpacity}}" />
+                   IsEnabled="{Binding IsAnyDialogOpen}"
+                   Opacity="{Binding IsAnyDialogOpen, Converter={StaticResource BoolToOpacity}}" />
 
         <StackPanel Orientation="Vertical"
                     Margin="15, 15">
@@ -82,8 +82,11 @@
                     Content="Remove"
                     Command="{Binding RemoveCommand}"
                     Style="{DynamicResource MaterialDesignFlatButton}" />
+            <Button Content="Yknow" Command="{Binding EditDialogCommand}"></Button>
 
             <views:AddDialog x:Name="AddDialog" />
+
+            <views:EditDialog x:Name="EditDialog" />
 
             <ListView x:Name="Emotes"
                       Margin="0, 15"
