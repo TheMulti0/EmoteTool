@@ -28,6 +28,7 @@ namespace EmoteTool.ViewModels
         private bool _isAddDialogOpen;
         private string _filePath;
         private string _emoteName;
+        private ObservableCollection<EmoteItem> _emotes;
 
         public AddCommand AddCommand { get; set; }
 
@@ -39,7 +40,15 @@ namespace EmoteTool.ViewModels
 
         public static string Seperator { get; private set; }
 
-        public ObservableCollection<EmoteItem> Emotes { get; set; }
+        public ObservableCollection<EmoteItem> Emotes
+        {
+            get => _emotes;
+            set
+            {
+                _emotes = value;
+                OnPropertyChanged();
+            }
+        }
 
         public EmoteItem SelectedItem
         {
@@ -102,8 +111,6 @@ namespace EmoteTool.ViewModels
 
         public Size IconSize { get; private set; }
 
-        
-
         public MainWindowViewModel()
         {
             Seperator = ";;;;;;";
@@ -149,10 +156,14 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        private void RemoveImage()
+        private void RemoveImage(object item)
         {
             if (SelectedItem == null)
             {
+                if (item != null)
+                {
+                    //SelectedItem = (EmoteItem)item;
+                }
                 if (Emotes.Count == 1)
                 {
                     Emotes.Clear();

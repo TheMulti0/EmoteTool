@@ -18,6 +18,7 @@
 
     <Window.Resources>
 
+        <viewModels:MainWindowViewModel x:Key="ViewModel" />
         <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
 
         <ControlTemplate x:Key="EmotesTemplate"
@@ -37,23 +38,38 @@
 
         </ControlTemplate>
 
-        <Style x:Key="HoverButton" 
-               TargetType="Button"
-               BasedOn="{StaticResource MaterialDesignFlatButton}">
+        <Style x:Key="HoverButtonsStyle" TargetType="Panel">
 
             <Setter Property="Visibility" Value="Collapsed" />
+
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}" Value="True">
+                <DataTrigger Value="True">
+
+                    <DataTrigger.Binding>
+                        <Binding Path="IsMouseOver"
+                                 RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}" />
+                    </DataTrigger.Binding>
+
                     <Setter Property="Visibility" Value="Visible" />
+
                 </DataTrigger>
             </Style.Triggers>
 
         </Style>
 
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
-            <Grid>
+            <StackPanel Orientation="Vertical">
 
-                <Button Style="{StaticResource HoverButton}" Content="4" Width="15" Height="15" />
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Top" HorizontalAlignment="Right"
+                            Style="{StaticResource HoverButtonsStyle}">
+
+                    <Button Foreground="Black" Height="15" Width="14"
+                            Command="{Binding RemoveCommand ,Source={StaticResource ViewModel}}"
+                            CommandParameter="{Binding}" />
+
+                </StackPanel>
+                
 
                 <StackPanel Orientation="Vertical">
 
@@ -67,7 +83,7 @@
 
                 </StackPanel>
 
-            </Grid>
+            </StackPanel>
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
@@ -102,7 +118,7 @@
             <ListView x:Name="Emotes"
                       Margin="0, 15"
                       Template="{StaticResource EmotesTemplate}"
-                      ItemsSource="{Binding Emotes}"
+                      ItemsSource="{Binding Emotes, Mode=TwoWay}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
                       SelectedItem="{Binding SelectedItem}">
