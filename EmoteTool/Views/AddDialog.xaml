@@ -36,8 +36,7 @@
                 </TextBlock>
 
                 <TextBox Name="EmoteName" Background="Transparent"
-                         Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                         Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <StackPanel Orientation="Horizontal" Margin="0, 5">
