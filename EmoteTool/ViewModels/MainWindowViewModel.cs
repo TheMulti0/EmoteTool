@@ -100,6 +100,7 @@ namespace EmoteTool.ViewModels
                 }
 
                 _isAddDialogOpen = value;
+                IsAnyDialogOpen = value;
                 OnPropertyChanged();
             }
         }
@@ -114,6 +115,7 @@ namespace EmoteTool.ViewModels
                     return;
                 }
                 _isEditDialogOpen = value;
+                IsAnyDialogOpen = value;
                 OnPropertyChanged();
             }
         }
@@ -127,11 +129,10 @@ namespace EmoteTool.ViewModels
                 {
                     return;
                 }
-                _isEditDialogOpen = value;
+                _isAnyDialogOpen = value;
                 OnPropertyChanged();
             }
         }
-
 
         public Size IconSize { get; private set; }
 
@@ -148,14 +149,12 @@ namespace EmoteTool.ViewModels
             AddDialogCommand = new Command(() =>
             {
                 IsAddDialogOpen = !IsAddDialogOpen;
-                IsAnyDialogOpen = !IsAnyDialogOpen;
                 FilePath = "";
             });
 
             EditDialogCommand = new Command(() =>
             {
-                IsEditDialogOpen = !IsAddDialogOpen;
-                IsAnyDialogOpen = !IsAnyDialogOpen;
+                IsEditDialogOpen = !IsEditDialogOpen;
                 FilePath = "";
             });
 
