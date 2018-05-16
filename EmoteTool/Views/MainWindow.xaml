@@ -94,7 +94,7 @@
                       ItemsSource="{Binding Emotes, Mode=TwoWay}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{Binding SelectedItem}">
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">

@@ -12,7 +12,7 @@ namespace EmoteTool.Views
         {
             InitializeComponent();
 
-            var window = Application.Current.MainWindow;
+            Window window = Application.Current.MainWindow;
             DataContext = window?.DataContext;
         }
     }

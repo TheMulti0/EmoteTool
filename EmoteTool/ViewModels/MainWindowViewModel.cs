@@ -88,7 +88,7 @@ namespace EmoteTool.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        
         public bool IsAddDialogOpen
         {
             get => _isAddDialogOpen;
@@ -154,8 +154,22 @@ namespace EmoteTool.ViewModels
 
             EditDialogCommand = new Command(() =>
             {
-                IsEditDialogOpen = !IsEditDialogOpen;
-                FilePath = "";
+                if (!IsEditDialogOpen)
+                {
+                    IsEditDialogOpen = true;
+                    FilePath = "";
+                }
+                else
+                {
+                    IsEditDialogOpen = false;
+                    int itemIndex = Emotes.IndexOf(SelectedItem);
+                    Emotes[itemIndex] = new EmoteItem(EmoteName, SelectedItem.Image);
+
+                    RemoveSelectedItemFromFile(out string match);
+
+                    string[] strings = match.Split(new string[]{Seperator}, StringSplitOptions.None);
+                    Default.SavedEmotes.Add(SelectedItem.Name + Seperator + strings.LastOrDefault());
+                }
             });
 
             Emotes = new ObservableCollection<EmoteItem>();
@@ -175,7 +189,7 @@ namespace EmoteTool.ViewModels
 
             foreach (string emote in Default.SavedEmotes)
             {
-                string[] splitted = emote.Split(MainWindowViewModel.Seperator.Split(' '),
+                string[] splitted = emote.Split(new string[] {Seperator},
                                                 StringSplitOptions.None);
                 string name = splitted[0];
                 string fileName = splitted[1];
@@ -204,8 +218,13 @@ namespace EmoteTool.ViewModels
 
             Emotes.Remove(SelectedItem);
 
+            RemoveSelectedItemFromFile(out string match);
+        }
+
+        private void RemoveSelectedItemFromFile(out string match)
+        {
             List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-            string match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
+            match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
 
             Default.SavedEmotes.Remove(match);
         }

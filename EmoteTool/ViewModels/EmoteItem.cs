@@ -8,7 +8,6 @@ namespace EmoteTool.ViewModels
 
         public BitmapImage Image { get; set; }
 
-
         public EmoteItem(string name, BitmapImage image)
         {
             Name = name;

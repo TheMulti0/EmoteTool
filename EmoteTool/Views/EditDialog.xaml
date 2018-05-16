@@ -41,7 +41,7 @@
 
             <Image Source="{Binding SelectedItem.Image}" />
             
-            <TextBlock Text="{Binding SelectedItem.Name}"></TextBlock>
+            <TextBlock Text="{Binding SelectedItem.Name}" />
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -52,7 +52,7 @@
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
                 <Button Content="Accept"
-                        Command="{Binding AddCommand}"
+                        Command="{Binding EditDialogCommand}"
                         CommandParameter="Accept"
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
