@@ -162,10 +162,13 @@ namespace EmoteTool.ViewModels
                 else
                 {
                     IsEditDialogOpen = false;
+                    string oldName = SelectedItem.Name;
                     int itemIndex = Emotes.IndexOf(SelectedItem);
-                    Emotes[itemIndex] = new EmoteItem(EmoteName, SelectedItem.Image);
+                    var emoteItem = new EmoteItem(EmoteName, SelectedItem.Image);
+                    SelectedItem = emoteItem;
+                    Emotes[itemIndex] = emoteItem;
 
-                    RemoveSelectedItemFromFile(out string match);
+                    RemoveSelectedItemFromFile(out string match, oldName);
 
                     string[] strings = match.Split(new string[]{Seperator}, StringSplitOptions.None);
                     Default.SavedEmotes.Add(SelectedItem.Name + Seperator + strings.LastOrDefault());
@@ -218,13 +221,17 @@ namespace EmoteTool.ViewModels
 
             Emotes.Remove(SelectedItem);
 
-            RemoveSelectedItemFromFile(out string match);
+            RemoveSelectedItemFromFile(out string match, EmoteName);
         }
 
-        private void RemoveSelectedItemFromFile(out string match)
+        private void RemoveSelectedItemFromFile(out string match, string name = null)
         {
+            if (name == null)
+            {
+                name = SelectedItem.Name;
+            }
             List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-            match = list.Find(s => s.StartsWith(SelectedItem.Name + Seperator));
+            match = list.Find(s => s.StartsWith(name + Seperator));
 
             Default.SavedEmotes.Remove(match);
         }
