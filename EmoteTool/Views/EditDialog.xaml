@@ -39,12 +39,54 @@
                          Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
+            <Grid HorizontalAlignment="Center">
+                <Image Source="{Binding SelectedItem.Image}" />
+                <Canvas MinWidth="50" MinHeight="50">
+                    <Canvas.Resources>
+
+                        <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="Control">
+                            <Grid>
+                                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
+                                       VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
+                                       VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
+                                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
+                                       VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
+                                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
+                                       VerticalAlignment="Bottom"  HorizontalAlignment="Stretch"/>
+                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
+                                       VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
+                                       VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
+                                       VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
+                                       VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </ControlTemplate>
+                        
+                        <ControlTemplate x:Key="ResizerRectTemplate" TargetType="ContentControl">
+                            <Grid>
+                                <Control Template="{StaticResource ResizeDecoratorTemplate}"/>
+                                <Rectangle Fill="Black"/>
+                            </Grid>
+                        </ControlTemplate>
+
+                    </Canvas.Resources>
+
+                    <ContentControl Template="{StaticResource ResizerRectTemplate}">
+                        <Border BorderThickness="0.3" BorderBrush="Aqua">
+                            <Rectangle Fill="Black" IsHitTestVisible="False"/>
+                        </Border>
+                    </ContentControl>
+
+                </Canvas>
+            </Grid>
+            
             <StackPanel Orientation="Vertical">
 
-                <Image Source="{Binding SelectedItem.Image.UriSource.AbsolutePath}" />
-
                 <TextBlock Text="{Binding SelectedItem.Name}"
-                           FontWeight="Medium"
+                           FontWeight="Medium" HorizontalAlignment="Center"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
             </StackPanel>
