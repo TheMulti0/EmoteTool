@@ -185,6 +185,10 @@ namespace EmoteTool.ViewModels
 
         private void EditDialog()
         {
+            if (SelectedItem == null)
+            {
+                return;
+            }
             if (!IsEditDialogOpen)
             {
                 IsEditDialogOpen = true;
