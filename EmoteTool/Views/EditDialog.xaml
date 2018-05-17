@@ -41,11 +41,36 @@
 
             <StackPanel Orientation="Vertical">
 
-                <Image Source="{Binding SelectedItem.Image.UriSource.AbsolutePath}" />
+                <Image Source="{Binding SelectedItem.Image" />
 
                 <TextBlock Text="{Binding SelectedItem.Name}"
                            FontWeight="Medium"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" />
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0, 5">
+
+                <Grid Margin="5, 5">
+
+                    <Rectangle RadiusX="7.5" RadiusY="7.5"
+                               Height="32"
+                               Fill="{DynamicResource PrimaryHueMidBrush}"
+                               Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" />
+
+                    <TextBlock x:Name="ImagePath" Panel.ZIndex="2"
+                               VerticalAlignment="Center" Margin="5, 5"
+                               Text="{Binding FilePath}"
+                               FontSize="14" FontWeight="Medium"
+                               Foreground="White" />
+
+                </Grid>
+
+                <Button Content="Browse" 
+                        Margin="5, 0" HorizontalAlignment="Right"
+                        Command="{Binding AddCommand}"
+                        CommandParameter="Browse"
+                        Style="{DynamicResource MaterialDesignFlatButton}" />
 
             </StackPanel>
 
