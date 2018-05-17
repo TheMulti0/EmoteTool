@@ -1,4 +1,6 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace EmoteTool.ViewModels
 {
@@ -8,10 +10,20 @@ namespace EmoteTool.ViewModels
 
         public BitmapImage Image { get; set; }
 
+        public string ImagePath { get; set; }
+
         public EmoteItem(string name, BitmapImage image)
         {
             Name = name;
             Image = image;
+            ImagePath = image.UriSource?.AbsolutePath;
+        }
+
+        public EmoteItem(string name, string imagePath)
+        {
+            Name = name;
+            ImagePath = imagePath;
+            Image = new BitmapImage(new Uri(ImagePath));
         }
     }
 }
