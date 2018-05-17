@@ -152,29 +152,7 @@ namespace EmoteTool.ViewModels
                 FilePath = "";
             });
 
-            EditDialogCommand = new Command(() =>
-            {
-                if (!IsEditDialogOpen)
-                {
-                    IsEditDialogOpen = true;
-                    EmoteName = "";
-                }
-                else
-                {
-                    IsEditDialogOpen = false;
-                    string oldName = SelectedItem.Name;
-                    int itemIndex = Emotes.IndexOf(SelectedItem);
-                    var emoteItem = new EmoteItem(EmoteName, SelectedItem.Image);
-                    Emotes[itemIndex] = emoteItem;
-                    SelectedItem = Emotes[itemIndex];
-
-                    RemoveSelectedItemFromFile(out string match, oldName);
-
-                    string[] strings = match.Split(new string[]{Seperator}, StringSplitOptions.None);
-                    Default.SavedEmotes.Add(SelectedItem.Name + Seperator + strings.LastOrDefault());
-                    return;
-                }
-            });
+            EditDialogCommand = new Command(EditDialog);
 
             Emotes = new ObservableCollection<EmoteItem>();
 
@@ -205,6 +183,30 @@ namespace EmoteTool.ViewModels
             }
         }
 
+        private void EditDialog()
+        {
+            if (!IsEditDialogOpen)
+            {
+                IsEditDialogOpen = true;
+                EmoteName = "";
+                FilePath = SelectedItem.ImagePath;
+            }
+            else
+            {
+                IsEditDialogOpen = false;
+
+                string oldName = SelectedItem.Name;
+                RemoveSelectedItemFromFile(oldName);
+                AddCommand.SortName();
+                var newItem = new EmoteItem(EmoteName, FilePath);
+                int itemIndex = Emotes.IndexOf(SelectedItem);
+                Emotes[itemIndex] = newItem;
+                SelectedItem = Emotes[itemIndex];
+
+                Default.SavedEmotes.Add(SelectedItem.Name + Seperator + FilePath);
+            }
+        }
+
         private void RemoveImage(object item)
         {
             if (SelectedItem == null)
@@ -222,17 +224,17 @@ namespace EmoteTool.ViewModels
 
             Emotes.Remove(SelectedItem);
 
-            RemoveSelectedItemFromFile(out string match, EmoteName);
+            RemoveSelectedItemFromFile(EmoteName);
         }
 
-        private void RemoveSelectedItemFromFile(out string match, string name = null)
+        private void RemoveSelectedItemFromFile(string name = null)
         {
             if (name == null)
             {
                 name = SelectedItem.Name;
             }
             List<string> list = Default.SavedEmotes.Cast<string>().ToList();
-            match = list.Find(s => s.StartsWith(name + Seperator));
+            string match = list.Find(s => s.StartsWith(name + Seperator));
 
             Default.SavedEmotes.Remove(match);
         }

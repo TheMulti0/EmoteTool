@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-
 using static EmoteTool.Properties.Settings;
 using static EmoteTool.ViewModels.MainWindowViewModel;
 
@@ -19,19 +17,21 @@ namespace EmoteTool.ViewModels
         private readonly MainWindowViewModel _vm;
         private EmoteItem _browsedItem;
 
-        public event EventHandler CanExecuteChanged;
-
         public AddCommand(MainWindowViewModel mainWindowViewModel)
         {
             _vm = mainWindowViewModel;
         }
 
-        public bool CanExecute(object parameter) 
-            => true;
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
 
         public void Execute(object parameter)
         {
-            string value = parameter as string;
+            var value = parameter as string;
             SelectImage(value);
         }
 
@@ -60,7 +60,7 @@ namespace EmoteTool.ViewModels
 
             BitmapImage bitmapImage = SetUpImage(fileName);
 
-            SortName();
+            _vm.EmoteName = SortName();
 
             var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage);
 
@@ -95,12 +95,12 @@ namespace EmoteTool.ViewModels
                 }
                 catch
                 {
-                    Default.SavedEmotes.Add(item.Name + Seperator + item.Image.UriSource.AbsolutePath);
+                    Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
                 }
             }
             catch
             {
-                Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.Image.UriSource.AbsolutePath);
+                Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.ImagePath);
             }
         }
 
@@ -119,29 +119,34 @@ namespace EmoteTool.ViewModels
             {
                 Title = "Select an image",
                 Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-                        "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-                        "Portable Network Graphic (*.png)|*.png"
+                         "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                         "Portable Network Graphic (*.png)|*.png"
             };
             bool? nullDialogChosen = dialog.ShowDialog();
 
             fileName = dialog.FileName;
 
             bool dialogChosen = nullDialogChosen ?? false;
-            return dialogChosen == true;
+            return dialogChosen;
         }
 
-        private void SortName()
+        public string SortName(string name = "")
         {
-            bool isInList = _vm.Emotes.Any(emote => _vm.EmoteName == emote.Name);
-            if (!string.IsNullOrWhiteSpace(_vm.EmoteName) 
-                && !isInList 
-                && _vm.EmoteName != Seperator)
+            if (name == "")
             {
-                return;
+                name = _vm.EmoteName;
+            }
+            bool isInList = _vm.Emotes.Any(emote => name == emote.Name);
+            if (!string.IsNullOrWhiteSpace(name)
+                && !isInList
+                && name != Seperator)
+            {
+                return name;
             }
 
             int number = _vm.Emotes.Count + 1;
-            _vm.EmoteName = "Emote #" + number;
+            name = "Emote #" + number;
+            return name;
         }
 
         private Bitmap ImageToResizedBitmap(Image imageToResize, Size size = default(Size))
@@ -179,6 +184,5 @@ namespace EmoteTool.ViewModels
                 return result;
             }
         }
-
     }
 }
