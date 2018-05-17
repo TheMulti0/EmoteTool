@@ -157,7 +157,7 @@ namespace EmoteTool.ViewModels
                 if (!IsEditDialogOpen)
                 {
                     IsEditDialogOpen = true;
-                    FilePath = "";
+                    EmoteName = "";
                 }
                 else
                 {
@@ -165,13 +165,14 @@ namespace EmoteTool.ViewModels
                     string oldName = SelectedItem.Name;
                     int itemIndex = Emotes.IndexOf(SelectedItem);
                     var emoteItem = new EmoteItem(EmoteName, SelectedItem.Image);
-                    SelectedItem = emoteItem;
                     Emotes[itemIndex] = emoteItem;
+                    SelectedItem = Emotes[itemIndex];
 
                     RemoveSelectedItemFromFile(out string match, oldName);
 
                     string[] strings = match.Split(new string[]{Seperator}, StringSplitOptions.None);
                     Default.SavedEmotes.Add(SelectedItem.Name + Seperator + strings.LastOrDefault());
+                    return;
                 }
             });
 

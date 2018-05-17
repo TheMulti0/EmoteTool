@@ -39,16 +39,22 @@
                          Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
-            <Image Source="{Binding SelectedItem.Image}" />
-            
-            <TextBlock Text="{Binding SelectedItem.Name}" />
+            <StackPanel Orientation="Vertical">
+
+                <Image Source="{Binding SelectedItem.Image.UriSource.AbsolutePath}" />
+
+                <TextBlock Text="{Binding SelectedItem.Name}"
+                           FontWeight="Medium"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
+
+            </StackPanel>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Center"
                         Margin="0, 5">
 
                 <Button Content="Cancel" 
-                        Command="{x:Static material:DialogHost.CloseDialogCommand}" 
+                        Command="{Binding EditDialogCommand}" 
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
                 <Button Content="Accept"
