@@ -68,7 +68,7 @@
                 
                 <Image x:Name="ImagePreview"
                        Source="{Binding FilePath}" />
-                
+
                 <Canvas>
                     <Canvas.Resources>
                         <ControlTemplate x:Key="DragThumbTemplate" TargetType="{x:Type views:DragThumb}">
@@ -111,8 +111,6 @@
                     <ContentControl Template="{StaticResource ResizerRectTemplate}"
                                     Width="{Binding ActualWidth, ElementName=ImagePreview}"
                                     Height="{Binding ActualHeight, ElementName=ImagePreview}"
-                                    MaxWidth="{Binding ActualWidth, ElementName=ImagePreview}"
-                                    MaxHeight="{Binding ActualHeight, ElementName=ImagePreview}"
                                     Canvas.Left="{Binding DragPosition.X}"
                                     Canvas.Top="{Binding DragPosition.Y}">
                         <Border BorderThickness="0.3" BorderBrush="Aqua">

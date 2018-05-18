@@ -28,7 +28,7 @@ namespace EmoteTool.ViewModels
             {
                 return;
             }
-            Clipboard.SetImage(SelectedItem.Image);
+            Clipboard.SetImage(_vm.SelectedItem.Image);
         }
     }
 }

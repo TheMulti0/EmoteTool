@@ -35,9 +35,9 @@ namespace EmoteTool.ViewModels
 
         public AddCommand AddCommand { get; set; }
 
-        public ICommand RemoveCommand { get; set; }
-
         public ICommand CopyCommand { get; set; }
+
+        public ICommand RemoveCommand { get; set; }
 
         public ICommand AddDialogCommand { get; set; }
 
@@ -159,10 +159,10 @@ namespace EmoteTool.ViewModels
             Seperator = ";;;;;;";
             
             AddCommand = new AddCommand(this);
-            
-            RemoveCommand = new CommandBase(RemoveImage);
 
-            CopyCommand = new CommandBase(CopyImage);
+            CopyCommand = new CopyCommand(this);
+
+            RemoveCommand = new CommandBase(RemoveImage);
 
             AddDialogCommand = new CommandBase(() =>
             {
