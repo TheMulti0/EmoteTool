@@ -201,8 +201,8 @@ namespace EmoteTool.ViewModels
 
                 string oldName = SelectedItem.Name;
                 RemoveSelectedItemFromFile(oldName);
-                AddCommand.SortName();
-                var newItem = new EmoteItem(EmoteName, FilePath);
+                EmoteName = AddCommand.SortName();
+                var newItem = new EmoteItem(EmoteName, FilePath ?? SelectedItem.ImagePath);
                 int itemIndex = Emotes.IndexOf(SelectedItem);
                 Emotes[itemIndex] = newItem;
                 SelectedItem = Emotes[itemIndex];
