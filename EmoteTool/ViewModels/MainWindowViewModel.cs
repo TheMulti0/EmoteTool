@@ -77,9 +77,10 @@ namespace EmoteTool.ViewModels
         public string FilePath
         {
             get => _filePath;
+
             set
             {
-                if (value == _filePath)
+                if (value == _filePath || string.IsNullOrWhiteSpace(value))
                 {
                     return;
                 }
@@ -88,7 +89,7 @@ namespace EmoteTool.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public bool IsAddDialogOpen
         {
             get => _isAddDialogOpen;
@@ -177,7 +178,7 @@ namespace EmoteTool.ViewModels
                 string fileName = splitted[1];
 
                 BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapImage);
+                var emoteItem = new EmoteItem(name, bitmapImage, fileName);
 
                 Emotes.Add(emoteItem);
             }

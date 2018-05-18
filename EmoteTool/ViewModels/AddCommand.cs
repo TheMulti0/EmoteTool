@@ -62,11 +62,11 @@ namespace EmoteTool.ViewModels
 
             _vm.EmoteName = SortName();
 
-            var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage);
+            var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
 
             if (parameter == "Browse")
             {
-                _browsedItem = new EmoteItem(_vm.EmoteName, bitmapImage);
+                _browsedItem = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
                 _vm.FilePath = fileName;
                 return;
             }

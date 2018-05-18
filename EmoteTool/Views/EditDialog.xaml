@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EmoteTool.Views"
+             xmlns:views="clr-namespace:EmoteTool.Views"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
              mc:Ignorable="d"
@@ -65,27 +65,26 @@
             </StackPanel>
 
             <Grid HorizontalAlignment="Center">
-                <Image Source="{Binding SelectedItem.Image}" />
+                <Image Source="{Binding FilePath}" />
                 <Canvas MinWidth="50" MinHeight="50">
                     <Canvas.Resources>
-
                         <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="Control">
                             <Grid>
-                                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
+                                <views:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
                                        VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
+                                <views:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
                                        VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
-                                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
+                                <views:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
                                        VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
-                                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
+                                <views:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
                                        VerticalAlignment="Bottom"  HorizontalAlignment="Stretch"/>
-                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
+                                <views:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
                                        VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
+                                <views:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
                                        VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
+                                <views:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
                                        VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-                                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
+                                <views:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
                                        VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
                             </Grid>
                         </ControlTemplate>

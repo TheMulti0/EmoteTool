@@ -12,11 +12,19 @@ namespace EmoteTool.ViewModels
 
         public string ImagePath { get; set; }
 
-        public EmoteItem(string name, BitmapImage image)
+        public EmoteItem(string name, BitmapImage image, string path = null)
         {
             Name = name;
             Image = image;
-            ImagePath = image.UriSource?.AbsolutePath;
+            
+            if (path == null)
+            {
+                ImagePath = image.UriSource?.AbsolutePath;
+            }
+            else
+            {
+                ImagePath = path;
+            }
         }
 
         public EmoteItem(string name, string imagePath)
