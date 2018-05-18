@@ -19,6 +19,7 @@ using Microsoft.Win32;
 
 using static EmoteTool.Properties.Settings;
 using Size = System.Drawing.Size;
+using Point = System.Drawing.Point;
 
 namespace EmoteTool.ViewModels
 {
@@ -80,7 +81,8 @@ namespace EmoteTool.ViewModels
 
             set
             {
-                if (value == _filePath || string.IsNullOrWhiteSpace(value))
+                if (value == _filePath 
+                    || string.IsNullOrWhiteSpace(value))
                 {
                     return;
                 }
@@ -136,6 +138,8 @@ namespace EmoteTool.ViewModels
         }
 
         public Size IconSize { get; private set; }
+
+        public Point DragPosition { get; set; }
 
         public MainWindowViewModel()
         {

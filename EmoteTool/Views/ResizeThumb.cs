@@ -14,7 +14,7 @@ namespace EmoteTool.Views
 
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            var item = this.DataContext as Control;
+            var item = DataContext as Control;
 
 
             if (item != null)

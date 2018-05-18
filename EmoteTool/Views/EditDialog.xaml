@@ -65,9 +65,16 @@
             </StackPanel>
 
             <Grid HorizontalAlignment="Center">
-                <Image Source="{Binding FilePath}" />
-                <Canvas MinWidth="50" MinHeight="50">
+                
+                <Image x:Name="ImagePreview"
+                       Source="{Binding FilePath}" />
+                
+                <Canvas>
                     <Canvas.Resources>
+                        <ControlTemplate x:Key="DragThumbTemplate" TargetType="{x:Type views:DragThumb}">
+                            <Rectangle Fill="Black"/>
+                        </ControlTemplate>
+
                         <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="Control">
                             <Grid>
                                 <views:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
@@ -91,16 +98,23 @@
                         
                         <ControlTemplate x:Key="ResizerRectTemplate" TargetType="ContentControl">
                             <Grid>
-                                <Control Template="{StaticResource ResizeDecoratorTemplate}"/>
-                                <Rectangle Fill="Black"/>
+                                <Control Template="{StaticResource ResizeDecoratorTemplate}"
+                                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <views:DragThumb Template="{StaticResource DragThumbTemplate}"
+                                    DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                    Cursor="SizeAll"/>
                             </Grid>
                         </ControlTemplate>
 
                     </Canvas.Resources>
 
-                    <ContentControl Template="{StaticResource ResizerRectTemplate}">
+                    <ContentControl Template="{StaticResource ResizerRectTemplate}"
+                                    Width="{Binding ActualWidth, ElementName=ImagePreview}"
+                                    Height="{Binding ActualHeight, ElementName=ImagePreview}"
+                                    Canvas.Left="{Binding DragPosition.X}"
+                                    Canvas.Top="{Binding DragPosition.Y}">
                         <Border BorderThickness="0.3" BorderBrush="Aqua">
-                            <Rectangle Fill="Black" IsHitTestVisible="False"/>
+                            <Rectangle Fill="Transparent" IsHitTestVisible="False"/>
                         </Border>
                     </ContentControl>
 
