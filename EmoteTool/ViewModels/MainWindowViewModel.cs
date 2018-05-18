@@ -143,17 +143,17 @@ namespace EmoteTool.ViewModels
             
             AddCommand = new AddCommand(this);
             
-            RemoveCommand = new Command(RemoveImage);
+            RemoveCommand = new CommandBase(RemoveImage);
 
-            CopyCommand = new Command(CopyImage);
+            CopyCommand = new CommandBase(CopyImage);
 
-            AddDialogCommand = new Command(() =>
+            AddDialogCommand = new CommandBase(() =>
             {
                 IsAddDialogOpen = !IsAddDialogOpen;
                 FilePath = "";
             });
 
-            EditDialogCommand = new Command(EditDialog);
+            EditDialogCommand = new CommandBase(EditDialog);
 
             Emotes = new ObservableCollection<EmoteItem>();
 
@@ -246,11 +246,7 @@ namespace EmoteTool.ViewModels
 
         private void CopyImage()
         {
-            if (SelectedItem == null)
-            {
-                return;
-            }
-            Clipboard.SetImage(SelectedItem.Image);
+            
         }
 
 

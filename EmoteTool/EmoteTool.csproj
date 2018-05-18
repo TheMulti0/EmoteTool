@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\CopyCommand.cs" />
     <Compile Include="Views\ResizeThumb.cs" />
     <Page Include="Views\EditDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -92,7 +93,7 @@
     </Compile>
     <Compile Include="ViewModels\AddCommand.cs" />
     <Compile Include="ViewModels\BoolToOpacityConverter.cs" />
-    <Compile Include="ViewModels\Command.cs" />
+    <Compile Include="ViewModels\CommandBase.cs" />
     <Compile Include="ViewModels\EmoteItem.cs" />
     <Compile Include="ViewModels\StringToVisibilityConverter.cs" />
     <Compile Include="ViewModels\TextStateToVisibilityConverter.cs" />
