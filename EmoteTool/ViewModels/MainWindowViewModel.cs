@@ -31,6 +31,7 @@ namespace EmoteTool.ViewModels
         private string _emoteName;
         private bool _isEditDialogOpen;
         private bool _isAnyDialogOpen;
+        private Point _dragPosition;
 
         public AddCommand AddCommand { get; set; }
 
@@ -139,7 +140,19 @@ namespace EmoteTool.ViewModels
 
         public Size IconSize { get; private set; }
 
-        public Point DragPosition { get; set; }
+        public Point DragPosition
+        {
+            get => _dragPosition;
+            set
+            {
+                if (value == _dragPosition)
+                {
+                    return;
+                }
+                _dragPosition = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MainWindowViewModel()
         {
