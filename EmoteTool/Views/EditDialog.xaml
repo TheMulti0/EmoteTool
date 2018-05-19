@@ -65,8 +65,9 @@
             </StackPanel>
 
             <Grid HorizontalAlignment="Center">
-                
+
                 <Image x:Name="ImagePreview"
+                       MaxHeight="300" MaxWidth="500"
                        Source="{Binding FilePath}" />
 
                 <Canvas>
@@ -95,7 +96,7 @@
                                        VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
                             </Grid>
                         </ControlTemplate>
-                        
+
                         <ControlTemplate x:Key="ResizerRectTemplate" TargetType="ContentControl">
                             <Grid>
                                 <Control Template="{StaticResource ResizeDecoratorTemplate}"
@@ -109,8 +110,8 @@
                     </Canvas.Resources>
 
                     <ContentControl Template="{StaticResource ResizerRectTemplate}"
-                                    Width="{Binding ActualWidth, ElementName=ImagePreview}"
-                                    Height="{Binding ActualHeight, ElementName=ImagePreview}"
+                                    Width="{Binding DragSize.Width}"
+                                    Height="{Binding DragSize.Height}"
                                     Canvas.Left="{Binding DragPosition.X}"
                                     Canvas.Top="{Binding DragPosition.Y}">
                         <Border BorderThickness="0.3" BorderBrush="Aqua">

@@ -31,7 +31,9 @@ namespace EmoteTool.ViewModels
         private string _emoteName;
         private bool _isEditDialogOpen;
         private bool _isAnyDialogOpen;
+
         private Point _dragPosition;
+        private Size _dragSize;
 
         public AddCommand AddCommand { get; set; }
 
@@ -154,6 +156,20 @@ namespace EmoteTool.ViewModels
             }
         }
 
+        public Size DragSize
+        {
+            get => _dragSize;
+            set
+            {
+                if (value == _dragSize)
+                {
+                    return;
+                }
+                _dragSize = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainWindowViewModel()
         {
             Seperator = ";;;;;;";
@@ -212,6 +228,10 @@ namespace EmoteTool.ViewModels
                 IsEditDialogOpen = true;
                 EmoteName = "";
                 FilePath = SelectedItem.ImagePath;
+                DragPosition = new Point(0, 0);
+                DragSize = new Size(
+                    Math.Min(Convert.ToInt32(SelectedItem.Image.Width), 500 ),
+                    Math.Min(Convert.ToInt32(SelectedItem.Image.Height), 300 ) );
             }
             else
             {

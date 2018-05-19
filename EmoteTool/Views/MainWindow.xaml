@@ -82,7 +82,7 @@
                     Content="Remove"
                     Command="{Binding RemoveCommand}"
                     Style="{DynamicResource MaterialDesignFlatButton}" />
-            <Button Content="Yknow" Command="{Binding EditDialogCommand}"></Button>
+            <Button Content="Yknow" Command="{Binding EditDialogCommand}"/>
 
             <views:AddDialog x:Name="AddDialog" />
 
