@@ -198,7 +198,6 @@ namespace EmoteTool.ViewModels
             return true;
         }
 
-
         private void AddToCollections(EmoteItem item)
         {
             _vm.Emotes.Add(item);
