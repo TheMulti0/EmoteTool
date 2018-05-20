@@ -41,17 +41,15 @@
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
             <StackPanel Orientation="Vertical">
 
-                <StackPanel Orientation="Vertical">
-
-                    <Image Width="35" Height="35"
+                    <Image HorizontalAlignment="Center" VerticalAlignment="Center"
+                           MaxWidth="35" MaxHeight="35"
+                           MinWidth="35" MinHeight="35"
                            Source="{Binding Image}" />
 
-                    <TextBlock Margin="0, 5"
+                    <TextBlock HorizontalAlignment="Center" Margin="0, 5"
                                Text="{Binding Name}"
                                FontWeight="Medium"
                                Foreground="{DynamicResource PrimaryHueMidBrush}" />
-
-                </StackPanel>
 
             </StackPanel>
         </DataTemplate>

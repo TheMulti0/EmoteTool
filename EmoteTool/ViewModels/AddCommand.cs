@@ -4,7 +4,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -25,8 +24,10 @@ namespace EmoteTool.ViewModels
 
         public event EventHandler CanExecuteChanged;
 
-        public bool CanExecute(object parameter) 
-            => true;
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
 
         public void Execute(object parameter)
         {
@@ -36,19 +37,8 @@ namespace EmoteTool.ViewModels
 
         public void SelectImage(string parameter = "")
         {
-            if (parameter == "Accept")
+            if (HandleAcceptParameter(parameter))
             {
-                if (string.IsNullOrWhiteSpace(_vm.FilePath)
-                    || _browsedItem == null)
-                {
-                    return;
-                }
-                if (_vm.EmoteName != _browsedItem.Name)
-                {
-                    _browsedItem.Name = _vm.EmoteName;
-                }
-
-                AcceptImage();
                 return;
             }
 
@@ -58,19 +48,48 @@ namespace EmoteTool.ViewModels
             }
 
             BitmapImage bitmapImage = SetUpImage(fileName);
-
             _vm.EmoteName = SortName();
+            var item = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
 
-            var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
-
-            if (parameter == "Browse")
+            if (HandleBrowserParameter(parameter, item))
             {
-                _browsedItem = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
-                _vm.FilePath = fileName;
                 return;
             }
 
-            AddToCollections(emoteItem);
+            AddToCollections(item);
+        }
+
+        private bool HandleBrowserParameter(string parameter, EmoteItem item)
+        {
+            if (parameter != "Browse")
+            {
+                return false;
+            }
+
+            _browsedItem = item;
+            _vm.FilePath = item.ImagePath;
+            return true;
+        }
+
+        private bool HandleAcceptParameter(string parameter)
+        {
+            if (parameter != "Accept")
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(_vm.FilePath)
+                && string.IsNullOrWhiteSpace(_browsedItem.Name)
+                && _browsedItem == null)
+            {
+                return true;
+            }
+            if (_vm.EmoteName != _browsedItem.Name)
+            {
+                _browsedItem.Name = _vm.EmoteName;
+            }
+
+            AcceptImage();
+            return true;
         }
 
         private void AcceptImage()
@@ -86,20 +105,18 @@ namespace EmoteTool.ViewModels
         private void AddToCollections(EmoteItem item)
         {
             _vm.Emotes.Add(item);
-            try
+            if (!string.IsNullOrWhiteSpace(item.ImagePath))
             {
-                try
-                {
-                    Default.SavedEmotes.Add(item.Name + Seperator + _vm.FilePath);
-                }
-                catch
-                {
-                    Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
-                }
+                Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
+                return;
             }
-            catch
+            if (item.Image.UriSource != null
+                || item.Image.BaseUri != null)
             {
-                Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.ImagePath);
+                Default.SavedEmotes.Add(item.Name +
+                                        Seperator +
+                                        item.Image.UriSource?.AbsolutePath
+                                        ?? item.Image.BaseUri.AbsolutePath);
             }
         }
 
@@ -141,9 +158,9 @@ namespace EmoteTool.ViewModels
             {
                 char last = name.LastOrDefault();
                 int i = int.Parse(last.ToString());
-                return 
-                    i == _vm.Emotes.Count + 1 
-                        ? name 
+                return
+                    i == _vm.Emotes.Count + 1
+                        ? name
                         : HandleBadName();
             }
             if (!string.IsNullOrWhiteSpace(name)
