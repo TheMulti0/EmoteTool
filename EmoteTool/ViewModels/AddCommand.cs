@@ -141,6 +141,16 @@ namespace EmoteTool.ViewModels
             {
                 return name;
             }
+            if (!string.IsNullOrWhiteSpace(name) 
+                && name.StartsWith("Emote"))
+            {
+                char last = name.LastOrDefault();
+                int i = int.Parse(last.ToString());
+                if (i == _vm.Emotes.Count + 1)
+                {
+                    return name;
+                }
+            }
 
             int number = _vm.Emotes.Count + 1;
             name = "Emote #" + number;

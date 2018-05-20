@@ -3,37 +3,26 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using EmoteTool.Annotations;
-using Microsoft.Win32;
-
 using static EmoteTool.Properties.Settings;
-using Size = System.Drawing.Size;
-using Point = System.Drawing.Point;
 
 namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-        private EmoteItem _selectedItem;
-        private bool _isAddDialogOpen;
-        private string _filePath;
-        private string _emoteName;
-        private bool _isEditDialogOpen;
-        private bool _isAnyDialogOpen;
-
         private Point _dragPosition;
         private Size _dragSize;
+        private string _emoteName;
+        private string _filePath;
+        private bool _isAddDialogOpen;
+        private bool _isAnyDialogOpen;
+        private bool _isEditDialogOpen;
+        private EmoteItem _selectedItem;
 
         public AddCommand AddCommand { get; set; }
 
@@ -84,7 +73,7 @@ namespace EmoteTool.ViewModels
 
             set
             {
-                if (value == _filePath 
+                if (value == _filePath
                     || string.IsNullOrWhiteSpace(value))
                 {
                     return;
@@ -140,7 +129,7 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public Size IconSize { get; private set; }
+        public Size IconSize { get; }
 
         public Point DragPosition
         {
@@ -173,7 +162,7 @@ namespace EmoteTool.ViewModels
         public MainWindowViewModel()
         {
             Seperator = ";;;;;;";
-            
+
             AddCommand = new AddCommand(this);
 
             CopyCommand = new CopyCommand(this);
@@ -195,6 +184,8 @@ namespace EmoteTool.ViewModels
             ReadSavedEmotes();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void ReadSavedEmotes()
         {
             if (Default.SavedEmotes == null)
@@ -205,9 +196,9 @@ namespace EmoteTool.ViewModels
 
             foreach (string emote in Default.SavedEmotes)
             {
-                string[] splitted = emote.Split(new string[] {Seperator},
+                string[] splitted = emote.Split(new[] {Seperator},
                                                 StringSplitOptions.None);
-                string name = splitted[0];
+                string name = AddCommand.SortName(splitted[0]);
                 string fileName = splitted[1];
 
                 BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
@@ -230,8 +221,8 @@ namespace EmoteTool.ViewModels
                 FilePath = SelectedItem.ImagePath;
                 DragPosition = new Point(0, 0);
                 DragSize = new Size(
-                    Math.Min(Convert.ToInt32(SelectedItem.Image.Width), 500 ),
-                    Math.Min(Convert.ToInt32(SelectedItem.Image.Height), 300 ) );
+                    Math.Min((int) (SelectedItem.Image.Width), 500),
+                    Math.Min((int)(SelectedItem.Image.Height), 300));
             }
             else
             {
@@ -271,29 +262,21 @@ namespace EmoteTool.ViewModels
 
         private void RemoveSelectedItemFromFile(string name = null)
         {
-            if (name == null)
+            if (string.IsNullOrWhiteSpace(name))
             {
                 name = SelectedItem.Name;
             }
-            List<string> list = Default.SavedEmotes.Cast<string>().ToList();
+            List<string> list = Default.SavedEmotes.Cast<string>()
+                                       .ToList();
             string match = list.Find(s => s.StartsWith(name + Seperator));
 
             Default.SavedEmotes.Remove(match);
         }
-
-        private void CopyImage()
-        {
-            
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
