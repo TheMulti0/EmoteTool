@@ -43,7 +43,7 @@ namespace EmoteTool.ViewModels
             get => _selectedItem;
             set
             {
-                if (value == _selectedItem || value == null)
+                if (value == _selectedItem)
                 {
                     return;
                 }
