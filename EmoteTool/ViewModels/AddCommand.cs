@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -136,24 +137,29 @@ namespace EmoteTool.ViewModels
             }
             bool isInList = _vm.Emotes.Any(emote => name == emote.Name);
             if (!string.IsNullOrWhiteSpace(name)
+                && name.StartsWith("Emote"))
+            {
+                char last = name.LastOrDefault();
+                int i = int.Parse(last.ToString());
+                return 
+                    i == _vm.Emotes.Count + 1 
+                        ? name 
+                        : HandleBadName();
+            }
+            if (!string.IsNullOrWhiteSpace(name)
                 && !isInList
                 && name != Seperator)
             {
                 return name;
             }
-            if (!string.IsNullOrWhiteSpace(name) 
-                && name.StartsWith("Emote"))
-            {
-                char last = name.LastOrDefault();
-                int i = int.Parse(last.ToString());
-                if (i == _vm.Emotes.Count + 1)
-                {
-                    return name;
-                }
-            }
+            return HandleBadName();
+        }
 
+        private string HandleBadName()
+        {
             int number = _vm.Emotes.Count + 1;
-            name = "Emote #" + number;
+            string name = "Emote #" + number;
+
             return name;
         }
 
