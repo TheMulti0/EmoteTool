@@ -76,11 +76,6 @@ namespace EmoteTool.ViewModels
                 _vm.ErrorLabel = AddError.InvalidImage;
                 return;
             }
-            if (_browsedItem?.Name.Contains(Seperator) ?? false)
-            {
-                _vm.ErrorLabel = AddError.InvalidName;
-                return;
-            }
             _vm.ErrorLabel = AddError.None;
             return;
         }

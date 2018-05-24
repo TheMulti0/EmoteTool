@@ -11,8 +11,6 @@ namespace EmoteTool.ViewModels
     {
         [Description("")]
         None,
-        [Description("Emote name cannot be this name.")]
-        InvalidName,
         [Description("Please choose an image.")]
         InvalidImage
     }
