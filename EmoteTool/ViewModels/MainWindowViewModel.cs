@@ -18,12 +18,13 @@ namespace EmoteTool.ViewModels
         private Point _dragPosition;
         private Size _dragSize;
         private string _emoteName;
+        private string _watermarkName;
         private string _filePath;
         private bool _isAddDialogOpen;
         private bool _isAnyDialogOpen;
         private bool _isEditDialogOpen;
         private EmoteItem _selectedItem;
-        private AddError _errorLabel;
+        private ItemError _errorLabel;
 
         public AddCommand AddCommand { get; set; }
 
@@ -36,6 +37,8 @@ namespace EmoteTool.ViewModels
         public ICommand EditDialogCommand { get; set; }
 
         public static string Seperator { get; private set; }
+
+        public static string DefaultWatermark { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
@@ -64,6 +67,21 @@ namespace EmoteTool.ViewModels
                 }
 
                 _emoteName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string WatermarkName
+        {
+            get => _watermarkName;
+            set
+            {
+                if (value == _watermarkName)
+                {
+                    return;
+                }
+
+                _watermarkName = value;
                 OnPropertyChanged();
             }
         }
@@ -160,7 +178,7 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public AddError ErrorLabel
+        public ItemError ErrorLabel
         {
             get => _errorLabel;
             set
@@ -174,18 +192,15 @@ namespace EmoteTool.ViewModels
         {
             Seperator = ";;;;;;";
 
+            DefaultWatermark = "Enter text for emote name";
+
             AddCommand = new AddCommand(this);
 
             CopyCommand = new CopyCommand(this);
 
             RemoveCommand = new CommandBase(RemoveImage);
 
-            AddDialogCommand = new CommandBase(() =>
-            {
-                IsAddDialogOpen = !IsAddDialogOpen;
-                FilePath = "";
-                ErrorLabel = AddError.None;
-            });
+            AddDialogCommand = new CommandBase(() => IsAddDialogOpen = !IsAddDialogOpen);
 
             EditDialogCommand = new CommandBase(EditDialog);
 
@@ -193,7 +208,7 @@ namespace EmoteTool.ViewModels
 
             IconSize = new Size(35, 35);
 
-            ErrorLabel = AddError.None;
+            ErrorLabel = ItemError.None;
 
             ReadSavedEmotes();
         }
@@ -231,12 +246,6 @@ namespace EmoteTool.ViewModels
             if (!IsEditDialogOpen)
             {
                 IsEditDialogOpen = true;
-                EmoteName = "";
-                FilePath = SelectedItem.ImagePath;
-                DragPosition = new Point(0, 0);
-                DragSize = new Size(
-                    Math.Min((int) (SelectedItem.Image.Width), 500),
-                    Math.Min((int)(SelectedItem.Image.Height), 300));
             }
             else
             {
@@ -252,6 +261,14 @@ namespace EmoteTool.ViewModels
                 SelectedItem = Emotes[itemIndex];
 
                 Default.SavedEmotes.Add(SelectedItem.Name + Seperator + FilePath);
+
+                EmoteName = "";
+                _watermarkName = DefaultWatermark;
+                FilePath = SelectedItem.ImagePath;
+                DragPosition = new Point(0, 0);
+                DragSize = new Size(
+                    Math.Min((int)(SelectedItem.Image.Width), 500),
+                    Math.Min((int)(SelectedItem.Image.Height), 300));
             }
         }
 

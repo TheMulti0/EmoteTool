@@ -69,7 +69,7 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\AddErrorToDescription.cs" />
     <Compile Include="ViewModels\CopyCommand.cs" />
-    <Compile Include="ViewModels\AddError.cs" />
+    <Compile Include="ViewModels\ItemError.cs" />
     <Compile Include="Views\DragThumb.cs" />
     <Compile Include="Views\ResizeThumb.cs" />
     <Page Include="Views\EditDialog.xaml">

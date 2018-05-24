@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmoteTool.ViewModels
 {
-    internal enum AddError
+    internal enum ItemError
     {
         [Description("")]
         None,

@@ -38,7 +38,7 @@ namespace EmoteTool.ViewModels
         public void SelectImage(string parameter = "")
         {
             CheckError();
-            if (_vm.ErrorLabel != AddError.None)
+            if (_vm.ErrorLabel != ItemError.None)
             {
                 return;
             }
@@ -46,7 +46,7 @@ namespace EmoteTool.ViewModels
             {
                 return;
             }
-            if (_vm.ErrorLabel != AddError.None)
+            if (_vm.ErrorLabel != ItemError.None)
             {
                 return;
             }
@@ -73,10 +73,10 @@ namespace EmoteTool.ViewModels
             if (!isNameNull &&
                 _browsedItem?.Image == null)
             {
-                _vm.ErrorLabel = AddError.InvalidImage;
+                _vm.ErrorLabel = ItemError.InvalidImage;
                 return;
             }
-            _vm.ErrorLabel = AddError.None;
+            _vm.ErrorLabel = ItemError.None;
             return;
         }
 
@@ -88,7 +88,7 @@ namespace EmoteTool.ViewModels
             }
             if (_browsedItem == null)
             {
-                _vm.ErrorLabel = AddError.InvalidImage;
+                _vm.ErrorLabel = ItemError.InvalidImage;
                 return false;
             }
             if (string.IsNullOrWhiteSpace(_vm.FilePath)
@@ -112,7 +112,9 @@ namespace EmoteTool.ViewModels
 
             _vm.IsAddDialogOpen = false;
             _vm.EmoteName = "";
+            _vm.WatermarkName = DefaultWatermark;
             _vm.FilePath = "";
+            _vm.ErrorLabel = ItemError.None;
             _browsedItem = null;
         }
 
