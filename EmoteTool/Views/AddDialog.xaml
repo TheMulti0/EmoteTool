@@ -14,13 +14,15 @@
 
         <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
+        <viewModels:AddErrorToDescription x:Key="AddErrorToDescription" />
 
     </material:DialogHost.Resources>
 
     <material:DialogHost.DialogContent>
         <StackPanel Orientation="Vertical">
             
-            <TextBlock Foreground="DarkGray" />
+            <TextBlock Text="{Binding ErrorLabel, Converter={StaticResource AddErrorToDescription}}"
+                       Foreground="DarkGray" />
 
             <Grid Width="200" Margin="15, 15">
 

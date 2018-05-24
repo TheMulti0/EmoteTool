@@ -23,6 +23,7 @@ namespace EmoteTool.ViewModels
         private bool _isAnyDialogOpen;
         private bool _isEditDialogOpen;
         private EmoteItem _selectedItem;
+        private AddError _errorLabel;
 
         public AddCommand AddCommand { get; set; }
 
@@ -159,6 +160,16 @@ namespace EmoteTool.ViewModels
             }
         }
 
+        public AddError ErrorLabel
+        {
+            get => _errorLabel;
+            set
+            {
+                _errorLabel = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainWindowViewModel()
         {
             Seperator = ";;;;;;";
@@ -173,6 +184,7 @@ namespace EmoteTool.ViewModels
             {
                 IsAddDialogOpen = !IsAddDialogOpen;
                 FilePath = "";
+                ErrorLabel = AddError.None;
             });
 
             EditDialogCommand = new CommandBase(EditDialog);
@@ -180,6 +192,8 @@ namespace EmoteTool.ViewModels
             Emotes = new ObservableCollection<EmoteItem>();
 
             IconSize = new Size(35, 35);
+
+            ErrorLabel = AddError.None;
 
             ReadSavedEmotes();
         }
@@ -190,7 +204,7 @@ namespace EmoteTool.ViewModels
         {
             if (Default.SavedEmotes == null)
             {
-                //Default.SavedEmotes = new StringCollection();
+                Default.SavedEmotes = new StringCollection();
                 return;
             }
 
@@ -266,8 +280,8 @@ namespace EmoteTool.ViewModels
             {
                 name = SelectedItem.Name;
             }
-            List<string> list = Default
-                .SavedEmotes.Cast<string>()
+            List<string> list = Default.SavedEmotes
+                .Cast<string>()
                 .ToList();
 
             string match = list.Find(s => s.StartsWith(name + Seperator));
