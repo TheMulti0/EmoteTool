@@ -15,6 +15,8 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
+        private static string _defaultWatermark;
+
         private Point _dragPosition;
         private Size _dragSize;
         private string _emoteName;
@@ -37,9 +39,7 @@ namespace EmoteTool.ViewModels
         public ICommand EditDialogCommand { get; set; }
 
         public static string Seperator { get; private set; }
-
-        public static string DefaultWatermark { get; private set; }
-
+        
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
         public EmoteItem SelectedItem
@@ -192,7 +192,7 @@ namespace EmoteTool.ViewModels
         {
             Seperator = ";;;;;;";
 
-            DefaultWatermark = "Enter text for emote name";
+            _defaultWatermark = "Enter text for emote name";
 
             AddCommand = new AddCommand(this);
 
@@ -200,7 +200,11 @@ namespace EmoteTool.ViewModels
 
             RemoveCommand = new CommandBase(RemoveImage);
 
-            AddDialogCommand = new CommandBase(() => IsAddDialogOpen = !IsAddDialogOpen);
+            AddDialogCommand = new CommandBase(() =>
+            {
+                IsAddDialogOpen = !IsAddDialogOpen;
+                WatermarkName = _defaultWatermark;
+            });
 
             EditDialogCommand = new CommandBase(EditDialog);
 
@@ -263,7 +267,7 @@ namespace EmoteTool.ViewModels
                 Default.SavedEmotes.Add(SelectedItem.Name + Seperator + FilePath);
 
                 EmoteName = "";
-                _watermarkName = DefaultWatermark;
+                _watermarkName = _defaultWatermark;
                 FilePath = SelectedItem.ImagePath;
                 DragPosition = new Point(0, 0);
                 DragSize = new Size(

@@ -24,7 +24,7 @@ namespace EmoteTool.ViewModels
         {
             Name = name;
             ImagePath = imagePath;
-            Image = new BitmapImage(new Uri(ImagePath));
+            Image = new BitmapImage(new Uri(ImagePath ?? ""));
         }
     }
 }

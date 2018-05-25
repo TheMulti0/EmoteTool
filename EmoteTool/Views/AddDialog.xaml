@@ -29,7 +29,8 @@
             <Grid Width="200" Margin="15, 15">
 
                 <TextBlock Text="{Binding WatermarkName}"
-                           Foreground="{DynamicResource PrimaryHueMidBrush}"
+                           Foreground="{DynamicResource PrimaryHueLightBrush}"
+                           Opacity="70"
                            Padding="4">
                     <TextBlock.Visibility>
                         <MultiBinding Converter="{StaticResource TextStateToVisibility}">

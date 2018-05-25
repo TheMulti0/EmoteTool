@@ -50,17 +50,19 @@ namespace EmoteTool.ViewModels
             {
                 return;
             }
-            if (!ChooseFile(out string fileName))
+            if (!ChooseFile(out string filePath))
             {
                 return;
             }
 
-            BitmapImage bitmapImage = SetUpImage(fileName);
-            if (_vm.EmoteName != SortName())
+            BitmapImage bitmapImage = SetUpImage(filePath);
+            string name = _vm.EmoteName;
+            if (name != SortName())
             {
                 _vm.WatermarkName = SortName();
+                name = _vm.WatermarkName;
             }
-            var item = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
+            var item = new EmoteItem(name, bitmapImage, filePath);
 
             if (HandleBrowserParameter(parameter, item))
             {
@@ -100,9 +102,9 @@ namespace EmoteTool.ViewModels
             {
                 return true;
             }
-            if (_vm.EmoteName != _browsedItem.Name)
+            if (SortName() != _browsedItem.Name)
             {
-                _browsedItem.Name = _vm.EmoteName;
+                _browsedItem.Name = SortName();
             }
 
             AcceptImage();
@@ -115,7 +117,6 @@ namespace EmoteTool.ViewModels
 
             _vm.IsAddDialogOpen = false;
             _vm.EmoteName = "";
-            _vm.WatermarkName = DefaultWatermark;
             _vm.FilePath = "";
             _vm.ErrorLabel = ItemError.None;
             _browsedItem = null;
