@@ -56,7 +56,10 @@ namespace EmoteTool.ViewModels
             }
 
             BitmapImage bitmapImage = SetUpImage(fileName);
-            _vm.EmoteName = SortName();
+            if (_vm.EmoteName != SortName())
+            {
+                _vm.WatermarkName = SortName();
+            }
             var item = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
 
             if (HandleBrowserParameter(parameter, item))
