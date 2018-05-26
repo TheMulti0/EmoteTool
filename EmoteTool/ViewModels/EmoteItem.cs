@@ -17,21 +17,14 @@ namespace EmoteTool.ViewModels
             Name = name;
             Image = image;
             
-            if (path == null)
-            {
-                ImagePath = image.UriSource?.AbsolutePath;
-            }
-            else
-            {
-                ImagePath = path;
-            }
+            ImagePath = path ?? image.UriSource?.AbsolutePath;
         }
 
         public EmoteItem(string name, string imagePath)
         {
             Name = name;
             ImagePath = imagePath;
-            Image = new BitmapImage(new Uri(ImagePath));
+            Image = new BitmapImage(new Uri(ImagePath ?? ""));
         }
     }
 }

@@ -14,6 +14,7 @@ namespace EmoteTool.ViewModels
 {
     internal class AddCommand : ICommand
     {
+
         private readonly MainWindowViewModel _vm;
         private EmoteItem _browsedItem;
 
@@ -24,8 +25,7 @@ namespace EmoteTool.ViewModels
 
         public event EventHandler CanExecuteChanged;
 
-        public bool CanExecute(object parameter) 
-            => true;
+        public bool CanExecute(object parameter) => true;
 
         public void Execute(object parameter)
         {
@@ -35,41 +35,85 @@ namespace EmoteTool.ViewModels
 
         public void SelectImage(string parameter = "")
         {
-            if (parameter == "Accept")
-            {
-                if (string.IsNullOrWhiteSpace(_vm.FilePath)
-                    || _browsedItem == null)
-                {
-                    return;
-                }
-                if (_vm.EmoteName != _browsedItem.Name)
-                {
-                    _browsedItem.Name = _vm.EmoteName;
-                }
-
-                AcceptImage();
-                return;
-            }
-
-            if (!ChooseFile(out string fileName))
+            CheckError();
+            if (_vm.ErrorLabel != ItemError.None)
             {
                 return;
             }
 
-            BitmapImage bitmapImage = SetUpImage(fileName);
-
-            _vm.EmoteName = SortName();
-
-            var emoteItem = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
-
-            if (parameter == "Browse")
+            if (HandleAcceptParameter(parameter))
             {
-                _browsedItem = new EmoteItem(_vm.EmoteName, bitmapImage, fileName);
-                _vm.FilePath = fileName;
                 return;
             }
 
-            AddToCollections(emoteItem);
+            if (_vm.ErrorLabel != ItemError.None)
+            {
+                return;
+            }
+
+            if (!ChooseFile(out string filePath))
+            {
+                return;
+            }
+
+            BitmapImage bitmapImage = SetUpImage(filePath);
+            string name = _vm.EmoteName;
+            if (name != SortName())
+            {
+                _vm.WatermarkName = SortName();
+                name = _vm.WatermarkName;
+            }
+
+            var item = new EmoteItem(name, bitmapImage, filePath);
+
+            if (HandleBrowserParameter(parameter, item))
+            {
+                return;
+            }
+
+            AddToCollections(item);
+        }
+
+        private void CheckError()
+        {
+            bool isNameNull = string.IsNullOrWhiteSpace(_browsedItem?.Name);
+            if (!isNameNull &&
+                _browsedItem?.Image == null)
+            {
+                _vm.ErrorLabel = ItemError.InvalidImage;
+                return;
+            }
+
+            _vm.ErrorLabel = ItemError.None;
+        }
+
+        private bool HandleAcceptParameter(string parameter)
+        {
+            if (parameter != "Accept")
+            {
+                return false;
+            }
+
+            if (_browsedItem == null)
+            {
+                _vm.ErrorLabel = ItemError.InvalidImage;
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(_vm.FilePath) &&
+                string.IsNullOrWhiteSpace(_browsedItem.Name) &&
+                _browsedItem == null)
+            {
+                return true;
+            }
+
+            if (SortName() != _browsedItem.Name)
+            {
+                _browsedItem.Name = SortName();
+            }
+
+            AcceptImage();
+            return true;
         }
 
         private void AcceptImage()
@@ -79,36 +123,8 @@ namespace EmoteTool.ViewModels
             _vm.IsAddDialogOpen = false;
             _vm.EmoteName = "";
             _vm.FilePath = "";
+            _vm.ErrorLabel = ItemError.None;
             _browsedItem = null;
-        }
-
-        private void AddToCollections(EmoteItem item)
-        {
-            _vm.Emotes.Add(item);
-            try
-            {
-                try
-                {
-                    Default.SavedEmotes.Add(item.Name + Seperator + _vm.FilePath);
-                }
-                catch
-                {
-                    Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
-                }
-            }
-            catch
-            {
-                Default.SavedEmotes.Add(item.Name + Seperator + _browsedItem.ImagePath);
-            }
-        }
-
-        public BitmapImage SetUpImage(string fileName)
-        {
-            Image image = Image.FromFile(fileName);
-            Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize);
-            BitmapImage bitmapImage = ImageToBitmapImage(resized);
-
-            return bitmapImage;
         }
 
         private static bool ChooseFile(out string fileName)
@@ -128,23 +144,13 @@ namespace EmoteTool.ViewModels
             return dialogChosen;
         }
 
-        public string SortName(string name = "")
+        public BitmapImage SetUpImage(string fileName)
         {
-            if (name == "")
-            {
-                name = _vm.EmoteName;
-            }
-            bool isInList = _vm.Emotes.Any(emote => name == emote.Name);
-            if (!string.IsNullOrWhiteSpace(name)
-                && !isInList
-                && name != Seperator)
-            {
-                return name;
-            }
+            Image image = Image.FromFile(fileName);
+            Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize);
+            BitmapImage bitmapImage = ImageToBitmapImage(resized);
 
-            int number = _vm.Emotes.Count + 1;
-            name = "Emote #" + number;
-            return name;
+            return bitmapImage;
         }
 
         private Bitmap ImageToResizedBitmap(Image imageToResize, Size size = default(Size))
@@ -182,5 +188,95 @@ namespace EmoteTool.ViewModels
                 return result;
             }
         }
+
+        public string SortName(string name = "")
+        {
+            if (name == "")
+            {
+                name = _vm.EmoteName;
+            }
+
+            bool isInList = _vm.Emotes.Any(emote => name == emote.Name);
+            if (!string.IsNullOrWhiteSpace(name) &&
+                name.StartsWith("Emote"))
+            {
+                char last = name.LastOrDefault();
+                int i = int.Parse(last.ToString());
+                return
+                    i == _vm.Emotes.Count + 1
+                        ? name
+                        : HandleBadName();
+            }
+
+            if (!string.IsNullOrWhiteSpace(name) &&
+                !isInList &&
+                name != Seperator)
+            {
+                return name;
+            }
+
+            return HandleBadName();
+        }
+
+        private string HandleBadName()
+        {
+            int number = _vm.Emotes.Count + 1;
+            string name = "Emote #" + number;
+
+            return name;
+        }
+
+        private bool HandleBrowserParameter(string parameter, EmoteItem item)
+        {
+            if (parameter != "Browse")
+            {
+                return false;
+            }
+
+            _browsedItem = item;
+            _vm.FilePath = item.ImagePath;
+            return true;
+        }
+
+        private void AddToCollections(EmoteItem item)
+        {
+            _vm.Emotes.Add(item);
+            if (!string.IsNullOrWhiteSpace(item?.ImagePath))
+            {
+                Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
+                return;
+            }
+
+            if (item?.Image?.UriSource != null ||
+                item?.Image?.BaseUri != null)
+            {
+                Default.SavedEmotes.Add(
+                    item.Name +
+                    Seperator +
+                    item.Image.UriSource?.AbsolutePath ??
+                    item.Image.BaseUri?.AbsolutePath);
+                return;
+            }
+
+            if (_browsedItem != null)
+            {
+                if (!string.IsNullOrWhiteSpace(_browsedItem.ImagePath))
+                {
+                    Default.SavedEmotes.Add(
+                        _browsedItem.Name + Seperator + _browsedItem.ImagePath);
+                }
+
+                if (_browsedItem.Image?.UriSource != null ||
+                    _browsedItem.Image?.BaseUri != null)
+                {
+                    Default.SavedEmotes.Add(
+                        _browsedItem.Name + Seperator + _browsedItem.Image.UriSource?.AbsolutePath ??
+                        _browsedItem.Image.BaseUri?.AbsolutePath);
+                }
+            }
+
+            throw new NullReferenceException("Image path is empty.");
+        }
+
     }
 }
