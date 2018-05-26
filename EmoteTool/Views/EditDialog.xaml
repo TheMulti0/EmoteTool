@@ -135,7 +135,7 @@
                         Margin="0, 5">
 
                 <Button Content="Cancel" 
-                        Command="{Binding EditDialogCommand}" 
+                        Command="{x:Static material:DialogHost.CloseDialogCommand}" 
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
                 <Button Content="Accept"
