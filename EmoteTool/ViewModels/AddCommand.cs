@@ -14,20 +14,18 @@ namespace EmoteTool.ViewModels
 {
     internal class AddCommand : ICommand
     {
+
         private readonly MainWindowViewModel _vm;
         private EmoteItem _browsedItem;
-
-        public event EventHandler CanExecuteChanged;
 
         public AddCommand(MainWindowViewModel mainWindowViewModel)
         {
             _vm = mainWindowViewModel;
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter) => true;
 
         public void Execute(object parameter)
         {
@@ -42,14 +40,17 @@ namespace EmoteTool.ViewModels
             {
                 return;
             }
+
             if (HandleAcceptParameter(parameter))
             {
                 return;
             }
+
             if (_vm.ErrorLabel != ItemError.None)
             {
                 return;
             }
+
             if (!ChooseFile(out string filePath))
             {
                 return;
@@ -62,6 +63,7 @@ namespace EmoteTool.ViewModels
                 _vm.WatermarkName = SortName();
                 name = _vm.WatermarkName;
             }
+
             var item = new EmoteItem(name, bitmapImage, filePath);
 
             if (HandleBrowserParameter(parameter, item))
@@ -81,8 +83,8 @@ namespace EmoteTool.ViewModels
                 _vm.ErrorLabel = ItemError.InvalidImage;
                 return;
             }
+
             _vm.ErrorLabel = ItemError.None;
-            return;
         }
 
         private bool HandleAcceptParameter(string parameter)
@@ -91,17 +93,20 @@ namespace EmoteTool.ViewModels
             {
                 return false;
             }
+
             if (_browsedItem == null)
             {
                 _vm.ErrorLabel = ItemError.InvalidImage;
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(_vm.FilePath)
-                && string.IsNullOrWhiteSpace(_browsedItem.Name)
-                && _browsedItem == null)
+
+            if (string.IsNullOrWhiteSpace(_vm.FilePath) &&
+                string.IsNullOrWhiteSpace(_browsedItem.Name) &&
+                _browsedItem == null)
             {
                 return true;
             }
+
             if (SortName() != _browsedItem.Name)
             {
                 _browsedItem.Name = SortName();
@@ -190,9 +195,10 @@ namespace EmoteTool.ViewModels
             {
                 name = _vm.EmoteName;
             }
+
             bool isInList = _vm.Emotes.Any(emote => name == emote.Name);
-            if (!string.IsNullOrWhiteSpace(name)
-                && name.StartsWith("Emote"))
+            if (!string.IsNullOrWhiteSpace(name) &&
+                name.StartsWith("Emote"))
             {
                 char last = name.LastOrDefault();
                 int i = int.Parse(last.ToString());
@@ -201,12 +207,14 @@ namespace EmoteTool.ViewModels
                         ? name
                         : HandleBadName();
             }
-            if (!string.IsNullOrWhiteSpace(name)
-                && !isInList
-                && name != Seperator)
+
+            if (!string.IsNullOrWhiteSpace(name) &&
+                !isInList &&
+                name != Seperator)
             {
                 return name;
             }
+
             return HandleBadName();
         }
 
@@ -238,15 +246,18 @@ namespace EmoteTool.ViewModels
                 Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
                 return;
             }
-            if (item?.Image?.UriSource != null || item?.Image?.BaseUri != null)
+
+            if (item?.Image?.UriSource != null ||
+                item?.Image?.BaseUri != null)
             {
                 Default.SavedEmotes.Add(
                     item.Name +
                     Seperator +
-                    item.Image.UriSource?.AbsolutePath
-                    ?? item.Image.BaseUri?.AbsolutePath);
+                    item.Image.UriSource?.AbsolutePath ??
+                    item.Image.BaseUri?.AbsolutePath);
                 return;
             }
+
             if (_browsedItem != null)
             {
                 if (!string.IsNullOrWhiteSpace(_browsedItem.ImagePath))
@@ -254,16 +265,18 @@ namespace EmoteTool.ViewModels
                     Default.SavedEmotes.Add(
                         _browsedItem.Name + Seperator + _browsedItem.ImagePath);
                 }
+
                 if (_browsedItem.Image?.UriSource != null ||
                     _browsedItem.Image?.BaseUri != null)
                 {
                     Default.SavedEmotes.Add(
-                        _browsedItem.Name + Seperator + _browsedItem.Image.UriSource?.AbsolutePath
-                        ?? _browsedItem.Image.BaseUri?.AbsolutePath);
+                        _browsedItem.Name + Seperator + _browsedItem.Image.UriSource?.AbsolutePath ??
+                        _browsedItem.Image.BaseUri?.AbsolutePath);
                 }
             }
 
             throw new NullReferenceException("Image path is empty.");
         }
+
     }
 }
