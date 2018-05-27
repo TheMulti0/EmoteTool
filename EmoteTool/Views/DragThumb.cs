@@ -14,15 +14,32 @@ namespace EmoteTool.Views
 
         public DragThumb()
         {
-            _vm = App.Current.MainWindow.DataContext as MainWindowViewModel;
+            _vm = Application.Current.MainWindow.DataContext as MainWindowViewModel;
             DragDelta += new DragDeltaEventHandler(MoveThumb_DragDelta);
         }
 
         private void MoveThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            int x = Convert.ToInt32(_vm.DragPosition.X + e.HorizontalChange);
-            int y = Convert.ToInt32(_vm.DragPosition.Y + e.VerticalChange);
+            var image = System.Drawing.Image.FromFile(_vm.SelectedItem.ImagePath);
+            
+            int x = (int)(_vm.DragPosition.X + e.HorizontalChange);
+            
+            int y = (int)(_vm.DragPosition.Y + e.VerticalChange);
+            
+            if (x >= 200 ||
+                x < 0)
+            {
+                return;
+            }
+            if (y >= 200 ||
+                y < 0)
+            {
+                return;
+            }
+            
+            
             _vm.DragPosition = new Point(x, y);
+
         }
     }
 }
