@@ -52,6 +52,11 @@ namespace EmoteTool.ViewModels
                 {
                     return;
                 }
+                if (value == null &&
+                    _selectedItem != null)
+                {
+                    return;
+                }
 
                 _selectedItem = value;
                 OnPropertyChanged();
@@ -236,11 +241,11 @@ namespace EmoteTool.ViewModels
 
             foreach (string emote in Default.SavedEmotes)
             {
-                string[] splitted = emote.Split(
+                string[] spitted = emote.Split(
                     new[] {Seperator},
                     StringSplitOptions.None);
-                string name = AddCommand.SortName(splitted[0]);
-                string fileName = splitted[1];
+                string name = AddCommand.SortName(spitted[0]);
+                string fileName = spitted[1];
 
                 BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
                 var emoteItem = new EmoteItem(name, bitmapImage, fileName);
@@ -284,8 +289,7 @@ namespace EmoteTool.ViewModels
                 Math.Min((int) SelectedItem.Image.Height, 300));
         }
 
-        private void RemoveImage(
-            object item)
+        private void RemoveImage(object item)
         {
             if (SelectedItem == null)
             {
@@ -305,8 +309,7 @@ namespace EmoteTool.ViewModels
             RemoveSelectedItemFromFile(EmoteName);
         }
 
-        private void RemoveSelectedItemFromFile(
-            string name = null)
+        private void RemoveSelectedItemFromFile(string name = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -323,8 +326,7 @@ namespace EmoteTool.ViewModels
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged(
-            [CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
