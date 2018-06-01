@@ -17,6 +17,10 @@
         <viewModels:AddErrorToDescription x:Key="AddErrorToDescription" />
 
     </material:DialogHost.Resources>
+    
+    <material:DialogHost.InputBindings>
+        <KeyBinding Key="Escape" Command="{x:Static material:DialogHost.CloseDialogCommand}" />
+    </material:DialogHost.InputBindings>
 
     <material:DialogHost.DialogContent>
         <StackPanel Orientation="Vertical">
