@@ -9,13 +9,13 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using EmoteTool.Annotations;
-using EmoteTool.Views;
 using static EmoteTool.Properties.Settings;
 
 namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
+
         private static string _defaultWatermark;
 
         private Point _dragPosition;
@@ -28,11 +28,6 @@ namespace EmoteTool.ViewModels
         private bool _isEditDialogOpen;
         private EmoteItem _selectedItem;
         private string _watermarkName;
-        private bool _isListViewRipple;
-
-        public static MainWindowViewModel Instance { get; private set; }
-
-        public static string Seperator { get; private set; }
 
         public AddCommand AddCommand { get; set; }
 
@@ -44,9 +39,7 @@ namespace EmoteTool.ViewModels
 
         public ICommand EditDialogCommand { get; set; }
 
-        public ICommand ItemButtonCommand { get; set; }
-
-        public ObservableCollection<ICommand> RemoveItemButtonCommands { get; private set; }
+        public static string Seperator { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
@@ -206,16 +199,6 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public bool IsListViewRipple
-        {
-            get => _isListViewRipple;
-            set
-            {
-                _isListViewRipple = value;
-                OnPropertyChanged();
-            }
-        }
-
         public MainWindowViewModel()
         {
             Seperator = ";;;;;;";
@@ -228,39 +211,20 @@ namespace EmoteTool.ViewModels
 
             RemoveCommand = new CommandBase(RemoveImage);
 
-            AddDialogCommand = new CommandBase(() =>
-            {
-                IsAddDialogOpen = !IsAddDialogOpen;
-                WatermarkName = _defaultWatermark;
-            });
+            AddDialogCommand = new CommandBase(
+                () =>
+                {
+                    IsAddDialogOpen = !IsAddDialogOpen;
+                    WatermarkName = _defaultWatermark;
+                });
 
             EditDialogCommand = new CommandBase(EditDialog);
-
-            ItemButtonCommand = new CommandBase((object item) =>
-            {
-                if (item == null)
-                {
-                    return;
-                }
-                if (SelectedItem == null)
-                {
-                    SelectedItem = item as EmoteItem;
-                }
-            });
-
-            RemoveItemButtonCommands = new ObservableCollection<ICommand>
-            {
-                ItemButtonCommand,
-                RemoveCommand
-            };
 
             Emotes = new ObservableCollection<EmoteItem>();
 
             IconSize = new Size(35, 35);
 
             ErrorLabel = ItemError.None;
-
-            IsListViewRipple = true;
 
             ReadSavedEmotes();
         }
@@ -327,23 +291,22 @@ namespace EmoteTool.ViewModels
 
         private void RemoveImage(object item)
         {
-            EmoteItem usedItem;
             if (SelectedItem == null)
             {
                 if (item != null)
                 {
-                    usedItem = (EmoteItem) item;
+                    SelectedItem = (EmoteItem) item;
+                }
+
+                if (Emotes.Count == 1)
+                {
+                    Emotes.Clear();
+                    return;
                 }
             }
-            usedItem = SelectedItem;
-            if (Emotes.Count == 1)
-            {
-                Emotes.Clear();
-                return;
-            }
 
-            Emotes.Remove(usedItem);
-            RemoveSelectedItemFromFile(usedItem?.Name);
+            Emotes.Remove(SelectedItem);
+            RemoveSelectedItemFromFile(EmoteName);
         }
 
         private void RemoveSelectedItemFromFile(string name = null)
@@ -354,8 +317,8 @@ namespace EmoteTool.ViewModels
             }
 
             List<string> list = Default.SavedEmotes
-                .Cast<string>()
-                .ToList();
+                                       .Cast<string>()
+                                       .ToList();
 
             string match = list.Find(s => s.StartsWith(name + Seperator));
 
@@ -367,5 +330,6 @@ namespace EmoteTool.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }
