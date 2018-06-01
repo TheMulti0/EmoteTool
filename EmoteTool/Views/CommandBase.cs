@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace EmoteTool.ViewModels
+namespace EmoteTool.Views
 {
     internal class CommandBase : ICommand
     {

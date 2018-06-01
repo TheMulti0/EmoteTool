@@ -20,6 +20,7 @@
 
         <viewModels:MainWindowViewModel x:Key="ViewModel" />
         <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
+        <views:CommandGroup x:Key="CommandGroup" />
 
         <ControlTemplate x:Key="EmotesTemplate"
                          TargetType="ListView">
@@ -39,7 +40,18 @@
         </ControlTemplate>
 
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
-            <StackPanel Orientation="Vertical">
+            <Grid>
+                
+                <StackPanel Orientation="Horizontal"
+                            Panel.ZIndex="2">
+                    <Button Content="R" CommandParameter="{Binding}">
+                        <Button.Command>
+                            <views:CommandGroup Commands="{Binding RemoveItemButtonCommands, Source={StaticResource ViewModel}}" />
+                        </Button.Command>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
 
                     <Image HorizontalAlignment="Center" VerticalAlignment="Center"
                            MaxWidth="35" MaxHeight="35"
@@ -51,7 +63,9 @@
                                FontWeight="Medium"
                                Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
-            </StackPanel>
+                </StackPanel>
+
+            </Grid>
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
@@ -92,7 +106,8 @@
                       ItemsSource="{Binding Emotes, Mode=TwoWay}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                      material:RippleAssist.IsDisabled="{Binding IsListViewRipple}">
 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
