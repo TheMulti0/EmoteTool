@@ -99,8 +99,7 @@ namespace EmoteTool.ViewModels
 
             set
             {
-                if (value == _filePath ||
-                    string.IsNullOrWhiteSpace(value))
+                if (value == _filePath)
                 {
                     return;
                 }
@@ -211,12 +210,11 @@ namespace EmoteTool.ViewModels
 
             RemoveCommand = new CommandBase(RemoveImage);
 
-            AddDialogCommand = new CommandBase(
-                () =>
-                {
-                    IsAddDialogOpen = !IsAddDialogOpen;
-                    WatermarkName = _defaultWatermark;
-                });
+            AddDialogCommand = new CommandBase(() =>
+            {
+                IsAddDialogOpen = !IsAddDialogOpen;
+                WatermarkName = _defaultWatermark;
+            });
 
             EditDialogCommand = new CommandBase(EditDialog);
 
