@@ -20,6 +20,7 @@
 
         <viewModels:MainWindowViewModel x:Key="ViewModel" />
         <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
+        <viewModels:EnumToIntConverter x:Key="EnumToInt" />
 
         <ControlTemplate x:Key="EmotesTemplate"
                          TargetType="ListView">
@@ -42,8 +43,8 @@
             <StackPanel Orientation="Vertical">
 
                     <Image HorizontalAlignment="Center" VerticalAlignment="Center"
-                           MaxWidth="35" MaxHeight="35"
-                           MinWidth="35" MinHeight="35"
+                           Width="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
+                           Height="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
                            Source="{Binding Image}" />
 
                     <TextBlock HorizontalAlignment="Center" Margin="0, 5"

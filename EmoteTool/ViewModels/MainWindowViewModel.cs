@@ -225,6 +225,7 @@ namespace EmoteTool.ViewModels
             ErrorLabel = ItemError.None;
 
             ReadSavedEmotes();
+            Emotes[0] = new EmoteItem(Emotes[0].Name, Emotes[0].ImagePath, sizeMode: ItemSizeMode.Large);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

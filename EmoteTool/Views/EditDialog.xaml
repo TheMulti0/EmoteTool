@@ -7,13 +7,14 @@
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
              mc:Ignorable="d"
-             CloseOnClickAway="True" 
+             CloseOnClickAway="True"
              IsOpen="{Binding Path=IsEditDialogOpen, Mode=TwoWay}">
 
     <material:DialogHost.Resources>
 
         <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
+        <viewModels:EnumToIntConverter x:Key="EnumToInt" />
 
     </material:DialogHost.Resources>
 
@@ -71,7 +72,8 @@
             <Grid HorizontalAlignment="Center">
 
                 <Image x:Name="ImagePreview"
-                       MaxHeight="300" MaxWidth="500"
+                       MaxWidth="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
+                       MaxHeight="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
                        Source="{Binding FilePath}" />
 
                 <Canvas>
