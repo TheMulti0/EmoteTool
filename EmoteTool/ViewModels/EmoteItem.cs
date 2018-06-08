@@ -6,12 +6,24 @@ namespace EmoteTool.ViewModels
 {
     internal class EmoteItem
     {
+        private string _imagePath;
 
         public string Name { get; set; }
 
         public BitmapImage ResizedImage { get; set; }
 
-        public string ImagePath { get; set; }
+        public string ImagePath
+        {
+            get => _imagePath;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return;
+                }
+                _imagePath = value;
+            }
+        }
 
         public ItemSizeMode SizeMode { get; set; }
 
@@ -45,16 +57,21 @@ namespace EmoteTool.ViewModels
             ImageSize = new Size((int) SizeMode, (int) SizeMode);
         }
 
-        public double TransformToPixels(double unit)
+        private static double TransformToPixels(double unit)
         {
             double pixel;
             using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
             {
-                pixel = (g.DpiX / 72 * unit);
+                pixel = (g.DpiX / 96 * unit);
             }
 
             return pixel;
         }
 
+        private void ReplaceFromFile(EmoteItem item)
+        {
+            new MainWindowViewModel().RemoveSelectedItemFromFile(item.Name);
+            new AddCommand().AddToCollections(item);
+        }
     }
 }

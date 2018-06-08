@@ -253,9 +253,16 @@ namespace EmoteTool.ViewModels
                     StringSplitOptions.None);
                 string name = AddCommand.SortName(spitted[0]);
                 string fileName = spitted[1];
+                string sizeModeString = spitted[2];
+                ItemSizeMode sizeMode;
+                if (!Enum.TryParse(sizeModeString, out sizeMode))
+                {
+                    sizeMode = ItemSizeMode.Standard;
+                }
+
 
                 BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapImage, fileName);
+                var emoteItem = new EmoteItem(name, bitmapImage, fileName , sizeMode: ItemSizeMode.Standard);
 
                 Emotes.Add(emoteItem);
             }
@@ -316,7 +323,7 @@ namespace EmoteTool.ViewModels
             RemoveSelectedItemFromFile(EmoteName);
         }
 
-        private void RemoveSelectedItemFromFile(string name = null)
+        public void RemoveSelectedItemFromFile(string name = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

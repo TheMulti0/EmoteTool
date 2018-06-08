@@ -18,6 +18,11 @@ namespace EmoteTool.ViewModels
         private readonly MainWindowViewModel _vm;
         private EmoteItem _browsedItem;
 
+        public AddCommand()
+        {
+            
+        }
+
         public AddCommand(MainWindowViewModel mainWindowViewModel)
         {
             _vm = mainWindowViewModel;
@@ -238,12 +243,12 @@ namespace EmoteTool.ViewModels
             return true;
         }
 
-        private void AddToCollections(EmoteItem item)
+        public void AddToCollections(EmoteItem item)
         {
             _vm.Emotes.Add(item);
             if (!string.IsNullOrWhiteSpace(item?.ImagePath))
             {
-                Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath);
+                Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath + Seperator + item.SizeMode);
                 return;
             }
 
@@ -254,7 +259,9 @@ namespace EmoteTool.ViewModels
                     item.Name +
                     Seperator +
                     item.ResizedImage.UriSource?.AbsolutePath ??
-                    item.ResizedImage.BaseUri?.AbsolutePath);
+                    item.ResizedImage.BaseUri?.AbsolutePath +
+                    Seperator +
+                    item.SizeMode);
                 return;
             }
 
@@ -263,7 +270,7 @@ namespace EmoteTool.ViewModels
                 if (!string.IsNullOrWhiteSpace(_browsedItem.ImagePath))
                 {
                     Default.SavedEmotes.Add(
-                        _browsedItem.Name + Seperator + _browsedItem.ImagePath);
+                        _browsedItem.Name + Seperator + _browsedItem.ImagePath + Seperator + _browsedItem.SizeMode);
                 }
 
                 if (_browsedItem.ResizedImage?.UriSource != null ||
@@ -271,7 +278,8 @@ namespace EmoteTool.ViewModels
                 {
                     Default.SavedEmotes.Add(
                         _browsedItem.Name + Seperator + _browsedItem.ResizedImage.UriSource?.AbsolutePath ??
-                        _browsedItem.ResizedImage.BaseUri?.AbsolutePath);
+                        _browsedItem.ResizedImage.BaseUri?.AbsolutePath +
+                        Seperator + _browsedItem.SizeMode);
                 }
             }
 
