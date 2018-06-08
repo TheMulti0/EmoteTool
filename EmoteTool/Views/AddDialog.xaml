@@ -15,7 +15,6 @@
         <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
         <viewModels:AddErrorToDescription x:Key="AddErrorToDescription" />
-        <viewModels:EnumToIntConverter x:Key="EnumToInt" />
 
     </material:DialogHost.Resources>
     
@@ -74,8 +73,8 @@
 
             </StackPanel>
 
-            <Image MaxWidth="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
-                   MaxHeight="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
+            <Image MaxWidth="{Binding SelectedItem.ImageSize.Width}"
+                   MaxHeight="{Binding SelectedItem.ImageSize.Height}"
                    Source="{Binding Text, ElementName=ImagePath}" />
 
             <StackPanel Orientation="Horizontal"

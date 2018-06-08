@@ -78,7 +78,7 @@ namespace EmoteTool.ViewModels
         {
             bool isNameNull = string.IsNullOrWhiteSpace(_browsedItem?.Name);
             if (!isNameNull &&
-                _browsedItem?.Image == null)
+                _browsedItem?.ResizedImage == null)
             {
                 _vm.ErrorLabel = ItemError.InvalidImage;
                 return;
@@ -247,14 +247,14 @@ namespace EmoteTool.ViewModels
                 return;
             }
 
-            if (item?.Image?.UriSource != null ||
-                item?.Image?.BaseUri != null)
+            if (item?.ResizedImage?.UriSource != null ||
+                item?.ResizedImage?.BaseUri != null)
             {
                 Default.SavedEmotes.Add(
                     item.Name +
                     Seperator +
-                    item.Image.UriSource?.AbsolutePath ??
-                    item.Image.BaseUri?.AbsolutePath);
+                    item.ResizedImage.UriSource?.AbsolutePath ??
+                    item.ResizedImage.BaseUri?.AbsolutePath);
                 return;
             }
 
@@ -266,12 +266,12 @@ namespace EmoteTool.ViewModels
                         _browsedItem.Name + Seperator + _browsedItem.ImagePath);
                 }
 
-                if (_browsedItem.Image?.UriSource != null ||
-                    _browsedItem.Image?.BaseUri != null)
+                if (_browsedItem.ResizedImage?.UriSource != null ||
+                    _browsedItem.ResizedImage?.BaseUri != null)
                 {
                     Default.SavedEmotes.Add(
-                        _browsedItem.Name + Seperator + _browsedItem.Image.UriSource?.AbsolutePath ??
-                        _browsedItem.Image.BaseUri?.AbsolutePath);
+                        _browsedItem.Name + Seperator + _browsedItem.ResizedImage.UriSource?.AbsolutePath ??
+                        _browsedItem.ResizedImage.BaseUri?.AbsolutePath);
                 }
             }
 

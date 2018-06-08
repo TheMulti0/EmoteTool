@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -28,6 +29,8 @@ namespace EmoteTool.ViewModels
         private bool _isEditDialogOpen;
         private EmoteItem _selectedItem;
         private string _watermarkName;
+
+        public static double FontSize { get; private set; }
 
         public AddCommand AddCommand { get; set; }
 
@@ -198,8 +201,12 @@ namespace EmoteTool.ViewModels
             }
         }
 
+        public IEnumerable ItemSizeModes { get; set; }
+
         public MainWindowViewModel()
         {
+            FontSize = 12;
+
             Seperator = ";;;;;;";
 
             _defaultWatermark = "Enter text for emote name";
@@ -220,12 +227,13 @@ namespace EmoteTool.ViewModels
 
             Emotes = new ObservableCollection<EmoteItem>();
 
-            IconSize = new Size(35, 35);
+            IconSize = new Size((int) ItemSizeMode.Standard, (int) ItemSizeMode.Standard);
 
             ErrorLabel = ItemError.None;
 
+            ItemSizeModes = Enum.GetValues(typeof(ItemSizeMode));
+
             ReadSavedEmotes();
-            Emotes[0] = new EmoteItem(Emotes[0].Name, Emotes[0].ImagePath, sizeMode: ItemSizeMode.Large);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -284,8 +292,8 @@ namespace EmoteTool.ViewModels
             FilePath = SelectedItem.ImagePath;
             DragPosition = new Point(0, 0);
             DragSize = new Size(
-                Math.Min((int) SelectedItem.Image.Width, 500),
-                Math.Min((int) SelectedItem.Image.Height, 300));
+                Math.Min((int) SelectedItem.ResizedImage.Width, 500),
+                Math.Min((int) SelectedItem.ResizedImage.Height, 300));
         }
 
         private void RemoveImage(object item)

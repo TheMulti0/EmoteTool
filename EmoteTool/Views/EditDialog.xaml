@@ -6,6 +6,7 @@
              xmlns:views="clr-namespace:EmoteTool.Views"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              CloseOnClickAway="True"
              IsOpen="{Binding Path=IsEditDialogOpen, Mode=TwoWay}">
@@ -14,7 +15,6 @@
 
         <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
-        <viewModels:EnumToIntConverter x:Key="EnumToInt" />
 
     </material:DialogHost.Resources>
 
@@ -68,12 +68,23 @@
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
             </StackPanel>
+            
+            <StackPanel Orientation="Horizontal">
+
+                <TextBlock Text="Emote Size Mode"
+                           FontWeight="Medium"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
+
+                <ComboBox ItemsSource="{Binding ItemSizeModes}"
+                          SelectedItem="{Binding SelectedItem.SizeMode}" />
+
+            </StackPanel>
 
             <Grid HorizontalAlignment="Center">
 
                 <Image x:Name="ImagePreview"
-                       MaxWidth="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
-                       MaxHeight="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
+                       MaxWidth="250"
+                       MaxHeight="250"
                        Source="{Binding FilePath}" />
 
                 <Canvas>

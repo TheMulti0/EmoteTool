@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
-        xmlns:material="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-        xmlns:properties="clr-namespace:EmoteTool.Properties"
         xmlns:views="clr-namespace:EmoteTool.Views"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="EmoteTool"
         Width="800" Height="500">
@@ -18,9 +17,7 @@
 
     <Window.Resources>
 
-        <viewModels:MainWindowViewModel x:Key="ViewModel" />
         <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
-        <viewModels:EnumToIntConverter x:Key="EnumToInt" />
 
         <ControlTemplate x:Key="EmotesTemplate"
                          TargetType="ListView">
@@ -40,16 +37,19 @@
         </ControlTemplate>
 
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
-            <StackPanel Orientation="Vertical">
+            <StackPanel MaxWidth="{Binding ItemSize.Width}"
+                        MaxHeight="{Binding ItemSize.Height}"
+                        Orientation="Vertical">
 
                     <Image HorizontalAlignment="Center" VerticalAlignment="Center"
-                           Width="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
-                           Height="{Binding SizeMode, Converter={StaticResource EnumToInt}}"
-                           Source="{Binding Image}" />
+                           Width="{Binding ImageSize.Width}"
+                           Height="{Binding ImageSize.Height}"
+                           Source="{Binding ImagePath}" />
 
                     <TextBlock HorizontalAlignment="Center" Margin="0, 5"
                                Text="{Binding Name}"
                                FontWeight="Medium"
+                               FontSize="{x:Static viewModels:MainWindowViewModel.FontSize}"
                                Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
             </StackPanel>
@@ -59,12 +59,17 @@
             <StackPanel Orientation="Horizontal" />
         </ItemsPanelTemplate>
 
+        <Style x:Key="ItemStyle"
+               TargetType="ListViewItem">
+            <Setter Property="Height" Value="{Binding}"></Setter>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
 
         <Rectangle x:Name="DialogShade"
-                   Panel.ZIndex="10" 
+                   Panel.ZIndex="2"
                    IsHitTestVisible="{Binding IsAnyDialogOpen}"
                    Fill="Black"
                    IsEnabled="{Binding IsAnyDialogOpen}"
@@ -81,7 +86,7 @@
                     Content="Remove"
                     Command="{Binding RemoveCommand}"
                     Style="{DynamicResource MaterialDesignFlatButton}" />
-            <Button Content="Yknow" Command="{Binding EditDialogCommand}"/>
+            <Button Content="Edit" Command="{Binding EditDialogCommand}"/>
 
             <views:AddDialog x:Name="AddDialog" />
 
@@ -91,6 +96,7 @@
                       Margin="0, 15"
                       Template="{StaticResource EmotesTemplate}"
                       ItemsSource="{Binding Emotes, Mode=TwoWay}"
+                      ItemContainerStyle="{StaticResource ItemStyle}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}">

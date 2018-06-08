@@ -6,34 +6,55 @@ namespace EmoteTool.ViewModels
 {
     internal class EmoteItem
     {
+
         public string Name { get; set; }
 
-        public BitmapImage Image { get; set; }
+        public BitmapImage ResizedImage { get; set; }
 
         public string ImagePath { get; set; }
 
         public ItemSizeMode SizeMode { get; set; }
 
-        public Size Size { get; set; }
+        public Size ItemSize { get; set; }
 
-        public EmoteItem(string name, BitmapImage image, string path = null, ItemSizeMode sizeMode = ItemSizeMode.Medium)
+        public Size ImageSize { get; set; }
+
+        public EmoteItem(string name,
+                         BitmapImage resizedImage,
+                         string path = null,
+                         ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
             Name = name;
-            Image = image;
+            ResizedImage = resizedImage;
 
-            ImagePath = path ?? image.UriSource?.AbsolutePath;
+            ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
             SizeMode = sizeMode;
-            Size = new Size((int) SizeMode, (int) SizeMode);
+            ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
+            var fontPixels = (int) TransformToPixels(MainWindowViewModel.FontSize);
+            ImageSize = new Size((int) SizeMode - fontPixels,
+                            (int) SizeMode - fontPixels);
         }
 
-        public EmoteItem(string name, string imagePath, ItemSizeMode sizeMode = ItemSizeMode.Medium)
+        public EmoteItem(string name, string imagePath, ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
             Name = name;
             ImagePath = imagePath;
 
-            Image = new BitmapImage(new Uri(ImagePath ?? ""));
+            ResizedImage = new BitmapImage(new Uri(ImagePath ?? ""));
             SizeMode = sizeMode;
-            Size = new Size((int)SizeMode, (int)SizeMode);
+            ImageSize = new Size((int) SizeMode, (int) SizeMode);
         }
+
+        public double TransformToPixels(double unit)
+        {
+            double pixel;
+            using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                pixel = (g.DpiX / 72 * unit);
+            }
+
+            return pixel;
+        }
+
     }
 }

@@ -69,7 +69,6 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\AddErrorToDescription.cs" />
     <Compile Include="ViewModels\CopyCommand.cs" />
-    <Compile Include="ViewModels\EnumToIntConverter.cs" />
     <Compile Include="ViewModels\ItemError.cs" />
     <Compile Include="ViewModels\ItemSizeMode.cs" />
     <Compile Include="Views\DragThumb.cs" />
