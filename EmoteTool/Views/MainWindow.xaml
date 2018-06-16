@@ -44,7 +44,7 @@
                     <Image HorizontalAlignment="Center" VerticalAlignment="Center"
                            Width="{Binding ImageSize.Width}"
                            Height="{Binding ImageSize.Height}"
-                           Source="{Binding ImagePath}" />
+                           Source="{Binding ResizedImage}" />
 
                     <TextBlock HorizontalAlignment="Center" Margin="0, 5"
                                Text="{Binding Name}"
