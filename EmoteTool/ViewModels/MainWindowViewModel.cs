@@ -233,6 +233,10 @@ namespace EmoteTool.ViewModels
                     return;
                 }
             }
+            else
+            {
+                return;
+            }
 
             Emotes.Remove(SelectedItem);
             RemoveSelectedItemFromFile(SelectedItem.Name);
