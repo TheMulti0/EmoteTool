@@ -22,7 +22,7 @@
         <ControlTemplate x:Key="EmotesTemplate"
                          TargetType="ListView">
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"> 
 
                 <ItemsPresenter />
 
@@ -37,8 +37,8 @@
         </ControlTemplate>
 
         <DataTemplate x:Key="EmoteItemTemplate" DataType="viewModels:EmoteItem">
-            <StackPanel MaxWidth="{Binding ItemSize.Width}"
-                        MaxHeight="{Binding ItemSize.Height}"
+            <StackPanel Width="{Binding ItemSize.Width}"
+                        Height="{Binding ItemSize.Height}"
                         Orientation="Vertical">
 
                     <Image HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -58,11 +58,6 @@
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
             <StackPanel Orientation="Horizontal" />
         </ItemsPanelTemplate>
-
-        <Style x:Key="ItemStyle"
-               TargetType="ListViewItem">
-            <Setter Property="Height" Value="{Binding}"></Setter>
-        </Style>
 
     </Window.Resources>
 
@@ -96,7 +91,6 @@
                       Margin="0, 15"
                       Template="{StaticResource EmotesTemplate}"
                       ItemsSource="{Binding Emotes, Mode=TwoWay}"
-                      ItemContainerStyle="{StaticResource ItemStyle}"
                       ItemTemplate="{StaticResource EmoteItemTemplate}"
                       ItemsPanel="{StaticResource ItemsPanelTemplate}"
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}">

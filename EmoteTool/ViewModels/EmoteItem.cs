@@ -6,24 +6,11 @@ namespace EmoteTool.ViewModels
 {
     internal class EmoteItem
     {
-        private string _imagePath;
-
         public string Name { get; set; }
 
         public BitmapImage ResizedImage { get; set; }
 
-        public string ImagePath
-        {
-            get => _imagePath;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    return;
-                }
-                _imagePath = value;
-            }
-        }
+        public string ImagePath { get; set; }
 
         public ItemSizeMode SizeMode { get; set; }
 
@@ -47,10 +34,14 @@ namespace EmoteTool.ViewModels
                             (int) SizeMode - fontPixels);
         }
 
-        public EmoteItem(string name, string imagePath, ItemSizeMode sizeMode = ItemSizeMode.Standard)
+        public EmoteItem(string name, string path, ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
             Name = name;
-            ImagePath = imagePath;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = ImagePath;
+            }
+            ImagePath = path;
 
             ResizedImage = new BitmapImage(new Uri(ImagePath ?? ""));
             SizeMode = sizeMode;
