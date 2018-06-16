@@ -69,6 +69,8 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\AddErrorToDescription.cs" />
     <Compile Include="ViewModels\CopyCommand.cs" />
+    <Compile Include="ViewModels\EditDialogCommand.cs" />
+    <Compile Include="ViewModels\EditDialogViewModel.cs" />
     <Compile Include="ViewModels\ItemError.cs" />
     <Compile Include="ViewModels\ItemSizeMode.cs" />
     <Compile Include="Views\DragThumb.cs" />
@@ -97,7 +99,7 @@
     </Compile>
     <Compile Include="ViewModels\AddCommand.cs" />
     <Compile Include="ViewModels\BoolToOpacityConverter.cs" />
-    <Compile Include="ViewModels\CommandBase.cs" />
+    <Compile Include="ViewModels\CommandFactory.cs" />
     <Compile Include="ViewModels\EmoteItem.cs" />
     <Compile Include="ViewModels\StringToVisibilityConverter.cs" />
     <Compile Include="ViewModels\TextStateToVisibilityConverter.cs" />

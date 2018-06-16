@@ -14,7 +14,6 @@ namespace EmoteTool.ViewModels
 {
     internal class AddCommand : ICommand
     {
-
         private readonly MainWindowViewModel _vm;
         private EmoteItem _browsedItem;
 
@@ -62,7 +61,7 @@ namespace EmoteTool.ViewModels
             }
 
             BitmapImage bitmapImage = SetUpImage(filePath);
-            string name = _vm.EmoteName;
+            string name = _vm.SelectedItem.Name;
             if (name != SortName())
             {
                 _vm.WatermarkName = SortName();
@@ -126,7 +125,6 @@ namespace EmoteTool.ViewModels
             AddToCollections(_browsedItem);
 
             _vm.IsAddDialogOpen = false;
-            _vm.EmoteName = "";
             _vm.ErrorLabel = ItemError.None;
             _browsedItem = null;
         }
@@ -197,7 +195,7 @@ namespace EmoteTool.ViewModels
         {
             if (name == "")
             {
-                name = _vm.EmoteName;
+                name = _vm.SelectedItem.Name;
             }
 
             bool isInList = _vm.Emotes.Any(emote => name == emote.Name);

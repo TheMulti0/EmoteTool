@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace EmoteTool.ViewModels
 {
-    internal class CommandBase : ICommand
+    internal class CommandFactory : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
@@ -17,13 +17,13 @@ namespace EmoteTool.ViewModels
         public bool IsParamaterized { get; set; }
 
 
-        public CommandBase(Action action, bool canExecute = true)
+        public CommandFactory(Action action, bool canExecute = true)
         {
             Action = action;
             _CanExecute = canExecute;
         }
 
-        public CommandBase(Action<object> paramaterizedAction, bool canExecute = true)
+        public CommandFactory(Action<object> paramaterizedAction, bool canExecute = true)
         {
             ParamaterizedAction = paramaterizedAction;
             _CanExecute = canExecute;

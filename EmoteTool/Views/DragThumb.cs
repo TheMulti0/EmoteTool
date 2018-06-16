@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-
+using Image = System.Drawing.Image;
 using Point = System.Drawing.Point;
 
 namespace EmoteTool.Views
@@ -14,17 +14,17 @@ namespace EmoteTool.Views
 
         public DragThumb()
         {
-            _vm = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+            _vm = Application.Current.MainWindow?.DataContext as MainWindowViewModel;
             DragDelta += new DragDeltaEventHandler(MoveThumb_DragDelta);
         }
 
         private void MoveThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            var image = System.Drawing.Image.FromFile(_vm.SelectedItem.ImagePath);
+            Image image = Image.FromFile(_vm.SelectedItem.ImagePath);
             
-            int x = (int)(_vm.DragPosition.X + e.HorizontalChange);
+            var x = (int)(_vm.DragPosition.X + e.HorizontalChange);
             
-            int y = (int)(_vm.DragPosition.Y + e.VerticalChange);
+            var y = (int)(_vm.DragPosition.Y + e.VerticalChange);
             
             if (x >= 200 ||
                 x < 0)

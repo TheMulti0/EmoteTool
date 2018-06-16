@@ -4,12 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:EmoteTool.Views"
-             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:EmoteTool.ViewModels"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              CloseOnClickAway="True"
              IsOpen="{Binding Path=IsEditDialogOpen, Mode=TwoWay}">
+
+    <d:DialogHost.DataContext>
+        <viewModels:EditDialogViewModel/>
+    </d:DialogHost.DataContext>
 
     <material:DialogHost.Resources>
 
@@ -41,7 +45,7 @@
                 </TextBlock>
 
                 <TextBox Name="EmoteName" Background="Transparent"
-                         Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding MainViewModel.SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <StackPanel Orientation="Horizontal" Margin="0, 5">
@@ -55,7 +59,7 @@
 
                     <TextBlock x:Name="ImagePath" Panel.ZIndex="2"
                                VerticalAlignment="Center" Margin="5, 5"
-                               Text="{Binding SelectedItem.ImagePath}"
+                               Text="{Binding MainViewModel.SelectedItem.ImagePath}"
                                FontSize="14" FontWeight="Medium"
                                Foreground="White" />
 
@@ -63,7 +67,7 @@
 
                 <Button Content="Browse" 
                         Margin="5, 0" HorizontalAlignment="Right"
-                        Command="{Binding AddCommand}"
+                        Command="{Binding MainViewModel.AddCommand}"
                         CommandParameter="Browse"
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
@@ -75,8 +79,8 @@
                            FontWeight="Medium"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
-                <ComboBox ItemsSource="{Binding ItemSizeModes}"
-                          SelectedItem="{Binding SelectedItem.SizeMode}" />
+                <ComboBox ItemsSource="{Binding MainViewModel.ItemSizeModes}"
+                          SelectedItem="{Binding MainViewModel.SelectedItem.SizeMode}" />
 
             </StackPanel>
 
@@ -85,7 +89,7 @@
                 <Image x:Name="ImagePreview"
                        MaxWidth="250"
                        MaxHeight="250"
-                       Source="{Binding SelectedItem.ImagePath}" />
+                       Source="{Binding MainViewModel.SelectedItem.ImagePath}" />
 
                 <Canvas>
                     <Canvas.Resources>
@@ -142,7 +146,7 @@
             
             <StackPanel Orientation="Vertical">
 
-                <TextBlock Text="{Binding SelectedItem.Name}"
+                <TextBlock Text="{Binding MainViewModel.SelectedItem.Name}"
                            FontWeight="Medium" HorizontalAlignment="Center"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
@@ -157,7 +161,7 @@
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
                 <Button Content="Accept"
-                        Command="{Binding EditDialogCommand}"
+                        Command="{Binding MainViewModel.EditDialogCommand}"
                         CommandParameter="Accept"
                         Style="{DynamicResource MaterialDesignFlatButton}" />
 
