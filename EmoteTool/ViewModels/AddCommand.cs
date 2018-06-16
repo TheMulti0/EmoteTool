@@ -105,7 +105,7 @@ namespace EmoteTool.ViewModels
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(_vm.FilePath) &&
+            if (string.IsNullOrWhiteSpace(_vm.SelectedItem.ImagePath) &&
                 string.IsNullOrWhiteSpace(_browsedItem.Name) &&
                 _browsedItem == null)
             {
@@ -127,7 +127,6 @@ namespace EmoteTool.ViewModels
 
             _vm.IsAddDialogOpen = false;
             _vm.EmoteName = "";
-            _vm.FilePath = "";
             _vm.ErrorLabel = ItemError.None;
             _browsedItem = null;
         }
@@ -239,7 +238,7 @@ namespace EmoteTool.ViewModels
             }
 
             _browsedItem = item;
-            _vm.FilePath = item.ImagePath;
+            _vm.SelectedItem.ImagePath = item.ImagePath;
             return true;
         }
 

@@ -89,7 +89,8 @@
 
                 <Canvas>
                     <Canvas.Resources>
-                        <ControlTemplate x:Key="DragThumbTemplate" TargetType="{x:Type views:DragThumb}">
+                        <ControlTemplate x:Key="DragThumbTemplate" 
+                                         TargetType="{x:Type views:DragThumb}">
                             <Rectangle Fill="Black"/>
                         </ControlTemplate>
 
