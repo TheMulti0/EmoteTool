@@ -96,21 +96,6 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public string FilePath
-        {
-            get => _filePath;
-
-            set
-            {
-                if (value == _filePath)
-                {
-                    return;
-                }
-
-                _filePath = value;
-                OnPropertyChanged();
-            }
-        }
 
         public bool IsAddDialogOpen
         {
@@ -287,16 +272,15 @@ namespace EmoteTool.ViewModels
             RemoveSelectedItemFromFile(oldName);
             EmoteName = AddCommand.SortName();
 
-            var newItem = new EmoteItem(EmoteName, FilePath ?? SelectedItem.ImagePath);
+            var newItem = new EmoteItem(EmoteName, SelectedItem.ImagePath);
             int itemIndex = Emotes.IndexOf(SelectedItem);
             Emotes[itemIndex] = newItem;
             SelectedItem = Emotes[itemIndex];
 
-            Default.SavedEmotes.Add(SelectedItem.Name + Seperator + FilePath);
+            Default.SavedEmotes.Add(SelectedItem.Name + Seperator + SelectedItem.ImagePath);
 
             EmoteName = "";
             _watermarkName = _defaultWatermark;
-            FilePath = SelectedItem.ImagePath;
             DragPosition = new Point(0, 0);
             DragSize = new Size(
                 Math.Min((int) SelectedItem.ResizedImage.Width, 500),

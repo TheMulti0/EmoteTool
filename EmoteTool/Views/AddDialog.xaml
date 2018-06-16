@@ -59,7 +59,7 @@
 
                     <TextBlock x:Name="ImagePath" Panel.ZIndex="2"
                                VerticalAlignment="Center" Margin="5, 5"
-                               Text="{Binding FilePath}"
+                               Text="{Binding SelectedItem.ImagePath}"
                                FontSize="14" FontWeight="Medium"
                                Foreground="White" />
 
