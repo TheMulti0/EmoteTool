@@ -238,7 +238,14 @@ namespace EmoteTool.ViewModels
             }
 
             _browsedItem = item;
-            _vm.SelectedItem.ImagePath = item.ImagePath;
+            if (_vm.SelectedItem == null)
+            {
+                _vm.SelectedItem = item;
+            }
+            else
+            {
+                _vm.SelectedItem.ImagePath = item.ImagePath;
+            }
             return true;
         }
 

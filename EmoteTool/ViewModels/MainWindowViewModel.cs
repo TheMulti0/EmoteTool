@@ -295,16 +295,15 @@ namespace EmoteTool.ViewModels
                 {
                     SelectedItem = (EmoteItem) item;
                 }
-
-                if (Emotes.Count == 1)
+                else if (Emotes.Count == 1)
                 {
                     Emotes.Clear();
                     return;
                 }
-            }
-            else
-            {
-                return;
+                else
+                {
+                    return;
+                }
             }
 
             Emotes.Remove(SelectedItem);
