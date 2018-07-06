@@ -18,10 +18,11 @@ namespace EmoteTool.ViewModels
 
         public Size ImageSize { get; set; }
 
-        public EmoteItem(string name,
-                         BitmapImage resizedImage,
-                         string path = null,
-                         ItemSizeMode sizeMode = ItemSizeMode.Standard)
+        public EmoteItem(
+            string name,
+            BitmapImage resizedImage,
+            string path = null,
+            ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
             Name = name;
             ResizedImage = resizedImage;
@@ -30,8 +31,9 @@ namespace EmoteTool.ViewModels
             SizeMode = sizeMode;
             ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
             var fontPixels = (int) TransformToPixels(MainWindowViewModel.FontSize);
-            ImageSize = new Size((int) SizeMode - fontPixels,
-                            (int) SizeMode - fontPixels);
+            ImageSize = new Size(
+                (int) SizeMode - fontPixels,
+                (int) SizeMode - fontPixels);
         }
 
         public EmoteItem(string name, string path, ItemSizeMode sizeMode = ItemSizeMode.Standard)
@@ -53,7 +55,7 @@ namespace EmoteTool.ViewModels
             double pixel;
             using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
             {
-                pixel = (g.DpiX / 96 * unit);
+                pixel = g.DpiX / 96 * unit;
             }
 
             return pixel;

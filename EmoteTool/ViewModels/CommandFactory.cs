@@ -5,9 +5,6 @@ namespace EmoteTool.ViewModels
 {
     internal class CommandFactory : ICommand
     {
-        public event EventHandler CanExecuteChanged;
-
-
         public Action Action { get; set; }
 
         public Action<object> ParamaterizedAction { get; set; }
@@ -15,7 +12,6 @@ namespace EmoteTool.ViewModels
         public bool _CanExecute { get; set; }
 
         public bool IsParamaterized { get; set; }
-
 
         public CommandFactory(Action action, bool canExecute = true)
         {
@@ -30,8 +26,12 @@ namespace EmoteTool.ViewModels
             IsParamaterized = true;
         }
 
+        public event EventHandler CanExecuteChanged;
+
         public bool CanExecute(object parameter)
-            => _CanExecute;
+        {
+            return _CanExecute;
+        }
 
         public void Execute(object parameter)
         {

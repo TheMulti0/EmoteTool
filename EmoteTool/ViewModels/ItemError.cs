@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace EmoteTool.ViewModels
 {
@@ -11,6 +6,7 @@ namespace EmoteTool.ViewModels
     {
         [Description("")]
         None,
+
         [Description("Please choose an image.")]
         InvalidImage
     }

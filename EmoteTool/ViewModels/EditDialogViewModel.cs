@@ -1,11 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using EmoteTool.Annotations;
-
-using static EmoteTool.Properties.Settings;
 
 namespace EmoteTool.ViewModels
 {
@@ -33,7 +28,6 @@ namespace EmoteTool.ViewModels
 
         public EditDialogViewModel()
         {
-            
         }
 
         public EditDialogViewModel(MainWindowViewModel viewModel)

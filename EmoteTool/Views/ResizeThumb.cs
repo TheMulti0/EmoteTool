@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using EmoteTool.ViewModels;
-
-using Size = System.Drawing.Size;
 using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace EmoteTool.Views
 {
     public class ResizeThumb : Thumb
     {
         private readonly MainWindowViewModel _vm;
-        private Size _minSize;
+        private readonly Size _minSize;
 
         public ResizeThumb()
         {
@@ -30,21 +28,17 @@ namespace EmoteTool.Views
             switch (VerticalAlignment)
             {
                 case VerticalAlignment.Bottom:
-                    deltaVertical = Math.Min(-e.VerticalChange,
-                        dragSize.Height - _minSize.Height);
+                    deltaVertical = Math.Min(-e.VerticalChange, dragSize.Height - _minSize.Height);
 
-                    _vm.DragSize = new Size(dragSize.Width,
-                        Convert.ToInt32(dragSize.Height - deltaVertical));
+                    _vm.DragSize = new Size(dragSize.Width, Convert.ToInt32(dragSize.Height - deltaVertical));
                     break;
                 case VerticalAlignment.Top:
-                    deltaVertical = Math.Min(e.VerticalChange,
-                        dragSize.Height - _minSize.Height);
+                    deltaVertical = Math.Min(e.VerticalChange, dragSize.Height - _minSize.Height);
                     _vm.DragPosition = new Point(
                         _vm.DragPosition.X,
                         Convert.ToInt32(_vm.DragPosition.Y + deltaVertical));
 
-                    _vm.DragSize = new Size(dragSize.Width,
-                        Convert.ToInt32(dragSize.Height - deltaVertical));
+                    _vm.DragSize = new Size(dragSize.Width, Convert.ToInt32(dragSize.Height - deltaVertical));
                     break;
                 default:
                     break;
@@ -53,22 +47,16 @@ namespace EmoteTool.Views
             switch (HorizontalAlignment)
             {
                 case HorizontalAlignment.Left:
-                    deltaHorizontal = Math.Min(e.HorizontalChange,
-                        dragSize.Width - _minSize.Width);
+                    deltaHorizontal = Math.Min(e.HorizontalChange, dragSize.Width - _minSize.Width);
                     _vm.DragPosition = new Point(
                         Convert.ToInt32(_vm.DragPosition.X + deltaHorizontal),
                         _vm.DragPosition.Y);
-                    _vm.DragSize = new Size(
-                        Convert.ToInt32(dragSize.Width - deltaHorizontal),
-                        dragSize.Height);
+                    _vm.DragSize = new Size(Convert.ToInt32(dragSize.Width - deltaHorizontal), dragSize.Height);
                     break;
                 case HorizontalAlignment.Right:
-                    deltaHorizontal = Math.Min(-e.HorizontalChange,
-                        dragSize.Width - _minSize.Width);                   
+                    deltaHorizontal = Math.Min(-e.HorizontalChange, dragSize.Width - _minSize.Width);
 
-                    _vm.DragSize = new Size(
-                        Convert.ToInt32(dragSize.Width - deltaHorizontal),
-                        dragSize.Height);
+                    _vm.DragSize = new Size(Convert.ToInt32(dragSize.Width - deltaHorizontal), dragSize.Height);
                     break;
                 default:
                     break;
