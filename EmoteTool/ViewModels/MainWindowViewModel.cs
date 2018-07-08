@@ -16,17 +16,12 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-
-        private static string _defaultWatermark;
-
+        public static string DefaultWatermark;
         private Point _dragPosition;
         private Size _dragSize;
-        private string _emoteName;
         private ItemError _errorLabel;
-        private string _filePath;
         private bool _isAddDialogOpen;
         private bool _isAnyDialogOpen;
-        private bool _isEditDialogOpen;
         private EmoteItem _selectedItem;
         private string _watermarkName;
 
@@ -66,21 +61,6 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public string EmoteName
-        {
-            get => _emoteName;
-            set
-            {
-                if (value == _emoteName)
-                {
-                    return;
-                }
-
-                _emoteName = value;
-                OnPropertyChanged();
-            }
-        }
-
         public string WatermarkName
         {
             get => _watermarkName;
@@ -96,7 +76,6 @@ namespace EmoteTool.ViewModels
             }
         }
 
-
         public bool IsAddDialogOpen
         {
             get => _isAddDialogOpen;
@@ -108,22 +87,6 @@ namespace EmoteTool.ViewModels
                 }
 
                 _isAddDialogOpen = value;
-                IsAnyDialogOpen = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsEditDialogOpen
-        {
-            get => _isEditDialogOpen;
-            set
-            {
-                if (value == _isEditDialogOpen)
-                {
-                    return;
-                }
-
-                _isEditDialogOpen = value;
                 IsAnyDialogOpen = value;
                 OnPropertyChanged();
             }
@@ -188,27 +151,31 @@ namespace EmoteTool.ViewModels
 
         public IEnumerable ItemSizeModes { get; set; }
 
+        public EditDialogViewModel EditDialogViewModel { get; set; }
+
         public MainWindowViewModel()
         {
             FontSize = 12;
 
             Seperator = ";;;;;;";
 
-            _defaultWatermark = "Enter text for emote name";
+            DefaultWatermark = "Enter text for emote name";
 
             AddCommand = new AddCommand(this);
 
             CopyCommand = new CopyCommand(this);
 
-            RemoveCommand = new CommandBase(RemoveImage);
+            RemoveCommand = new CommandFactory(RemoveImage);
 
-            AddDialogCommand = new CommandBase(() =>
+            AddDialogCommand = new CommandFactory(() =>
             {
                 IsAddDialogOpen = !IsAddDialogOpen;
-                WatermarkName = _defaultWatermark;
+                WatermarkName = DefaultWatermark;
             });
 
-            EditDialogCommand = new CommandBase(EditDialog);
+            EditDialogViewModel = new EditDialogViewModel(this);
+
+            EditDialogCommand = new EditDialogCommand(this, EditDialogViewModel);
 
             Emotes = new ObservableCollection<EmoteItem>();
 
@@ -234,8 +201,12 @@ namespace EmoteTool.ViewModels
             foreach (string emote in Default.SavedEmotes)
             {
                 string[] spitted = emote.Split(
-                    new[] {Seperator},
+                    new[]
+                    {
+                        Seperator
+                    },
                     StringSplitOptions.None);
+
                 string name = AddCommand.SortName(spitted[0]);
                 string fileName = spitted[1];
                 string sizeModeString = spitted[2];
@@ -245,46 +216,11 @@ namespace EmoteTool.ViewModels
                     sizeMode = ItemSizeMode.Standard;
                 }
 
-
                 BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapImage, fileName , sizeMode: ItemSizeMode.Standard);
+                var emoteItem = new EmoteItem(name, bitmapImage, fileName, ItemSizeMode.Standard);
 
                 Emotes.Add(emoteItem);
             }
-        }
-
-        private void EditDialog()
-        {
-            if (SelectedItem == null)
-            {
-                return;
-            }
-
-            if (!IsEditDialogOpen)
-            {
-                IsEditDialogOpen = true;
-                return;
-            }
-
-            IsEditDialogOpen = false;
-
-            string oldName = SelectedItem.Name;
-            RemoveSelectedItemFromFile(oldName);
-            EmoteName = AddCommand.SortName();
-
-            var newItem = new EmoteItem(EmoteName, SelectedItem.ImagePath);
-            int itemIndex = Emotes.IndexOf(SelectedItem);
-            Emotes[itemIndex] = newItem;
-            SelectedItem = Emotes[itemIndex];
-
-            Default.SavedEmotes.Add(SelectedItem.Name + Seperator + SelectedItem.ImagePath);
-
-            EmoteName = "";
-            _watermarkName = _defaultWatermark;
-            DragPosition = new Point(0, 0);
-            DragSize = new Size(
-                Math.Min((int) SelectedItem.ResizedImage.Width, 500),
-                Math.Min((int) SelectedItem.ResizedImage.Height, 300));
         }
 
         private void RemoveImage(object item)
@@ -307,7 +243,7 @@ namespace EmoteTool.ViewModels
             }
 
             Emotes.Remove(SelectedItem);
-            RemoveSelectedItemFromFile(EmoteName);
+            RemoveSelectedItemFromFile(SelectedItem?.Name);
         }
 
         public void RemoveSelectedItemFromFile(string name = null)
@@ -318,8 +254,8 @@ namespace EmoteTool.ViewModels
             }
 
             List<string> list = Default.SavedEmotes
-                                       .Cast<string>()
-                                       .ToList();
+                .Cast<string>()
+                .ToList();
 
             string match = list.Find(s => s.StartsWith(name + Seperator));
 
@@ -331,6 +267,5 @@ namespace EmoteTool.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

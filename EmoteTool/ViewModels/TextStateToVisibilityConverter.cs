@@ -9,15 +9,17 @@ namespace EmoteTool.ViewModels
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(values[0] is bool) || !(values[1] is bool))
+            if (!(values[0] is bool) ||
+                !(values[1] is bool))
             {
                 return Visibility.Visible;
             }
 
-            bool hasText = !(bool)values[0];
-            bool hasFocus = (bool)values[1];
+            bool hasText = !(bool) values[0];
+            var hasFocus = (bool) values[1];
 
-            if (hasFocus || hasText)
+            if (hasFocus ||
+                hasText)
             {
                 return Visibility.Collapsed;
             }

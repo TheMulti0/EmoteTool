@@ -8,14 +8,12 @@ namespace EmoteTool.ViewModels
 {
     internal class AddErrorToDescription : IValueConverter
     {
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             FieldInfo fi = value?.GetType()
-                                 .GetField(value.ToString());
-            DescriptionAttribute[] attributes = (DescriptionAttribute[]) fi?.GetCustomAttributes(
-                typeof(DescriptionAttribute),
-                false);
+                .GetField(value.ToString());
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[]) fi?.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
             if (attributes != null &&
                 attributes.Length > 0)
@@ -27,7 +25,8 @@ namespace EmoteTool.ViewModels
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
-
+        {
+            throw new NotImplementedException();
+        }
     }
 }
