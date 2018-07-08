@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using EmoteTool.Annotations;
-
 namespace EmoteTool.ViewModels
 {
     internal class EditDialogViewModel : INotifyPropertyChanged
     {
         private bool _isEditDialogOpen;
-
+        private Point _dragPosition;
+        private Size _dragSize;
         public MainWindowViewModel MainViewModel { get; set; }
 
         public bool IsEditDialogOpen
@@ -25,7 +26,34 @@ namespace EmoteTool.ViewModels
                 OnPropertyChanged();
             }
         }
+        public Point DragPosition
+        {
+            get => _dragPosition;
+            set
+            {
+                if (value == _dragPosition)
+                {
+                    return;
+                }
 
+                _dragPosition = value;
+                OnPropertyChanged();
+            }
+        }
+        public Size DragSize
+        {
+            get => _dragSize;
+            set
+            {
+                if (value == _dragSize)
+                {
+                    return;
+                }
+
+                _dragSize = value;
+                OnPropertyChanged();
+            }
+        }
         public EditDialogViewModel()
         {
         }

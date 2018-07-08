@@ -17,8 +17,7 @@ namespace EmoteTool.ViewModels
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
         public static string DefaultWatermark;
-        private Point _dragPosition;
-        private Size _dragSize;
+        
         private ItemError _errorLabel;
         private bool _isAddDialogOpen;
         private bool _isAnyDialogOpen;
@@ -108,36 +107,6 @@ namespace EmoteTool.ViewModels
         }
 
         public Size IconSize { get; }
-
-        public Point DragPosition
-        {
-            get => _dragPosition;
-            set
-            {
-                if (value == _dragPosition)
-                {
-                    return;
-                }
-
-                _dragPosition = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Size DragSize
-        {
-            get => _dragSize;
-            set
-            {
-                if (value == _dragSize)
-                {
-                    return;
-                }
-
-                _dragSize = value;
-                OnPropertyChanged();
-            }
-        }
 
         public ItemError ErrorLabel
         {
