@@ -66,7 +66,7 @@ namespace EmoteTool.ViewModels
             }
 
             BitmapImage bitmapImage = SetUpImage(filePath);
-            string name = _vm.NewEmote;
+            string name = _vm.NewEmote.Name;
             if (name != SortName())
             {
                 _editVm.WatermarkName = SortName();
