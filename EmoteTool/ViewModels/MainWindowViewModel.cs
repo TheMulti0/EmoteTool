@@ -20,7 +20,8 @@ namespace EmoteTool.ViewModels
         private bool _isAddDialogOpen;
         private bool _isAnyDialogOpen;
         private EmoteItem _selectedItem;
-        
+        private EmoteItem _newEmote;
+
         public static double FontSize { get; private set; }
 
         public AddCommand AddCommand { get; set; }
@@ -36,6 +37,20 @@ namespace EmoteTool.ViewModels
         public static string Seperator { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
+
+        public EmoteItem NewEmote
+        {
+            get => _newEmote;
+            set
+            {
+                if (value == _newEmote)
+                {
+                    return;
+                }
+                _newEmote = value;
+                OnPropertyChanged();
+            }
+        }
 
         public EmoteItem SelectedItem
         {

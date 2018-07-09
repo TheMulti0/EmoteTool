@@ -66,7 +66,7 @@ namespace EmoteTool.ViewModels
             }
 
             BitmapImage bitmapImage = SetUpImage(filePath);
-            string name = _vm.SelectedItem.Name;
+            string name = _vm.NewEmote;
             if (name != SortName())
             {
                 _editVm.WatermarkName = SortName();
@@ -112,7 +112,7 @@ namespace EmoteTool.ViewModels
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(_vm.SelectedItem.ImagePath) &&
+            if (string.IsNullOrWhiteSpace(_vm.NewEmote.ImagePath) &&
                 string.IsNullOrWhiteSpace(_browsedItem.Name) &&
                 _browsedItem == null)
             {
@@ -208,7 +208,7 @@ namespace EmoteTool.ViewModels
         {
             if (name == "")
             {
-                name = _vm.SelectedItem.Name;
+                name = _vm.NewEmote.Name;
             }
 
             bool isInList = _vm.Emotes.Any(emote => name == emote.Name);
@@ -249,13 +249,13 @@ namespace EmoteTool.ViewModels
             }
 
             _browsedItem = item;
-            if (_vm.SelectedItem == null)
+            if (_vm.NewEmote == null)
             {
-                _vm.SelectedItem = item;
+                _vm.NewEmote = item;
             }
             else
             {
-                _vm.SelectedItem.ImagePath = item.ImagePath;
+                _vm.NewEmote.ImagePath = item.ImagePath;
             }
             return true;
         }
