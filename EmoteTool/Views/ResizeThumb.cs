@@ -24,46 +24,51 @@ namespace EmoteTool.Views
 
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            //double deltaVertical, deltaHorizontal;
+            double deltaV, deltaH;
+            double VChange = e.VerticalChange;
+            double HChange = e.HorizontalChange;
 
-            Size dragSize = _editVm.DragSize;
+            Size size = _editVm.DragSize;
+            double WToChangeTo = size.Width;
+            double HToChangeTo = size.Height;
+            double XToChangeTo = _editVm.DragPosition.X;
+            double YToChangeTo = _editVm.DragPosition.Y;
+
             switch (VerticalAlignment)
             {
-                case VerticalAlignment.Bottom:
-                    deltaVertical = Math.Min(-e.VerticalChange, dragSize.Height - _minSize.Height);
-
-                    _editVm.DragSize = new Size(dragSize.Width, Convert.ToInt32(dragSize.Height - deltaVertical));
-                    break;
                 case VerticalAlignment.Top:
-                    deltaVertical = Math.Min(e.VerticalChange, dragSize.Height - _minSize.Height);
+                    deltaV = Math.Min(VChange, size.Height - _minSize.Height);
 
-                    _editVm.DragPosition = new Point(
-                        _editVm.DragPosition.X,
-                        Convert.ToInt32(_editVm.DragPosition.Y + deltaVertical));
-
-                    _editVm.DragSize = new Size(dragSize.Width, Convert.ToInt32(dragSize.Height - deltaVertical));
+                    YToChangeTo += deltaV;
+                    HToChangeTo -= deltaV;
+                    break;
+                case VerticalAlignment.Bottom:
+                    deltaV = Math.Min(-VChange, size.Height - _minSize.Height);
+                    HToChangeTo -= deltaV;
                     break;
             }
 
             switch (HorizontalAlignment)
             {
                 case HorizontalAlignment.Left:
-                    deltaHorizontal = Math.Min(e.HorizontalChange, dragSize.Width - _minSize.Width);
-                    _editVm.DragPosition = new Point(
-                        Convert.ToInt32(_editVm.DragPosition.X + deltaHorizontal),
-                        _editVm.DragPosition.Y);
-                    _editVm.DragSize = new Size(Convert.ToInt32(dragSize.Width - deltaHorizontal), dragSize.Height);
+                    deltaH = Math.Min(HChange, size.Width - _minSize.Width);
+
+                    XToChangeTo += deltaH;
+                    WToChangeTo -= deltaH;
                     break;
                 case HorizontalAlignment.Right:
-                    deltaHorizontal = Math.Min(-e.HorizontalChange, dragSize.Width - _minSize.Width);
-
-                    _editVm.DragSize = new Size(Convert.ToInt32(dragSize.Width - deltaHorizontal), dragSize.Height);
-                    break;
-                default:
+                    deltaH = Math.Min(-HChange, size.Width - _minSize.Width);
+                    WToChangeTo -= deltaH;
                     break;
             }
 
-            e.Handled = true;
+            _editVm.DragSize = new Size((int)WToChangeTo, (int)HToChangeTo);
+            _editVm.DragPosition = new Point((int)XToChangeTo, (int)YToChangeTo);
         }
     }
 }
+
+
+
+
+//e.Handled = true;  ?

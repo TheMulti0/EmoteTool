@@ -162,7 +162,7 @@
 
                     <ContentControl Template="{StaticResource ResizerRectTemplate}"
                                 Width="{Binding DragSize.Width}"
-                                Height="{Binding DragSizeY.Height}"
+                                Height="{Binding DragSize.Height}"
                                 Canvas.Left="{Binding DragPosition.X}" 
                                 Canvas.Top="{Binding DragPosition.Y}"/>
 

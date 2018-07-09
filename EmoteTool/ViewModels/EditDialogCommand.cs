@@ -7,15 +7,15 @@ namespace EmoteTool.ViewModels
 {
     internal class EditDialogCommand : ICommand
     {
-        private readonly MainWindowViewModel _mainViewModel;
-        private readonly EditDialogViewModel _vm;
+        private readonly MainWindowViewModel _mainVm;
+        private readonly EditDialogViewModel _editVm;
 
         public EditDialogCommand(
             MainWindowViewModel mainWindowViewModel,
-            EditDialogViewModel viewModel)
+            EditDialogViewModel editDialogViewModel)
         {
-            _mainViewModel = mainWindowViewModel;
-            _vm = viewModel;
+            _mainVm = mainWindowViewModel;
+            _editVm = editDialogViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -27,19 +27,19 @@ namespace EmoteTool.ViewModels
 
         public void Execute(object parameter)
         {
-            if (_mainViewModel.SelectedItem == null)
+            if (_mainVm.SelectedItem == null)
             {
                 return;
             }
-            if (!_vm.IsEditDialogOpen)
+            if (!_editVm.IsEditDialogOpen)
             {
-                _vm.IsEditDialogOpen = true;
+                _editVm.IsEditDialogOpen = true;
                 return;
             }
-            _vm.IsEditDialogOpen = false;
+            _editVm.IsEditDialogOpen = false;
 
-            _mainViewModel.RemoveSelectedItemFromFile(_mainViewModel.SelectedItem.Name);
-            _mainViewModel.SelectedItem.Name = _mainViewModel.AddCommand.SortName();
+            _mainVm.RemoveSelectedItemFromFile(_mainVm.SelectedItem.Name);
+            _mainVm.SelectedItem.Name = _mainVm.AddCommand.SortName();
 
             SetNewItem();
 
@@ -48,28 +48,28 @@ namespace EmoteTool.ViewModels
 
         private void SetToDefault()
         {
-            _mainViewModel.WatermarkName = MainWindowViewModel.DefaultWatermark;
-            _mainViewModel.DragPosition = new Point(0, 0);
-            _mainViewModel.DragSize = new Size(
-                Math.Min((int) _mainViewModel.SelectedItem.ResizedImage.Width, 500),
-                Math.Min((int) _mainViewModel.SelectedItem.ResizedImage.Height, 300));
+            _editVm.WatermarkName = EditDialogViewModel.DefaultWatermark;
+            _editVm.DragPosition = new Point(0, 0);
+            _editVm.DragSize = new Size(
+                Math.Min((int)_mainVm.SelectedItem.ResizedImage.Width, 300),
+                Math.Min((int)_mainVm.SelectedItem.ResizedImage.Height, 300));
         }
 
         private void SetNewItem()
         {
             var newItem = new EmoteItem(
-                _mainViewModel.SelectedItem.Name,
-                _mainViewModel.SelectedItem.ImagePath);
+                _mainVm.SelectedItem.Name,
+                _mainVm.SelectedItem.ImagePath);
 
-            int itemIndex = _mainViewModel.Emotes.IndexOf(_mainViewModel.SelectedItem);
-            _mainViewModel.Emotes[itemIndex] = newItem;
+            int itemIndex = _mainVm.Emotes.IndexOf(_mainVm.SelectedItem);
+            _mainVm.Emotes[itemIndex] = newItem;
 
-            _mainViewModel.SelectedItem = _mainViewModel.Emotes[itemIndex];
+            _mainVm.SelectedItem = _mainVm.Emotes[itemIndex];
 
             Default.SavedEmotes.Add(
-                _mainViewModel.SelectedItem.Name +
+                _mainVm.SelectedItem.Name +
                 MainWindowViewModel.Seperator +
-                _mainViewModel.SelectedItem.ImagePath);
+                _mainVm.SelectedItem.ImagePath);
         }
     }
 }

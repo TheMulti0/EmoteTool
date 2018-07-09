@@ -15,6 +15,7 @@ namespace EmoteTool.ViewModels
     internal class AddCommand : ICommand
     {
         private readonly MainWindowViewModel _vm;
+        private readonly EditDialogViewModel _editVm;
         private EmoteItem _browsedItem;
 
         public AddCommand()
@@ -24,6 +25,7 @@ namespace EmoteTool.ViewModels
         public AddCommand(MainWindowViewModel mainWindowViewModel)
         {
             _vm = mainWindowViewModel;
+            _editVm = _vm.EditDialogViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -67,8 +69,8 @@ namespace EmoteTool.ViewModels
             string name = _vm.SelectedItem.Name;
             if (name != SortName())
             {
-                _vm.WatermarkName = SortName();
-                name = _vm.WatermarkName;
+                _editVm.WatermarkName = SortName();
+                name = _editVm.WatermarkName;
             }
 
             var item = new EmoteItem(

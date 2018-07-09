@@ -6,10 +6,14 @@ namespace EmoteTool.ViewModels
 {
     internal class EditDialogViewModel : INotifyPropertyChanged
     {
+        public MainWindowViewModel MainViewModel { get; set; }
+        public static string DefaultWatermark;
+        public static Size ImagePreviewMaxSize = new Size(300, 300);
+
         private bool _isEditDialogOpen;
         private Point _dragPosition;
         private Size _dragSize;
-        public MainWindowViewModel MainViewModel { get; set; }
+        private string _watermarkName;
 
         public bool IsEditDialogOpen
         {
@@ -54,8 +58,24 @@ namespace EmoteTool.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string WatermarkName
+        {
+            get => _watermarkName;
+            set
+            {
+                if (value == _watermarkName)
+                {
+                    return;
+                }
+
+                _watermarkName = value;
+                OnPropertyChanged();
+            }
+        }
         public EditDialogViewModel()
         {
+            DefaultWatermark = "Enter text for emote name";
+            WatermarkName = DefaultWatermark;
         }
 
         public EditDialogViewModel(MainWindowViewModel viewModel)

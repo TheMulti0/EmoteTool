@@ -16,14 +16,11 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-        public static string DefaultWatermark;
-        
         private ItemError _errorLabel;
         private bool _isAddDialogOpen;
         private bool _isAnyDialogOpen;
         private EmoteItem _selectedItem;
-        private string _watermarkName;
-
+        
         public static double FontSize { get; private set; }
 
         public AddCommand AddCommand { get; set; }
@@ -56,21 +53,6 @@ namespace EmoteTool.ViewModels
                 }
 
                 _selectedItem = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string WatermarkName
-        {
-            get => _watermarkName;
-            set
-            {
-                if (value == _watermarkName)
-                {
-                    return;
-                }
-
-                _watermarkName = value;
                 OnPropertyChanged();
             }
         }
@@ -128,8 +110,6 @@ namespace EmoteTool.ViewModels
 
             Seperator = ";;;;;;";
 
-            DefaultWatermark = "Enter text for emote name";
-
             AddCommand = new AddCommand(this);
 
             CopyCommand = new CopyCommand(this);
@@ -139,7 +119,6 @@ namespace EmoteTool.ViewModels
             AddDialogCommand = new CommandFactory(() =>
             {
                 IsAddDialogOpen = !IsAddDialogOpen;
-                WatermarkName = DefaultWatermark;
             });
 
             EditDialogViewModel = new EditDialogViewModel(this);
