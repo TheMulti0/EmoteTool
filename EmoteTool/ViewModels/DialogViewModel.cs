@@ -24,6 +24,8 @@ namespace EmoteTool.ViewModels
 
         public ICommand AddDialogCommand { get; set; }
 
+        public ICommand EditDialogCommand { get; set; }
+
         public string WatermarkName
         {
             get => _watermarkName;
@@ -134,6 +136,7 @@ namespace EmoteTool.ViewModels
 
             AddCommand = new AddCommand(MainViewModel);
             AddDialogCommand = new CommandFactory(() => IsAddDialogOpen = !IsAddDialogOpen);
+            EditDialogCommand = new EditDialogCommand(MainViewModel, this);
 
             WatermarkName = DefaultWatermark;
         }

@@ -27,8 +27,6 @@ namespace EmoteTool.ViewModels
 
         public ICommand RemoveCommand { get; set; }
 
-        public ICommand EditDialogCommand { get; set; }
-
         public static string Seperator { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
@@ -91,9 +89,7 @@ namespace EmoteTool.ViewModels
             CopyCommand = new CopyCommand(this);
             RemoveCommand = new CommandFactory(RemoveImage);
                 
-
             DialogViewModel = new DialogViewModel(this);
-            EditDialogCommand = new EditDialogCommand(this, DialogViewModel);
 
             Emotes = new ObservableCollection<EmoteItem>();
             NewEmote = new EmoteItem();

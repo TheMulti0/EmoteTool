@@ -81,7 +81,7 @@
                     Content="Remove"
                     Command="{Binding RemoveCommand}"
                     Style="{DynamicResource MaterialDesignFlatButton}" />
-            <Button Content="Edit" Command="{Binding EditDialogCommand}"/>
+            <Button Content="Edit" Command="{Binding DialogViewModel.EditDialogCommand}"/>
 
             <views:AddDialog x:Name="AddDialog" />
 
