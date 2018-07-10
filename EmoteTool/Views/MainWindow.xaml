@@ -30,7 +30,7 @@
                         Content="+" FontSize="30"
                         Foreground="{DynamicResource PrimaryHueMidBrush}"
                         Style="{DynamicResource MaterialDesignFlatButton}"
-                        Command="{Binding AddDialogCommand}" />
+                        Command="{Binding DialogViewModel.AddDialogCommand}" />
 
             </StackPanel>
 
@@ -65,10 +65,10 @@
 
         <Rectangle x:Name="DialogShade"
                    Panel.ZIndex="2"
-                   IsHitTestVisible="{Binding IsAnyDialogOpen}"
+                   IsHitTestVisible="{Binding DialogViewModel.IsAnyDialogOpen}"
                    Fill="Black"
-                   IsEnabled="{Binding IsAnyDialogOpen}"
-                   Opacity="{Binding IsAnyDialogOpen, Converter={StaticResource BoolToOpacity}}" />
+                   IsEnabled="{Binding DialogViewModel.IsAnyDialogOpen}"
+                   Opacity="{Binding DialogViewModel.IsAnyDialogOpen, Converter={StaticResource BoolToOpacity}}" />
 
         <StackPanel Orientation="Vertical"
                     Margin="15, 15">

@@ -14,18 +14,14 @@ namespace EmoteTool.ViewModels
 {
     internal class AddCommand : ICommand
     {
-        private readonly EditDialogViewModel _editVm;
         private readonly MainWindowViewModel _vm;
+        private readonly DialogViewModel _dialogVm;
         private EmoteItem _browsedItem;
-
-        public AddCommand()
-        {
-        }
 
         public AddCommand(MainWindowViewModel mainWindowViewModel)
         {
             _vm = mainWindowViewModel;
-            _editVm = _vm.EditDialogViewModel;
+            _dialogVm = mainWindowViewModel.DialogViewModel
         }
 
         public event EventHandler CanExecuteChanged;
@@ -68,8 +64,8 @@ namespace EmoteTool.ViewModels
             string name = _vm.NewEmote.Name;
             if (name != SortName())
             {
-                _editVm.WatermarkName = SortName();
-                name = _editVm.WatermarkName;
+                _vm.DialogViewModel.WatermarkName = SortName();
+                name = _vm.DialogViewModel.WatermarkName;
             }
 
             var item = new EmoteItem(name, bitmapImage, filePath);
@@ -127,7 +123,9 @@ namespace EmoteTool.ViewModels
         {
             AddToCollections(_browsedItem);
 
-            _vm.IsAddDialogOpen = false;
+            _vm.DialogViewModel.IsAddDialogOpen = false;
+            _vm.DialogViewModel.WatermarkName = DialogViewModel.DefaultWatermark;
+            _vm.NewEmote = new EmoteItem();
             _vm.ErrorLabel = ItemError.None;
             _browsedItem = null;
         }

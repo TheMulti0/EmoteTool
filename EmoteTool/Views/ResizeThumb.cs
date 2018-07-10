@@ -9,7 +9,7 @@ namespace EmoteTool.Views
 {
     public class ResizeThumb : Thumb
     {
-        private readonly EditDialogViewModel _editVm;
+        private readonly DialogViewModel _dialogVm;
         private readonly Size _minSize;
 
         private Size _size;
@@ -21,26 +21,26 @@ namespace EmoteTool.Views
             DragDelta += ResizeThumb_DragDelta;
 
             var mainVm = Application.Current.MainWindow?.DataContext as MainWindowViewModel;
-            _editVm = mainVm?.EditDialogViewModel;
+            _dialogVm = mainVm?.DialogViewModel;
             _minSize = new Size(10, 10);
         }
 
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            _size = _editVm.DragSize;
+            _size = _dialogVm.DragSize;
             
             (double width, double xPosition) = GetWidth(e.HorizontalChange);
             (double height, double yPosition) = GetHeight(e.VerticalChange);
 
-            _editVm.DragSize = new Size((int) width, (int) height);
-            _editVm.DragPosition = new Point((int) xPosition, (int) yPosition);
+            _dialogVm.DragSize = new Size((int) width, (int) height);
+            _dialogVm.DragPosition = new Point((int) xPosition, (int) yPosition);
         }
 
         private (double width, double xPosition) GetWidth(double horizontalChange)
         {
             double width = _size.Width;
             double minWidth = _minSize.Width;
-            double xPosition = _editVm.DragPosition.X;
+            double xPosition = _dialogVm.DragPosition.X;
 
             switch (HorizontalAlignment)
             {
@@ -62,7 +62,7 @@ namespace EmoteTool.Views
         {
             double height = _size.Height;
             double minHeight = _minSize.Height;
-            double yPosition = _editVm.DragPosition.Y;
+            double yPosition = _dialogVm.DragPosition.Y;
 
             switch (VerticalAlignment)
             {

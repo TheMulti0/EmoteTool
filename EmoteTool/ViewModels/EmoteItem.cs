@@ -68,8 +68,9 @@ namespace EmoteTool.ViewModels
 
         private void ReplaceFromFile(EmoteItem item)
         {
-            new MainWindowViewModel().RemoveSelectedItemFromFile(item.Name);
-            new AddCommand().AddToCollections(item);
+            var vm = new MainWindowViewModel();
+            vm.RemoveSelectedItemFromFile(item.Name);
+            vm.DialogViewModel.AddCommand.AddToCollections(item);
         }
     }
 }

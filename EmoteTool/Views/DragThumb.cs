@@ -9,12 +9,12 @@ namespace EmoteTool.Views
     public class DragThumb : Thumb
     {
         private readonly MainWindowViewModel _vm;
-        private readonly EditDialogViewModel _editVm;
+        private readonly DialogViewModel _dialogVm;
 
         public DragThumb()
         {
             _vm = Application.Current.MainWindow?.DataContext as MainWindowViewModel;
-            _editVm = _vm.EditDialogViewModel;
+            _dialogVm = _vm.DialogViewModel;
             DragDelta += MoveThumb_DragDelta;
         }
 
@@ -22,9 +22,9 @@ namespace EmoteTool.Views
         {
             Image image = Image.FromFile(_vm.SelectedItem.ImagePath);
 
-            var x = (int) (_editVm.DragPosition.X + e.HorizontalChange);
+            var x = (int) (_dialogVm.DragPosition.X + e.HorizontalChange);
 
-            var y = (int) (_editVm.DragPosition.Y + e.VerticalChange);
+            var y = (int) (_dialogVm.DragPosition.Y + e.VerticalChange);
 
             if (x >= 100 || x < 0)
             {
@@ -35,7 +35,7 @@ namespace EmoteTool.Views
                 return;
             }
 
-            _editVm.DragPosition = new Point(x, y);
+            _dialogVm.DragPosition = new Point(x, y);
         }
     }
 }

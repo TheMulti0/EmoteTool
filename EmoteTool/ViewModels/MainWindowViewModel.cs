@@ -16,41 +16,22 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-        private ItemError _errorLabel;
-        private bool _isAddDialogOpen;
-        private bool _isAnyDialogOpen;
+        
         private EmoteItem _selectedItem;
         private EmoteItem _newEmote;
+        private ItemError _errorLabel;
 
         public static double FontSize { get; private set; }
-
-        public AddCommand AddCommand { get; set; }
 
         public ICommand CopyCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
-
-        public ICommand AddDialogCommand { get; set; }
 
         public ICommand EditDialogCommand { get; set; }
 
         public static string Seperator { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
-
-        public EmoteItem NewEmote
-        {
-            get => _newEmote;
-            set
-            {
-                if (value == _newEmote)
-                {
-                    return;
-                }
-                _newEmote = value;
-                OnPropertyChanged();
-            }
-        }
 
         public EmoteItem SelectedItem
         {
@@ -72,38 +53,19 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public bool IsAddDialogOpen
+        public EmoteItem NewEmote
         {
-            get => _isAddDialogOpen;
+            get => _newEmote;
             set
             {
-                if (value == _isAddDialogOpen)
+                if (value == _newEmote)
                 {
                     return;
                 }
-
-                _isAddDialogOpen = value;
-                IsAnyDialogOpen = value;
+                _newEmote = value;
                 OnPropertyChanged();
             }
         }
-
-        public bool IsAnyDialogOpen
-        {
-            get => _isAnyDialogOpen;
-            set
-            {
-                if (value == _isAnyDialogOpen)
-                {
-                    return;
-                }
-
-                _isAnyDialogOpen = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Size IconSize { get; }
 
         public ItemError ErrorLabel
         {
@@ -115,77 +77,32 @@ namespace EmoteTool.ViewModels
             }
         }
 
+        public Size IconSize { get; }
+
         public IEnumerable ItemSizeModes { get; set; }
 
-        public EditDialogViewModel EditDialogViewModel { get; set; }
+        public DialogViewModel DialogViewModel { get; set; }
 
         public MainWindowViewModel()
         {
             FontSize = 12;
-
             Seperator = ";;;;;;";
 
-            AddCommand = new AddCommand(this);
-
             CopyCommand = new CopyCommand(this);
-
             RemoveCommand = new CommandFactory(RemoveImage);
+                
 
-            AddDialogCommand = new CommandFactory(() =>
-            {
-                IsAddDialogOpen = !IsAddDialogOpen;
-            });
-
-            EditDialogViewModel = new EditDialogViewModel(this);
-
-            EditDialogCommand = new EditDialogCommand(this, EditDialogViewModel);
+            DialogViewModel = new DialogViewModel(this);
+            EditDialogCommand = new EditDialogCommand(this, DialogViewModel);
 
             Emotes = new ObservableCollection<EmoteItem>();
-
             NewEmote = new EmoteItem();
 
             IconSize = new Size((int) ItemSizeMode.Standard, (int) ItemSizeMode.Standard);
-
             ErrorLabel = ItemError.None;
-
             ItemSizeModes = Enum.GetValues(typeof(ItemSizeMode));
 
             ReadSavedEmotes();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void ReadSavedEmotes()
-        {
-            if (Default.SavedEmotes == null)
-            {
-                Default.SavedEmotes = new StringCollection();
-                return;
-            }
-
-            foreach (string emote in Default.SavedEmotes)
-            {
-                string[] spitted = emote.Split(
-                    new[]
-                    {
-                        Seperator
-                    },
-                    StringSplitOptions.None);
-
-                string name = AddCommand.SortName(spitted[0]);
-                string fileName = spitted[1];
-                string sizeModeString = spitted[2];
-                ItemSizeMode sizeMode;
-                if (!Enum.TryParse(sizeModeString, out sizeMode))
-                {
-                    sizeMode = ItemSizeMode.Standard;
-                }
-
-                BitmapImage bitmapImage = AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapImage, fileName, ItemSizeMode.Standard);
-
-                Emotes.Add(emoteItem);
-            }
         }
 
         private void RemoveImage(object item)
@@ -226,6 +143,41 @@ namespace EmoteTool.ViewModels
 
             Default.SavedEmotes.Remove(match);
         }
+
+        private void ReadSavedEmotes()
+        {
+            if (Default.SavedEmotes == null)
+            {
+                Default.SavedEmotes = new StringCollection();
+                return;
+            }
+
+            foreach (string emote in Default.SavedEmotes)
+            {
+                string[] spitted = emote.Split(
+                    new[]
+                    {
+                        Seperator
+                    },
+                    StringSplitOptions.None);
+
+                string name = DialogViewModel.AddCommand.SortName(spitted[0]);
+                string fileName = spitted[1];
+                string sizeModeString = spitted[2];
+                ItemSizeMode sizeMode;
+                if (!Enum.TryParse(sizeModeString, out sizeMode))
+                {
+                    sizeMode = ItemSizeMode.Standard;
+                }
+
+                BitmapImage bitmapImage = DialogViewModel.AddCommand.SetUpImage(fileName);
+                var emoteItem = new EmoteItem(name, bitmapImage, fileName, ItemSizeMode.Standard);
+
+                Emotes.Add(emoteItem);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

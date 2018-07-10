@@ -14,7 +14,7 @@ namespace EmoteTool.Views
             InitializeComponent();
 
             var mainVm = App.Current.MainWindow.DataContext as MainWindowViewModel;
-            DataContext = mainVm?.EditDialogViewModel;
+            DataContext = mainVm?.DialogViewModel;
         }
     }
 }

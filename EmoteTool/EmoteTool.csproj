@@ -73,7 +73,7 @@
     <Compile Include="ViewModels\AddErrorToDescription.cs" />
     <Compile Include="ViewModels\CopyCommand.cs" />
     <Compile Include="ViewModels\EditDialogCommand.cs" />
-    <Compile Include="ViewModels\EditDialogViewModel.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\ItemError.cs" />
     <Compile Include="ViewModels\ItemSizeMode.cs" />
     <Compile Include="Views\DragThumb.cs" />
