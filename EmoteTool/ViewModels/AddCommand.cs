@@ -21,7 +21,7 @@ namespace EmoteTool.ViewModels
         public AddCommand(MainWindowViewModel mainWindowViewModel)
         {
             _vm = mainWindowViewModel;
-            _dialogVm = mainWindowViewModel.DialogViewModel
+            _dialogVm = mainWindowViewModel.DialogViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
