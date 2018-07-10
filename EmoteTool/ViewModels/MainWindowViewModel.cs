@@ -142,6 +142,8 @@ namespace EmoteTool.ViewModels
 
             Emotes = new ObservableCollection<EmoteItem>();
 
+            NewEmote = new EmoteItem();
+
             IconSize = new Size((int) ItemSizeMode.Standard, (int) ItemSizeMode.Standard);
 
             ErrorLabel = ItemError.None;

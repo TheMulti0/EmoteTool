@@ -18,6 +18,11 @@ namespace EmoteTool.ViewModels
 
         public Size ImageSize { get; set; }
 
+        public EmoteItem()
+        {
+            
+        }
+
         public EmoteItem(
             string name,
             BitmapImage resizedImage,
