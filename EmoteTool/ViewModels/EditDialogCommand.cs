@@ -38,11 +38,7 @@ namespace EmoteTool.ViewModels
             }
             _dialogVm.IsEditDialogOpen = false;
 
-            _mainVm.RemoveSelectedItemFromFile(_mainVm.SelectedItem.Name);
-            _mainVm.SelectedItem.Name = _dialogVm.AddCommand.SortName();
-
             SetNewItem();
-
             SetToDefault();
         }
 
@@ -64,13 +60,14 @@ namespace EmoteTool.ViewModels
                 selectedItem.ResizedImage,
                 selectedItem.ImagePath,
                 selectedItem.SizeMode);
-
-            int itemIndex = _mainVm.Emotes.IndexOf(selectedItem);
-            _mainVm.Emotes[itemIndex] = newItem;
-
-            _mainVm.SelectedItem = _mainVm.Emotes[itemIndex];
-
-            _dialogVm.AddCommand.AddToCollections(newItem);
+            
+            _mainVm.RemoveSelectedItemFromFile(selectedItem.Name);
+            string itemString = newItem.Name +
+                                MainWindowViewModel.Seperator +
+                                newItem.ImagePath +
+                                MainWindowViewModel.Seperator +
+                                newItem.SizeMode;
+            Default.SavedEmotes.Add(itemString);
         }
     }
 }

@@ -52,13 +52,13 @@
                         </TextBlock.Visibility>
                     </TextBlock>
 
-                    <TextBox Name="EmoteName" Background="Transparent" MaxLength="32" 
-                         Text="{Binding EmoteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Name="EmoteName" Background="Transparent"
+                             Text="{Binding MainViewModel.SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
-                <TextBlock Text="{Binding SelectedItem.Name}"
+                <!--<TextBlock Text="{Binding MainViewModel.SelectedItem.Name}"
                            FontWeight="Medium" HorizontalAlignment="Center"
-                           Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" />-->
 
                 <StackPanel Orientation="Horizontal" Margin="0, 5">
                     <!--Path-->
@@ -71,7 +71,7 @@
 
                         <TextBlock x:Name="ImagePath" Panel.ZIndex="1"
                                VerticalAlignment="Center" Margin="5, 5"
-                               Text="{Binding SelectedItem.ImagePath}"
+                               Text="{Binding MainViewModel.SelectedItem.ImagePath}"
                                FontSize="14" FontWeight="Medium"
                                Foreground="White" />
 

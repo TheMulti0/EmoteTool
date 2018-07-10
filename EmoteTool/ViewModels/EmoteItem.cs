@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using EmoteTool.Annotations;
 using Size = System.Drawing.Size;
 
 namespace EmoteTool.ViewModels

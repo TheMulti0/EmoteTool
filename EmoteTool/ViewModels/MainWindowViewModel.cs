@@ -167,7 +167,7 @@ namespace EmoteTool.ViewModels
                 }
 
                 BitmapImage bitmapImage = DialogViewModel.AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapImage, fileName, ItemSizeMode.Standard);
+                var emoteItem = new EmoteItem(name, bitmapImage, fileName, sizeMode);
 
                 Emotes.Add(emoteItem);
             }
