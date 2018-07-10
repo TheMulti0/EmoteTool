@@ -44,23 +44,6 @@ namespace EmoteTool.ViewModels
                 (int) SizeMode - fontPixels);
         }
 
-        //public EmoteItem(string name, string path, ItemSizeMode sizeMode = ItemSizeMode.Standard)
-        //{
-        //    Name = name;
-        //    if (string.IsNullOrWhiteSpace(path))
-        //    {
-        //        path = ImagePath;
-        //    }
-        //    ImagePath = path;
-
-        //    ResizedImage = new BitmapImage(new Uri(ImagePath ?? ""));
-        //    SizeMode = sizeMode;
-        //    var fontPixels = (int)TransformToPixels(MainWindowViewModel.NameFontSize);
-        //    ImageSize = new Size(
-        //        (int)SizeMode - fontPixels,
-        //        (int)SizeMode - fontPixels);
-        //}
-
         private static double TransformToPixels(double points)
         {
             PropertyInfo dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
