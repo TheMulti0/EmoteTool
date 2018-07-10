@@ -38,25 +38,18 @@ namespace EmoteTool.ViewModels
             ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
             SizeMode = sizeMode;
             ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
-            var fontPixels = (int) TransformToPixels(MainWindowViewModel.NameFontSize);
+            var fontPixels = (int) PointToPixels(MainWindowViewModel.NameFontSize);
             ImageSize = new Size(
                 (int) SizeMode - fontPixels,
                 (int) SizeMode - fontPixels);
         }
 
-        private static double TransformToPixels(double points)
+        private static double PointToPixels(double points)
         {
             PropertyInfo dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
             var dpiX = (int) dpiXProperty?.GetValue(null, null);
 
             return points * dpiX / 72;
-        }
-
-        private void ReplaceFromFile(EmoteItem item)
-        {
-            var vm = new MainWindowViewModel();
-            vm.RemoveSelectedItemFromFile(item.Name);
-            vm.DialogViewModel.AddCommand.AddToCollections(item);
         }
     }
 }
