@@ -12,7 +12,7 @@
              IsOpen="{Binding Path=IsEditDialogOpen, Mode=TwoWay}">
 
     <d:DialogHost.DataContext>
-        <viewModels:EditDialogViewModel/>
+        <viewModels:DialogViewModel/>
     </d:DialogHost.DataContext>
 
     <material:DialogHost.Resources>

@@ -8,14 +8,14 @@ namespace EmoteTool.ViewModels
     internal class EditDialogCommand : ICommand
     {
         private readonly MainWindowViewModel _mainVm;
-        private readonly EditDialogViewModel _editVm;
+        private readonly DialogViewModel _dialogVm;
 
         public EditDialogCommand(
             MainWindowViewModel mainWindowViewModel,
-            EditDialogViewModel editDialogViewModel)
+            DialogViewModel dialogViewModel)
         {
             _mainVm = mainWindowViewModel;
-            _editVm = editDialogViewModel;
+            _dialogVm = dialogViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -31,15 +31,15 @@ namespace EmoteTool.ViewModels
             {
                 return;
             }
-            if (!_editVm.IsEditDialogOpen)
+            if (!_dialogVm.IsEditDialogOpen)
             {
-                _editVm.IsEditDialogOpen = true;
+                _dialogVm.IsEditDialogOpen = true;
                 return;
             }
-            _editVm.IsEditDialogOpen = false;
+            _dialogVm.IsEditDialogOpen = false;
 
             _mainVm.RemoveSelectedItemFromFile(_mainVm.SelectedItem.Name);
-            _mainVm.SelectedItem.Name = _mainVm.AddCommand.SortName();
+            _mainVm.SelectedItem.Name = _dialogVm.AddCommand.SortName();
 
             SetNewItem();
 
@@ -48,28 +48,29 @@ namespace EmoteTool.ViewModels
 
         private void SetToDefault()
         {
-            _editVm.WatermarkName = EditDialogViewModel.DefaultWatermark;
-            _editVm.DragPosition = new Point(0, 0);
-            _editVm.DragSize = new Size(
+            _dialogVm.WatermarkName = DialogViewModel.DefaultWatermark;
+            _dialogVm.DragPosition = new Point(0, 0);
+            _dialogVm.DragSize = new Size(
                 Math.Min((int)_mainVm.SelectedItem.ResizedImage.Width, 300),
                 Math.Min((int)_mainVm.SelectedItem.ResizedImage.Height, 300));
         }
 
         private void SetNewItem()
         {
-            var newItem = new EmoteItem(
-                _mainVm.SelectedItem.Name,
-                _mainVm.SelectedItem.ImagePath);
+            EmoteItem selectedItem = _mainVm.SelectedItem;
 
-            int itemIndex = _mainVm.Emotes.IndexOf(_mainVm.SelectedItem);
+            var newItem = new EmoteItem(
+                selectedItem.Name,
+                selectedItem.ResizedImage,
+                selectedItem.ImagePath,
+                selectedItem.SizeMode);
+
+            int itemIndex = _mainVm.Emotes.IndexOf(selectedItem);
             _mainVm.Emotes[itemIndex] = newItem;
 
             _mainVm.SelectedItem = _mainVm.Emotes[itemIndex];
 
-            Default.SavedEmotes.Add(
-                _mainVm.SelectedItem.Name +
-                MainWindowViewModel.Seperator +
-                _mainVm.SelectedItem.ImagePath);
+            _dialogVm.AddCommand.AddToCollections(newItem);
         }
     }
 }

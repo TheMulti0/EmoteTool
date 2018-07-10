@@ -7,59 +7,77 @@ using Size = System.Drawing.Size;
 
 namespace EmoteTool.Views
 {
-    class ResizeThumb : Thumb
+    public class ResizeThumb : Thumb
     {
-        private readonly EditDialogViewModel _editVm;
+        private readonly DialogViewModel _dialogVm;
         private readonly Size _minSize;
+
+        private Size _size;
+        private double _horizontalDelta;
+        private double _verticalDelta;
 
         public ResizeThumb()
         {
             DragDelta += ResizeThumb_DragDelta;
 
-            var _mainVm = Application.Current.MainWindow?.DataContext as MainWindowViewModel;
-            _editVm = _mainVm.EditDialogViewModel;
+            var mainVm = Application.Current.MainWindow?.DataContext as MainWindowViewModel;
+            _dialogVm = mainVm?.DialogViewModel;
             _minSize = new Size(10, 10);
         }
 
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            double deltaV, deltaH;
-            double vChange = e.VerticalChange;
-            double hChange = e.HorizontalChange;
-            Size size = _editVm.DragSize;
+            _size = _dialogVm.DragSize;
+            
+            (double width, double xPosition) = GetWidth(e.HorizontalChange);
+            (double height, double yPosition) = GetHeight(e.VerticalChange);
 
-            double width = size.Width;
-            double xPos = _editVm.DragPosition.X;
+            _dialogVm.DragSize = new Size((int) width, (int) height);
+            _dialogVm.DragPosition = new Point((int) xPosition, (int) yPosition);
+        }
+
+        private (double width, double xPosition) GetWidth(double horizontalChange)
+        {
+            double width = _size.Width;
+            double minWidth = _minSize.Width;
+            double xPosition = _dialogVm.DragPosition.X;
+
             switch (HorizontalAlignment)
             {
                 case HorizontalAlignment.Left:
-                    deltaH = Math.Min(hChange, width - _minSize.Width);
-                    xPos += deltaH;
-                    width -= deltaH;
+                    _horizontalDelta = Math.Min(horizontalChange, width - minWidth);
+
+                    xPosition += _horizontalDelta;
+                    width -= _horizontalDelta;
                     break;
                 case HorizontalAlignment.Right:
-                    deltaH = Math.Min(-hChange, width - _minSize.Width);
-                    width -= deltaH;
+                    _horizontalDelta = Math.Min(-horizontalChange, width - minWidth);
+                    width -= _horizontalDelta;
                     break;
             }
+            return (width, xPosition);
+        }
 
-            double height = size.Height;
-            double yPos = _editVm.DragPosition.Y;
+        private (double height, double yPosition) GetHeight(double verticalChange)
+        {
+            double height = _size.Height;
+            double minHeight = _minSize.Height;
+            double yPosition = _dialogVm.DragPosition.Y;
+
             switch (VerticalAlignment)
             {
                 case VerticalAlignment.Top:
-                    deltaV = Math.Min(vChange, height - _minSize.Height);
-                    yPos += deltaV;
-                    height -= deltaV;
+                    _verticalDelta = Math.Min(verticalChange, height - minHeight);
+
+                    yPosition += _verticalDelta;
+                    height -= _verticalDelta;
                     break;
                 case VerticalAlignment.Bottom:
-                    deltaV = Math.Min(-vChange, height - _minSize.Height);
-                    height -= deltaV;
+                    _verticalDelta = Math.Min(-verticalChange, height - minHeight);
+                    height -= _verticalDelta;
                     break;
             }
-
-            _editVm.DragSize = new Size((int)width, (int)height);
-            _editVm.DragPosition = new Point((int)xPos, (int)yPos);
+            return (height, yPosition);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using EmoteTool.ViewModels;
 using MaterialDesignThemes.Wpf;
 
 namespace EmoteTool.Views
@@ -12,8 +13,8 @@ namespace EmoteTool.Views
         {
             InitializeComponent();
 
-            Window window = Application.Current.MainWindow;
-            DataContext = window?.DataContext;
+            var mainVm = App.Current.MainWindow.DataContext as MainWindowViewModel;
+            DataContext = mainVm?.DialogViewModel;
         }
     }
 }

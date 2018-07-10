@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using Size = System.Drawing.Size;
 
 namespace EmoteTool.ViewModels
 {
@@ -18,6 +21,11 @@ namespace EmoteTool.ViewModels
 
         public Size ImageSize { get; set; }
 
+        public EmoteItem()
+        {
+            
+        }
+
         public EmoteItem(
             string name,
             BitmapImage resizedImage,
@@ -30,41 +38,18 @@ namespace EmoteTool.ViewModels
             ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
             SizeMode = sizeMode;
             ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
-            var fontPixels = (int) TransformToPixels(MainWindowViewModel.FontSize);
+            var fontPixels = (int) PointToPixels(MainWindowViewModel.NameFontSize);
             ImageSize = new Size(
                 (int) SizeMode - fontPixels,
                 (int) SizeMode - fontPixels);
         }
 
-        public EmoteItem(string name, string path, ItemSizeMode sizeMode = ItemSizeMode.Standard)
+        private static double PointToPixels(double points)
         {
-            Name = name;
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                path = ImagePath;
-            }
-            ImagePath = path;
+            PropertyInfo dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+            var dpiX = (int) dpiXProperty?.GetValue(null, null);
 
-            ResizedImage = new BitmapImage(new Uri(ImagePath ?? ""));
-            SizeMode = sizeMode;
-            ImageSize = new Size((int) SizeMode, (int) SizeMode);
-        }
-
-        private static double TransformToPixels(double unit)
-        {
-            double pixel;
-            using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                pixel = g.DpiX / 96 * unit;
-            }
-
-            return pixel;
-        }
-
-        private void ReplaceFromFile(EmoteItem item)
-        {
-            new MainWindowViewModel().RemoveSelectedItemFromFile(item.Name);
-            new AddCommand().AddToCollections(item);
+            return points * dpiX / 72;
         }
     }
 }
