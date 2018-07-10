@@ -21,7 +21,7 @@ namespace EmoteTool.ViewModels
         private EmoteItem _newEmote;
         private ItemError _errorLabel;
 
-        public static double FontSize { get; private set; }
+        public static double NameFontSize { get; private set; }
 
         public ICommand CopyCommand { get; set; }
 
@@ -83,7 +83,7 @@ namespace EmoteTool.ViewModels
 
         public MainWindowViewModel()
         {
-            FontSize = 12;
+            NameFontSize = 12;
             Seperator = ";;;;;;";
 
             CopyCommand = new CopyCommand(this);

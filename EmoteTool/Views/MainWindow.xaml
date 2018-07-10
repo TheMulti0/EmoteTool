@@ -49,7 +49,7 @@
                     <TextBlock HorizontalAlignment="Center" Margin="0, 5"
                                Text="{Binding Name}"
                                FontWeight="Medium"
-                               FontSize="{x:Static viewModels:MainWindowViewModel.FontSize}"
+                               FontSize="{x:Static viewModels:MainWindowViewModel.NameFontSize}"
                                Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
             </StackPanel>

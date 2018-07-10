@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using Size = System.Drawing.Size;
 
 namespace EmoteTool.ViewModels
 {
@@ -35,35 +38,35 @@ namespace EmoteTool.ViewModels
             ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
             SizeMode = sizeMode;
             ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
-            var fontPixels = (int) TransformToPixels(MainWindowViewModel.FontSize);
+            var fontPixels = (int) TransformToPixels(MainWindowViewModel.NameFontSize);
             ImageSize = new Size(
                 (int) SizeMode - fontPixels,
                 (int) SizeMode - fontPixels);
         }
 
-        public EmoteItem(string name, string path, ItemSizeMode sizeMode = ItemSizeMode.Standard)
+        //public EmoteItem(string name, string path, ItemSizeMode sizeMode = ItemSizeMode.Standard)
+        //{
+        //    Name = name;
+        //    if (string.IsNullOrWhiteSpace(path))
+        //    {
+        //        path = ImagePath;
+        //    }
+        //    ImagePath = path;
+
+        //    ResizedImage = new BitmapImage(new Uri(ImagePath ?? ""));
+        //    SizeMode = sizeMode;
+        //    var fontPixels = (int)TransformToPixels(MainWindowViewModel.NameFontSize);
+        //    ImageSize = new Size(
+        //        (int)SizeMode - fontPixels,
+        //        (int)SizeMode - fontPixels);
+        //}
+
+        private static double TransformToPixels(double points)
         {
-            Name = name;
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                path = ImagePath;
-            }
-            ImagePath = path;
+            PropertyInfo dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+            var dpiX = (int) dpiXProperty?.GetValue(null, null);
 
-            ResizedImage = new BitmapImage(new Uri(ImagePath ?? ""));
-            SizeMode = sizeMode;
-            ImageSize = new Size((int) SizeMode, (int) SizeMode);
-        }
-
-        private static double TransformToPixels(double unit)
-        {
-            double pixel;
-            using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                pixel = g.DpiX / 96 * unit;
-            }
-
-            return pixel;
+            return points * dpiX / 72;
         }
 
         private void ReplaceFromFile(EmoteItem item)

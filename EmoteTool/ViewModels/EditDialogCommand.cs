@@ -57,19 +57,20 @@ namespace EmoteTool.ViewModels
 
         private void SetNewItem()
         {
-            var newItem = new EmoteItem(
-                _mainVm.SelectedItem.Name,
-                _mainVm.SelectedItem.ImagePath);
+            EmoteItem selectedItem = _mainVm.SelectedItem;
 
-            int itemIndex = _mainVm.Emotes.IndexOf(_mainVm.SelectedItem);
+            var newItem = new EmoteItem(
+                selectedItem.Name,
+                selectedItem.ResizedImage,
+                selectedItem.ImagePath,
+                selectedItem.SizeMode);
+
+            int itemIndex = _mainVm.Emotes.IndexOf(selectedItem);
             _mainVm.Emotes[itemIndex] = newItem;
 
             _mainVm.SelectedItem = _mainVm.Emotes[itemIndex];
 
-            Default.SavedEmotes.Add(
-                _mainVm.SelectedItem.Name +
-                MainWindowViewModel.Seperator +
-                _mainVm.SelectedItem.ImagePath);
+            _dialogVm.AddCommand.AddToCollections(newItem);
         }
     }
 }
