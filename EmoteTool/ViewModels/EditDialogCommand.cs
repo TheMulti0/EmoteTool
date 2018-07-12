@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Input;
-using static EmoteTool.Properties.Settings;
+using static EmoteTool.Program;
 
 namespace EmoteTool.ViewModels
 {
@@ -67,7 +67,7 @@ namespace EmoteTool.ViewModels
                                 newItem.ImagePath +
                                 MainWindowViewModel.Seperator +
                                 newItem.SizeMode;
-            Default.SavedEmotes.Add(itemString);
+            Settings.SavedEmotes.Add(itemString);
         }
     }
 }

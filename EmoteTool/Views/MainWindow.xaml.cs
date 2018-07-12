@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using EmoteTool.Properties;
 using EmoteTool.ViewModels;
 using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
+using static EmoteTool.Program;
 
 namespace EmoteTool.Views
 {
@@ -23,8 +26,7 @@ namespace EmoteTool.Views
 
         private static void OnClosing(object sender, CancelEventArgs cancelEventArgs)
         {
-            Settings.Default.Save();
-            //Settings.Default.Reload();
+            File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(Program.Settings, Formatting.Indented));
         }
     }
 }

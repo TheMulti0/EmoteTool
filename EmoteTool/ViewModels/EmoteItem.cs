@@ -26,7 +26,6 @@ namespace EmoteTool.ViewModels
 
         public EmoteItem()
         {
-            
         }
 
         public EmoteItem(

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-using static EmoteTool.Properties.Settings;
+using static EmoteTool.Program;
 using static EmoteTool.ViewModels.MainWindowViewModel;
 
 namespace EmoteTool.ViewModels
@@ -248,13 +248,13 @@ namespace EmoteTool.ViewModels
             _vm.Emotes.Add(item);
             if (!string.IsNullOrWhiteSpace(item?.ImagePath))
             {
-                Default.SavedEmotes.Add(item.Name + Seperator + item.ImagePath + Seperator + item.SizeMode);
+                Settings.SavedEmotes.Add(item.Name + Seperator + item.ImagePath + Seperator + item.SizeMode);
                 return;
             }
 
             if (item?.ResizedImage?.UriSource != null || item?.ResizedImage?.BaseUri != null)
             {
-                Default.SavedEmotes.Add(item.Name + Seperator + item.ResizedImage.UriSource?.AbsolutePath);
+                Settings.SavedEmotes.Add(item.Name + Seperator + item.ResizedImage.UriSource?.AbsolutePath);
                 return;
             }
 
@@ -262,13 +262,13 @@ namespace EmoteTool.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(_browsedItem.ImagePath))
                 {
-                    Default.SavedEmotes.Add(
+                    Settings.SavedEmotes.Add(
                         _browsedItem.Name + Seperator + _browsedItem.ImagePath + Seperator + _browsedItem.SizeMode);
                 }
 
                 if (_browsedItem.ResizedImage?.UriSource != null || _browsedItem.ResizedImage?.BaseUri != null)
                 {
-                    Default.SavedEmotes.Add(
+                    Settings.SavedEmotes.Add(
                         _browsedItem.Name + Seperator + _browsedItem.ResizedImage.UriSource?.AbsolutePath);
                 }
             }

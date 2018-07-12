@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using EmoteTool.Annotations;
-using static EmoteTool.Properties.Settings;
+using static EmoteTool.Program;
 
 namespace EmoteTool.ViewModels
 {
@@ -131,24 +131,24 @@ namespace EmoteTool.ViewModels
                 name = SelectedItem.Name;
             }
 
-            List<string> list = Default.SavedEmotes
+            List<string> list = Settings.SavedEmotes
                 .Cast<string>()
                 .ToList();
 
             string match = list.Find(s => s.StartsWith(name + Seperator));
 
-            Default.SavedEmotes.Remove(match);
+            Settings.SavedEmotes.Remove(match);
         }
 
         private void ReadSavedEmotes()
         {
-            if (Default.SavedEmotes == null)
+            if (Settings.SavedEmotes == null)
             {
-                Default.SavedEmotes = new StringCollection();
+                Settings.SavedEmotes = new List<string>();
                 return;
             }
 
-            foreach (string emote in Default.SavedEmotes)
+            foreach (string emote in Settings.SavedEmotes)
             {
                 string[] spitted = emote.Split(
                     new[]
