@@ -15,12 +15,30 @@ namespace EmoteTool.ViewModels
         private ItemSizeMode _sizeMode;
         private Size _itemSize;
         private Size _imageSize;
+        private string _name;
+        private string _imagePath;
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
         public BitmapImage ResizedImage { get; set; }
 
-        public string ImagePath { get; set; }
+        public string ImagePath
+        {
+            get => _imagePath;
+            set
+            {
+                _imagePath = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ItemSizeMode SizeMode
         {
