@@ -10,19 +10,47 @@ using Size = System.Drawing.Size;
 
 namespace EmoteTool.ViewModels
 {
-    internal class EmoteItem
+    internal class EmoteItem : INotifyPropertyChanged
     {
+        private ItemSizeMode _sizeMode;
+        private Size _itemSize;
+        private Size _imageSize;
+
         public string Name { get; set; }
 
         public BitmapImage ResizedImage { get; set; }
 
         public string ImagePath { get; set; }
 
-        public ItemSizeMode SizeMode { get; set; }
+        public ItemSizeMode SizeMode
+        {
+            get => _sizeMode;
+            set
+            {
+                _sizeMode = value;
+                SetSize();
+            }
+        }
 
-        public Size ItemSize { get; set; }
+        public Size ItemSize
+        {
+            get => _itemSize;
+            set
+            {
+                _itemSize = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public Size ImageSize { get; set; }
+        public Size ImageSize
+        {
+            get => _imageSize;
+            set
+            {
+                _imageSize = value;
+                OnPropertyChanged();
+            }
+        }
 
         public EmoteItem()
         {
@@ -39,11 +67,7 @@ namespace EmoteTool.ViewModels
 
             ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
             SizeMode = sizeMode;
-            ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
-            var fontPixels = (int) PointToPixels(MainWindowViewModel.NameFontSize);
-            ImageSize = new Size(
-                (int) SizeMode - fontPixels,
-                (int) SizeMode - fontPixels);
+            SetSize();
         }
 
         private static double PointToPixels(double points)
@@ -52,6 +76,21 @@ namespace EmoteTool.ViewModels
             var dpiX = (int) dpiXProperty?.GetValue(null, null);
 
             return points * dpiX / 72;
+        }
+
+        private void SetSize()
+        {
+            ItemSize = new Size((int) SizeMode + 10, (int) SizeMode + 10);
+            var fontPixels = (int) PointToPixels(MainWindowViewModel.NameFontSize);
+            ImageSize = new Size((int) SizeMode - fontPixels, (int) SizeMode - fontPixels);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

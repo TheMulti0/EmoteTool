@@ -54,19 +54,13 @@ namespace EmoteTool.ViewModels
         private void SetNewItem()
         {
             EmoteItem selectedItem = _mainVm.SelectedItem;
-
-            var newItem = new EmoteItem(
-                selectedItem.Name,
-                selectedItem.ResizedImage,
-                selectedItem.ImagePath,
-                selectedItem.SizeMode);
             
             _mainVm.RemoveSelectedItemFromFile(selectedItem.Name);
-            string itemString = newItem.Name +
+            string itemString = selectedItem.Name +
                                 MainWindowViewModel.Seperator +
-                                newItem.ImagePath +
+                                selectedItem.ImagePath +
                                 MainWindowViewModel.Seperator +
-                                newItem.SizeMode;
+                                selectedItem.SizeMode;
             Settings.SavedEmotes.Add(itemString);
         }
     }
