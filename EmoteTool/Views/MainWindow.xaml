@@ -56,7 +56,7 @@
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
-            <StackPanel Orientation="Horizontal" />
+            <WrapPanel Orientation="Horizontal" />
         </ItemsPanelTemplate>
 
     </Window.Resources>
@@ -86,22 +86,26 @@
             <views:AddDialog x:Name="AddDialog" />
 
             <views:EditDialog x:Name="EditDialog" />
+            
+            <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Disabled">-->
 
-            <ListView x:Name="Emotes"
-                      Margin="0, 15"
-                      Template="{StaticResource EmotesTemplate}"
-                      ItemsSource="{Binding Emotes, Mode=TwoWay}"
-                      ItemTemplate="{StaticResource EmoteItemTemplate}"
-                      ItemsPanel="{StaticResource ItemsPanelTemplate}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <ListView x:Name="Emotes"
+                          Margin="0, 15"
+                          Template="{StaticResource EmotesTemplate}"
+                          ItemsSource="{Binding Emotes, Mode=TwoWay}"
+                          ItemTemplate="{StaticResource EmoteItemTemplate}"
+                          ItemsPanel="{StaticResource ItemsPanelTemplate}"
+                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
 
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding CopyCommand, Mode=OneWay}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding CopyCommand, Mode=OneWay}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
-            </ListView>
+                </ListView>
+            <!--</ScrollViewer>-->
 
         </StackPanel>
 
