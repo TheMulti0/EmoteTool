@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -20,6 +22,7 @@ namespace EmoteTool.ViewModels
         private Size _imageSize;
         private string _name;
         private string _imagePath;
+        private string _actualImagePath;
 
         public string Name
         {
@@ -34,7 +37,7 @@ namespace EmoteTool.ViewModels
         public BitmapImage ResizedImage { get; set; }
 
         public string ActualImagePath { get; set; }
-
+    
         public string ImagePath
         {
             get => _imagePath;
@@ -42,11 +45,6 @@ namespace EmoteTool.ViewModels
             {
                 _imagePath = value;
                 OnPropertyChanged();
-                if (ActualImagePath.EndsWith(Name))
-                {
-                    return;
-                }
-                ActualImagePath = CopyImage(value);
             }
         }
 
@@ -86,38 +84,43 @@ namespace EmoteTool.ViewModels
 
         public EmoteItem(
             string name,
-            BitmapImage resizedImage,
-            string path = null,
+            string path,
+            BitmapImage resizedImage = null,
             ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
             Name = name;
-            ResizedImage = resizedImage;
+            ResizedImage = resizedImage ?? new BitmapImage(new Uri(path));
 
-            ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
-            ActualImagePath = Path.Combine(
-                ImagePath,
-                Name);
+            ActualImagePath = Path.Combine(ImagesPath, Name, Path.GetExtension(path));
+            ImagePath = path;
+            
             SizeMode = sizeMode;
             SetSize();
         }
 
         public static string CopyImage(string path)
         {
-            string newPath = Path.Combine(
-                ImagesPath,
-                "Image1");
+            if (!Directory.Exists(ImagesPath))
+            {
+                Directory.CreateDirectory(ImagesPath);
+            }
+            string extention = Path.GetExtension(path);
+            string newPath = Path.Combine(ImagesPath, $"Image1{extention}");
+            if (File.Exists(newPath))
+            {
+                File.Delete(newPath);
+            }
             File.Copy(path, newPath);
 
             return newPath;
         }
 
-        public static string RenameImage(string newName, string oldName = "Image1")
+        public static string RenameImage(string newName, string oldPath)
         {
-            string filePath = Path.Combine(
-                ImagesPath,
-                oldName);
-            string newFilePath = filePath.Replace(oldName, newName);
-            File.Move(filePath, newFilePath);
+            string newFilePath = oldPath.Replace(Path.GetFileNameWithoutExtension(oldPath), newName);
+            File.Copy(oldPath, newFilePath, true);
+            File.Delete(oldPath);
+            
             return newFilePath;
         }
 
@@ -125,7 +128,7 @@ namespace EmoteTool.ViewModels
         {
             PropertyInfo dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
             var dpiX = (int) dpiXProperty?.GetValue(null, null);
-
+            
             return points * dpiX / 72;
         }
 

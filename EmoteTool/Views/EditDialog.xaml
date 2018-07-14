@@ -125,7 +125,7 @@
                 <Image x:Name="ImagePreview"
                        MaxWidth="300"
                        MaxHeight="300"
-                       Source="{Binding MainViewModel.SelectedItem.ImagePath}" />
+                       Source="{Binding MainViewModel.SelectedItem.ActualImagePath}" />
 
                 <Canvas>
                     <Canvas.Resources>

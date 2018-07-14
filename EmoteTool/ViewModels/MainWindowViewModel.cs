@@ -16,7 +16,6 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-        
         private EmoteItem _selectedItem;
         private EmoteItem _newEmote;
         private ItemError _errorLabel;
@@ -26,8 +25,6 @@ namespace EmoteTool.ViewModels
         public ICommand CopyCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
-
-        public static string Seperator { get; private set; }
 
         public ObservableCollection<EmoteItem> Emotes { get; set; }
 
@@ -84,7 +81,6 @@ namespace EmoteTool.ViewModels
         public MainWindowViewModel()
         {
             NameFontSize = 12;
-            Seperator = ";;;;;;";
 
             CopyCommand = new CopyCommand(this);
             RemoveCommand = new CommandFactory(RemoveImage);
@@ -131,45 +127,17 @@ namespace EmoteTool.ViewModels
                 name = SelectedItem.Name;
             }
 
-            List<string> list = Settings.SavedEmotes
-                .Cast<string>()
-                .ToList();
+            var tuple = Settings.SavedEmotes.Find(t => t.name == name);
 
-            string match = list.Find(s => s.StartsWith(name + Seperator));
-
-            Settings.SavedEmotes.Remove(match);
+            Settings.SavedEmotes.Remove(tuple);
         }
 
         private void ReadSavedEmotes()
         {
-            if (Settings.SavedEmotes == null)
+            foreach (var tuple in Settings.SavedEmotes)
             {
-                Settings.SavedEmotes = new List<string>();
-                return;
-            }
-
-            foreach (string emote in Settings.SavedEmotes)
-            {
-                string[] spitted = emote.Split(
-                    new[]
-                    {
-                        Seperator
-                    },
-                    StringSplitOptions.None);
-
-                string name = DialogViewModel.AddCommand.SortName(spitted[0]);
-                string fileName = spitted[1];
-                string sizeModeString = spitted[2];
-                ItemSizeMode sizeMode;
-                if (!Enum.TryParse(sizeModeString, out sizeMode))
-                {
-                    sizeMode = ItemSizeMode.Standard;
-                }
-
-                BitmapImage bitmapImage = DialogViewModel.AddCommand.SetUpImage(fileName);
-                var emoteItem = new EmoteItem(name, bitmapImage, fileName, sizeMode);
-
-                Emotes.Add(emoteItem);
+                BitmapImage resizedImage = DialogViewModel.AddCommand.SetUpImage(tuple.imagePath, out string imagePath);
+                Emotes.Add(new EmoteItem(tuple.name, tuple.imagePath, sizeMode:tuple.sizeMode));
             }
         }
 

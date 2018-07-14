@@ -8,7 +8,6 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using static EmoteTool.Program;
-using static EmoteTool.ViewModels.MainWindowViewModel;
 
 namespace EmoteTool.ViewModels
 {
@@ -60,7 +59,7 @@ namespace EmoteTool.ViewModels
                 return;
             }
 
-            BitmapImage bitmapImage = SetUpImage(filePath);
+            BitmapImage bitmapImage = SetUpImage(filePath, out string tempActualPath);
             string name = _vm.NewEmote.Name;
             if (name != SortName())
             {
@@ -68,8 +67,10 @@ namespace EmoteTool.ViewModels
                 name = _vm.DialogViewModel.WatermarkName;
             }
 
-            filePath = EmoteItem.RenameImage(name);
-            var item = new EmoteItem(name, bitmapImage, filePath);
+            bitmapImage = null;
+            EmoteItem.RenameImage(name, tempActualPath);
+            bitmapImage = CreateImage(filePath);
+            var item = new EmoteItem(name, filePath, bitmapImage);
 
             if (HandleBrowserParameter(parameter, item))
             {
@@ -80,7 +81,7 @@ namespace EmoteTool.ViewModels
         }
 
         private void CheckError()
-        {
+        { 
             bool isNameNull = string.IsNullOrWhiteSpace(_browsedItem?.Name);
             if (!isNameNull && _browsedItem?.ResizedImage == null)
             {
@@ -149,14 +150,27 @@ namespace EmoteTool.ViewModels
             return dialogChosen;
         }
 
-        public BitmapImage SetUpImage(string fileName)
+        public BitmapImage SetUpImage(string fileName, out string imagePath)
         {
-            string imagePath = EmoteItem.CopyImage(fileName);
+            imagePath = EmoteItem.CopyImage(fileName);
 
-            Image image = Image.FromFile(imagePath);
-            Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize);
-            BitmapImage bitmapImage = ImageToBitmapImage(resized);
+            BitmapImage bitmapImage = CreateImage(imagePath);
 
+            return bitmapImage;
+        }
+
+        private BitmapImage CreateImage(string imagePath)
+        {
+            BitmapImage bitmapImage;
+            using (Image image = Image.FromFile(imagePath))
+            {
+                using (Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize))
+                {
+                    bitmapImage = ImageToBitmapImage(resized);
+                }
+                
+            }
+            
             return bitmapImage;
         }
 
@@ -211,7 +225,7 @@ namespace EmoteTool.ViewModels
                 return i == _vm.Emotes.Count + 1 ? name : HandleBadName();
             }
 
-            if (!string.IsNullOrWhiteSpace(name) && !isInList && name != Seperator)
+            if (!string.IsNullOrWhiteSpace(name) && !isInList)
             {
                 return name;
             }
@@ -251,29 +265,14 @@ namespace EmoteTool.ViewModels
             _vm.Emotes.Add(item);
             if (!string.IsNullOrWhiteSpace(item?.ImagePath))
             {
-                Settings.SavedEmotes.Add(item.Name + Seperator + item.ImagePath + Seperator + item.SizeMode);
+                Settings.SavedEmotes.Add((item.Name, item.ImagePath, item.SizeMode));
                 return;
             }
 
-            if (item?.ResizedImage?.UriSource != null || item?.ResizedImage?.BaseUri != null)
+            if (!string.IsNullOrWhiteSpace(_browsedItem?.ImagePath))
             {
-                Settings.SavedEmotes.Add(item.Name + Seperator + item.ResizedImage.UriSource?.AbsolutePath);
-                return;
-            }
-
-            if (_browsedItem != null)
-            {
-                if (!string.IsNullOrWhiteSpace(_browsedItem.ImagePath))
-                {
-                    Settings.SavedEmotes.Add(
-                        _browsedItem.Name + Seperator + _browsedItem.ImagePath + Seperator + _browsedItem.SizeMode);
-                }
-
-                if (_browsedItem.ResizedImage?.UriSource != null || _browsedItem.ResizedImage?.BaseUri != null)
-                {
-                    Settings.SavedEmotes.Add(
-                        _browsedItem.Name + Seperator + _browsedItem.ResizedImage.UriSource?.AbsolutePath);
-                }
+                Settings.SavedEmotes.Add(
+                    (_browsedItem.Name, _browsedItem.ImagePath, _browsedItem.SizeMode));
             }
 
             throw new NullReferenceException("Image path is empty.");

@@ -79,7 +79,7 @@
 
             <Image MaxWidth="{Binding MainViewModel.NewEmote.ImageWidth.Width}"
                    MaxHeight="{Binding MainViewModel.NewEmote.ImageWidth.Height}"
-                   Source="{Binding Text, ElementName=ImagePath}" />
+                   Source="{Binding Text, ElementName=ActualImagePath}" />
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Center"

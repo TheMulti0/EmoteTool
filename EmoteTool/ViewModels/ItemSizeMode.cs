@@ -1,6 +1,6 @@
 ﻿namespace EmoteTool.ViewModels
 {
-    internal enum ItemSizeMode
+    public enum ItemSizeMode
     {
         Standard = 65,
         Large = 105

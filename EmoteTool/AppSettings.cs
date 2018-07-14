@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using EmoteTool.ViewModels;
 
 namespace EmoteTool
 {
     public class AppSettings
     {
-        public List<string> SavedEmotes { get; set; }
+        public List<(string name,
+                     string imagePath,
+                     ItemSizeMode sizeMode)> 
+            SavedEmotes { get; set; }
     }
 }

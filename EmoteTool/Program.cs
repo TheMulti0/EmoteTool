@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Windows.Media.Imaging;
+using EmoteTool.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -36,11 +38,10 @@ namespace EmoteTool
             _settingsFolderPath = Path.Combine(appData, @"EmoteTool\");
             SettingsPath = Path.Combine(_settingsFolderPath, "settings.json");
 
-            if (Directory.Exists(_settingsFolderPath))
+            if (!Directory.Exists(_settingsFolderPath))
             {
-                return;
+                Directory.CreateDirectory(_settingsFolderPath);
             }
-            Directory.CreateDirectory(_settingsFolderPath);
         }
 
         private static void ReadSettings()
@@ -51,11 +52,11 @@ namespace EmoteTool
                 string json = File.ReadAllText(SettingsPath);
                 var jsonObject = (JObject) JsonConvert.DeserializeObject(json);
 
-                Settings.SavedEmotes = JsonConvert.DeserializeObject<List<string>>(jsonObject["SavedEmotes"].ToString());
+                Settings.SavedEmotes = JsonConvert.DeserializeObject<List<(string, string, ItemSizeMode)>>(jsonObject["SavedEmotes"].ToString());
             }
             catch
             {
-                // ignored
+                Settings.SavedEmotes = new List<(string name, string imagePath, ItemSizeMode sizeMode)>();
             }
         }
 
