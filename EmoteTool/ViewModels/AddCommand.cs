@@ -68,6 +68,7 @@ namespace EmoteTool.ViewModels
                 name = _vm.DialogViewModel.WatermarkName;
             }
 
+            filePath = EmoteItem.RenameImage(name);
             var item = new EmoteItem(name, bitmapImage, filePath);
 
             if (HandleBrowserParameter(parameter, item))
@@ -150,7 +151,9 @@ namespace EmoteTool.ViewModels
 
         public BitmapImage SetUpImage(string fileName)
         {
-            Image image = Image.FromFile(fileName);
+            string imagePath = EmoteItem.CopyImage(fileName);
+
+            Image image = Image.FromFile(imagePath);
             Bitmap resized = ImageToResizedBitmap(image, _vm.IconSize);
             BitmapImage bitmapImage = ImageToBitmapImage(resized);
 

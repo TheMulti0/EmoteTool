@@ -58,7 +58,7 @@ namespace EmoteTool.ViewModels
             _mainVm.RemoveSelectedItemFromFile(selectedItem.Name);
             string itemString = selectedItem.Name +
                                 MainWindowViewModel.Seperator +
-                                selectedItem.ImagePath +
+                                selectedItem.ActualImagePath +
                                 MainWindowViewModel.Seperator +
                                 selectedItem.SizeMode;
             Settings.SavedEmotes.Add(itemString);

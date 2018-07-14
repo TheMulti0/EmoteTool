@@ -28,7 +28,7 @@ namespace EmoteTool.Views
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             _size = _dialogVm.DragSize;
-            
+                
             (double width, double xPosition) = GetWidth(e.HorizontalChange);
             (double height, double yPosition) = GetHeight(e.VerticalChange);
 

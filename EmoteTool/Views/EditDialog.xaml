@@ -40,21 +40,28 @@
             <StackPanel Grid.Column="0" Grid.Row="0"
                         Orientation="Vertical" Margin="15, 15" >
                 <!--Name-->
-                <Grid MaxWidth="200">
-                    <TextBlock Text="Rename emote"
+                <StackPanel>
+
+                    <TextBlock Text="Emote Name:"
+                               FontWeight="Medium"
+                               Foreground="{DynamicResource PrimaryHueMidBrush}" />
+
+                    <Grid MaxWidth="200">
+                        <TextBlock Text="Type the desirable name here"
                            Foreground="{DynamicResource PrimaryHueMidBrush}"
                            Padding="4">
-                        <TextBlock.Visibility>
-                            <MultiBinding Converter="{StaticResource TextStateToVisibility}">
-                                <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
-                                <Binding ElementName="EmoteName" Path="IsFocused" />
-                            </MultiBinding>
-                        </TextBlock.Visibility>
-                    </TextBlock>
+                            <TextBlock.Visibility>
+                                <MultiBinding Converter="{StaticResource TextStateToVisibility}">
+                                    <Binding ElementName="EmoteName" Path="Text.IsEmpty" />
+                                    <Binding ElementName="EmoteName" Path="IsFocused" />
+                                </MultiBinding>
+                            </TextBlock.Visibility>
+                        </TextBlock>
 
-                    <TextBox Name="EmoteName" Background="Transparent"
+                        <TextBox Name="EmoteName" Background="Transparent"
                              Text="{Binding MainViewModel.SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                    </Grid>
+                </StackPanel>
 
                 <!--<TextBlock Text="{Binding MainViewModel.SelectedItem.Name}"
                            FontWeight="Medium" HorizontalAlignment="Center"

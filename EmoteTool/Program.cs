@@ -12,6 +12,7 @@ namespace EmoteTool
     {
         private static string _settingsFolderPath;
         public static string SettingsPath { get; set; }
+        public static string ImagesPath { get; set; }
         public static AppSettings Settings { get; set; }
 
         [STAThread]
@@ -21,6 +22,10 @@ namespace EmoteTool
 
             SetPath();
             ReadSettings();
+
+            ImagesPath = Path.Combine(
+                _settingsFolderPath,
+                @"Images\");
 
             App.Main();
         }

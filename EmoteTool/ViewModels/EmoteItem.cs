@@ -1,12 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using EmoteTool.Annotations;
+using EmoteTool.Properties;
 using Size = System.Drawing.Size;
+using static EmoteTool.Program;
 
 namespace EmoteTool.ViewModels
 {
@@ -30,6 +33,8 @@ namespace EmoteTool.ViewModels
 
         public BitmapImage ResizedImage { get; set; }
 
+        public string ActualImagePath { get; set; }
+
         public string ImagePath
         {
             get => _imagePath;
@@ -37,6 +42,11 @@ namespace EmoteTool.ViewModels
             {
                 _imagePath = value;
                 OnPropertyChanged();
+                if (ActualImagePath.EndsWith(Name))
+                {
+                    return;
+                }
+                ActualImagePath = CopyImage(value);
             }
         }
 
@@ -84,8 +94,31 @@ namespace EmoteTool.ViewModels
             ResizedImage = resizedImage;
 
             ImagePath = path ?? resizedImage.UriSource?.AbsolutePath;
+            ActualImagePath = Path.Combine(
+                ImagePath,
+                Name);
             SizeMode = sizeMode;
             SetSize();
+        }
+
+        public static string CopyImage(string path)
+        {
+            string newPath = Path.Combine(
+                ImagesPath,
+                "Image1");
+            File.Copy(path, newPath);
+
+            return newPath;
+        }
+
+        public static string RenameImage(string newName, string oldName = "Image1")
+        {
+            string filePath = Path.Combine(
+                ImagesPath,
+                oldName);
+            string newFilePath = filePath.Replace(oldName, newName);
+            File.Move(filePath, newFilePath);
+            return newFilePath;
         }
 
         private static double PointToPixels(double points)

@@ -5,7 +5,6 @@ using System.IO;
 using System.Windows;
 using EmoteTool.Properties;
 using EmoteTool.ViewModels;
-using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using static EmoteTool.Program;
 
