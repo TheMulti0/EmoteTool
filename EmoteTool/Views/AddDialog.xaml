@@ -19,6 +19,7 @@
         <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
         <viewModels:AddErrorToDescription x:Key="AddErrorToDescription" />
+        <viewModels:StringToCachedImage x:Key="StringToImage" />
 
     </material:DialogHost.Resources>
     
@@ -68,7 +69,7 @@
                                Foreground="White" />
 
                 </Grid>
-                
+
                 <Button Content="Browse" 
                         Margin="5, 0" HorizontalAlignment="Right"
                         Command="{Binding AddCommand}"
@@ -79,7 +80,7 @@
 
             <Image MaxWidth="{Binding MainViewModel.NewEmote.ImageWidth.Width}"
                    MaxHeight="{Binding MainViewModel.NewEmote.ImageWidth.Height}"
-                   Source="{Binding Text, ElementName=ActualImagePath}" />
+                   Source="{Binding MainViewModel.NewEmote.ActualImagePath, Converter={StaticResource StringToImage}}" />
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Center"

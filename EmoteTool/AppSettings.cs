@@ -5,8 +5,10 @@ namespace EmoteTool
 {
     public class AppSettings
     {
-        public List<(string name,
+        public List<(int id,
+                     string name,
                      string imagePath,
+                     string actualImagePath,
                      ItemSizeMode sizeMode)> 
             SavedEmotes { get; set; }
     }

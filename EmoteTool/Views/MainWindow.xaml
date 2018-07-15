@@ -18,6 +18,7 @@
     <Window.Resources>
 
         <viewModels:BoolToOpacityConverter x:Key="BoolToOpacity" />
+        <viewModels:StringToCachedImage x:Key="StringToImage" />
 
         <ControlTemplate x:Key="EmotesTemplate"
                          TargetType="ListView">
@@ -44,7 +45,7 @@
                     <Image HorizontalAlignment="Center" VerticalAlignment="Center"
                            Width="{Binding ImageSize.Width}"
                            Height="{Binding ImageSize.Height}"
-                           Source="{Binding ResizedImage}" />
+                           Source="{Binding ActualImagePath, Converter={StaticResource StringToImage}}" />
 
                     <TextBlock HorizontalAlignment="Center" Margin="0, 5"
                                Text="{Binding Name}"

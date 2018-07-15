@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -16,9 +14,9 @@ namespace EmoteTool.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
-        private EmoteItem _selectedItem;
-        private EmoteItem _newEmote;
         private ItemError _errorLabel;
+        private EmoteItem _newEmote;
+        private EmoteItem _selectedItem;
 
         public static double NameFontSize { get; private set; }
 
@@ -37,8 +35,7 @@ namespace EmoteTool.ViewModels
                 {
                     return;
                 }
-                if (value == null &&
-                    _selectedItem != null)
+                if (value == null && _selectedItem != null)
                 {
                     return;
                 }
@@ -84,18 +81,20 @@ namespace EmoteTool.ViewModels
 
             CopyCommand = new CopyCommand(this);
             RemoveCommand = new CommandFactory(RemoveImage);
-                
+
             DialogViewModel = new DialogViewModel(this);
 
             Emotes = new ObservableCollection<EmoteItem>();
             NewEmote = new EmoteItem();
 
-            IconSize = new Size((int) ItemSizeMode.Standard, (int) ItemSizeMode.Standard);
+            IconSize = new Size(32, 32);
             ErrorLabel = ItemError.None;
             ItemSizeModes = Enum.GetValues(typeof(ItemSizeMode));
 
             ReadSavedEmotes();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void RemoveImage(object item)
         {
@@ -128,20 +127,18 @@ namespace EmoteTool.ViewModels
             }
 
             var tuple = Settings.SavedEmotes.Find(t => t.name == name);
-
             Settings.SavedEmotes.Remove(tuple);
+            File.Delete(SelectedItem.ActualImagePath);
         }
 
         private void ReadSavedEmotes()
         {
             foreach (var tuple in Settings.SavedEmotes)
             {
-                BitmapImage resizedImage = DialogViewModel.AddCommand.SetUpImage(tuple.imagePath, out string imagePath);
-                Emotes.Add(new EmoteItem(tuple.name, tuple.imagePath, sizeMode:tuple.sizeMode));
+                BitmapImage resizedImage = DialogViewModel.AddCommand.CreateImage(tuple.actualImagePath);
+                Emotes.Add(new EmoteItem(tuple.id, tuple.name, tuple.imagePath, resizedImage, tuple.sizeMode));
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

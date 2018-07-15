@@ -1,15 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using EmoteTool.Annotations;
-using EmoteTool.Properties;
 using Size = System.Drawing.Size;
 using static EmoteTool.Program;
 
@@ -24,11 +20,17 @@ namespace EmoteTool.ViewModels
         private string _imagePath;
         private string _actualImagePath;
 
+        public int Id { get; set; }
+
         public string Name
         {
             get => _name;
             set
             {
+                if (ActualImagePath != null)
+                {
+                    ActualImagePath = _actualImagePath?.Replace(_name, value);
+                }
                 _name = value;
                 OnPropertyChanged();
             }
@@ -36,8 +38,20 @@ namespace EmoteTool.ViewModels
 
         public BitmapImage ResizedImage { get; set; }
 
-        public string ActualImagePath { get; set; }
-    
+        public string ActualImagePath
+        {
+            get => _actualImagePath;
+            set
+            {
+                if (_actualImagePath != null)
+                {
+                    RenameImage(Path.GetFileNameWithoutExtension(value), _actualImagePath);
+                }
+                _actualImagePath = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string ImagePath
         {
             get => _imagePath;
@@ -78,20 +92,23 @@ namespace EmoteTool.ViewModels
             }
         }
 
-        public EmoteItem()
+        public EmoteItem(ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
+            SizeMode = sizeMode;
+            SetSize();
         }
 
         public EmoteItem(
+            int id,
             string name,
             string path,
-            BitmapImage resizedImage = null,
+            BitmapImage resizedImage,
             ItemSizeMode sizeMode = ItemSizeMode.Standard)
         {
             Name = name;
-            ResizedImage = resizedImage ?? new BitmapImage(new Uri(path));
+            ResizedImage = resizedImage;
 
-            ActualImagePath = Path.Combine(ImagesPath, Name, Path.GetExtension(path));
+            ActualImagePath = Path.Combine(ImagesPath, Name + Path.GetExtension(path));
             ImagePath = path;
             
             SizeMode = sizeMode;
@@ -118,8 +135,11 @@ namespace EmoteTool.ViewModels
         public static string RenameImage(string newName, string oldPath)
         {
             string newFilePath = oldPath.Replace(Path.GetFileNameWithoutExtension(oldPath), newName);
-            File.Copy(oldPath, newFilePath, true);
-            File.Delete(oldPath);
+            if (File.Exists(newFilePath))
+            {
+                File.Delete(newFilePath);
+            }
+            File.Move(oldPath, newFilePath);
             
             return newFilePath;
         }

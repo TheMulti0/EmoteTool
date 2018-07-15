@@ -52,11 +52,11 @@ namespace EmoteTool
                 string json = File.ReadAllText(SettingsPath);
                 var jsonObject = (JObject) JsonConvert.DeserializeObject(json);
 
-                Settings.SavedEmotes = JsonConvert.DeserializeObject<List<(string, string, ItemSizeMode)>>(jsonObject["SavedEmotes"].ToString());
+                Settings.SavedEmotes = JsonConvert.DeserializeObject<List<(int, string, string, string, ItemSizeMode)>>(jsonObject["SavedEmotes"].ToString());
             }
             catch
             {
-                Settings.SavedEmotes = new List<(string name, string imagePath, ItemSizeMode sizeMode)>();
+                Settings.SavedEmotes = new List<(int id, string name, string imagePath, string actualImagePath, ItemSizeMode sizeMode)>();
             }
         }
 

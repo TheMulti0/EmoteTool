@@ -135,7 +135,10 @@ namespace EmoteTool.ViewModels
             DefaultWatermark = "Enter text for emote name";
 
             AddCommand = new AddCommand(MainViewModel);
-            AddDialogCommand = new CommandFactory(() => IsAddDialogOpen = !IsAddDialogOpen);
+            AddDialogCommand = new CommandFactory(() =>
+            {
+                IsAddDialogOpen = !IsAddDialogOpen;
+            });
             EditDialogCommand = new EditDialogCommand(MainViewModel, this);
 
             WatermarkName = DefaultWatermark;

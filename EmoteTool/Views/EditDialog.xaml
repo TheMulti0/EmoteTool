@@ -19,6 +19,7 @@
 
         <viewModels:TextStateToVisibilityConverter x:Key="TextStateToVisibility" />
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
+        <viewModels:StringToCachedImage x:Key="StringToImage" />
 
     </material:DialogHost.Resources>
 
@@ -125,7 +126,7 @@
                 <Image x:Name="ImagePreview"
                        MaxWidth="300"
                        MaxHeight="300"
-                       Source="{Binding MainViewModel.SelectedItem.ActualImagePath}" />
+                       Source="{Binding MainViewModel.SelectedItem.ActualImagePath, Converter={StaticResource StringToImage}}" />
 
                 <Canvas>
                     <Canvas.Resources>
