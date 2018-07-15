@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using EmoteTool.Annotations;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using EmoteTool.Annotations;
 
 namespace EmoteTool.ViewModels
 {
@@ -15,8 +15,10 @@ namespace EmoteTool.ViewModels
         private bool _isAnyDialogOpen;
         private bool _isAddDialogOpen;
         private bool _isEditDialogOpen;
+        private bool _doesOriginalmageExists;
         private Size _dragSize;
         private Point _dragPosition;
+
 
         public MainWindowViewModel MainViewModel { get; set; }
 
@@ -84,6 +86,21 @@ namespace EmoteTool.ViewModels
 
                 _isEditDialogOpen = value;
                 IsAnyDialogOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool DoesOriginalImageExists
+        {
+            get => _doesOriginalmageExists;
+            set
+            {
+                if (value == _doesOriginalmageExists)
+                {
+                    return;
+                }
+
+                _doesOriginalmageExists = value;
                 OnPropertyChanged();
             }
         }

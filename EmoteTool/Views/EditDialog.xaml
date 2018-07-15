@@ -75,21 +75,45 @@
                         <Rectangle RadiusX="7.5" RadiusY="7.5"
                                Height="32"
                                Fill="{DynamicResource PrimaryHueMidBrush}"
-                               Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" />
+                               Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" >
+                        </Rectangle>
 
                         <TextBlock x:Name="ImagePath" Panel.ZIndex="1"
                                VerticalAlignment="Center" Margin="5, 5"
-                               Text="{Binding MainViewModel.SelectedItem.ImagePath}"
                                FontSize="14" FontWeight="Medium"
-                               Foreground="White" />
+                               Foreground="White"
+                                   >
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DoesOriginalImageExists}" Value="True">
+                                            <Setter Property="Text" Value="{Binding MainViewModel.SelectedItem.ImagePath}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DoesOriginalImageExists}" Value="False">
+                                            <Setter Property="Text" 
+                                                    Value="Image Does Not Exist In The Original Folder, However It Is Still Saved Inside The Program" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
 
                     </Grid>
 
                     <Button Content="Browse" Margin="5, 0"
                         HorizontalAlignment="Right"
                         Command="{Binding AddCommand}"
-                        CommandParameter="Browse"
-                        Style="{DynamicResource MaterialDesignFlatButton}" />
+                        CommandParameter="Browse">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DoesOriginalImageExists}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                 </StackPanel>
                 <!--Size Mode-->
