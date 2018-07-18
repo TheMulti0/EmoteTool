@@ -409,6 +409,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+<<<<<<< HEAD
 
 # Cake - Uncomment if you are using it
 # tools/**
@@ -443,3 +444,6 @@ ASALocalRun/
 
 
 # End of https://www.gitignore.io/api/rider,jetbrains,visualstudio
+=======
+/packages/
+>>>>>>> 237448dc5e16cb1d3aea81f1ac3d58f4665b7501
