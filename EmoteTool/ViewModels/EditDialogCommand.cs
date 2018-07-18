@@ -34,8 +34,8 @@ namespace EmoteTool.ViewModels
             }
             if (!_dialogVm.IsEditDialogOpen)
             {
-                _dialogVm.DoesOriginalImageExists = File.Exists(_vm.SelectedItem.ImagePath);
                 _dialogVm.IsEditDialogOpen = true;
+                bool result = _vm.SelectedItem.DoesOriginalImageExist;
                 return;
             }
             _dialogVm.IsEditDialogOpen = false;

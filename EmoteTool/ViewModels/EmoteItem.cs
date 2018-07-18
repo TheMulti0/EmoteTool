@@ -13,12 +13,27 @@ namespace EmoteTool.ViewModels
 {
     internal class EmoteItem : INotifyPropertyChanged
     {
+        private bool _doesOriginalImageExist;
+        private string _actualImagePath;
+        private string _imagePath;
         private ItemSizeMode _sizeMode;
         private Size _itemSize;
         private Size _imageSize;
         private string _name;
-        private string _imagePath;
-        private string _actualImagePath;
+
+        public bool DoesOriginalImageExist
+        {
+            get
+            {
+                bool result = File.Exists(ImagePath);
+                if (result != _doesOriginalImageExist)
+                {
+                    _doesOriginalImageExist = result;
+                    OnPropertyChanged();
+                }
+                return result;
+            }
+        }
 
         public int Id { get; set; }
 

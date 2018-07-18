@@ -78,18 +78,17 @@
                                Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" >
                         </Rectangle>
 
-                        <TextBlock x:Name="ImagePath" Panel.ZIndex="1"
-                               VerticalAlignment="Center" Margin="5, 5"
-                               FontSize="14" FontWeight="Medium"
-                               Foreground="White"
-                                   >
+                        <TextBlock x:Name="ImagePath"
+                                   Panel.ZIndex="1" VerticalAlignment="Center" Margin="5, 5"
+                                   FontSize="14" FontWeight="Medium"
+                                   Foreground="White">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DoesOriginalImageExists}" Value="True">
+                                        <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist}" Value="True">
                                             <Setter Property="Text" Value="{Binding MainViewModel.SelectedItem.ImagePath}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding DoesOriginalImageExists}" Value="False">
+                                        <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist}" Value="False">
                                             <Setter Property="Text" 
                                                     Value="Image Does Not Exist In The Original Folder, However It Is Still Saved Inside The Program" />
                                         </DataTrigger>
@@ -107,7 +106,7 @@
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding DoesOriginalImageExists}" Value="False">
+                                    <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
