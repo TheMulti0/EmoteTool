@@ -21,6 +21,24 @@
         <viewModels:StringToVisibilityConverter x:Key="StringToVisibility" />
         <viewModels:StringToCachedImage x:Key="StringToImage" />
 
+        <Style x:Key="WarningLabel"
+               TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist}" Value="False">
+                    <Setter Property="Text" Value="The original image doesn't exist in this path! &#13; The image still exists in the programs backups and can be used." />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ImagePathPanelStyle"
+               TargetType="Panel">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
     </material:DialogHost.Resources>
 
     <material:DialogHost.InputBindings>
@@ -40,12 +58,15 @@
 
             <StackPanel Grid.Column="0" Grid.Row="0"
                         Orientation="Vertical" Margin="15, 15" >
+
+                <TextBlock Name="WarningLabel"
+                           Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           FontWeight="Light"
+                           Foreground="DarkGray"
+                           Style="{StaticResource WarningLabel}" />
+
                 <!--Name-->
                 <StackPanel>
-
-                    <TextBlock Text="Emote Name:"
-                               FontWeight="Medium"
-                               Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
                     <Grid MaxWidth="200">
                         <TextBlock Text="Type the desirable name here"
@@ -68,51 +89,28 @@
                            FontWeight="Medium" HorizontalAlignment="Center"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" />-->
 
-                <StackPanel Orientation="Horizontal" Margin="0, 5">
+                <StackPanel Orientation="Horizontal" Margin="0, 5"
+                            Style="{StaticResource ImagePathPanelStyle}">
                     <!--Path-->
                     <Grid Margin="0,5">
 
                         <Rectangle RadiusX="7.5" RadiusY="7.5"
-                               Height="32"
-                               Fill="{DynamicResource PrimaryHueMidBrush}"
-                               Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" >
+                                   Height="32"
+                                   Fill="{DynamicResource PrimaryHueMidBrush}"
+                                   Visibility="{Binding Text, ElementName=ImagePath, Converter={StaticResource StringToVisibility}}" >
                         </Rectangle>
 
                         <TextBlock x:Name="ImagePath"
+                                   Text="{Binding MainViewModel.SelectedItem.ImagePath}"
                                    Panel.ZIndex="1" VerticalAlignment="Center" Margin="5, 5"
                                    FontSize="14" FontWeight="Medium"
-                                   Foreground="White">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist}" Value="True">
-                                            <Setter Property="Text" Value="{Binding MainViewModel.SelectedItem.ImagePath}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist}" Value="False">
-                                            <Setter Property="Text" 
-                                                    Value="Image Does Not Exist In The Original Folder, However It Is Still Saved Inside The Program" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-
+                                   Foreground="White" />
                     </Grid>
 
                     <Button Content="Browse" Margin="5, 0"
-                        HorizontalAlignment="Right"
-                        Command="{Binding AddCommand}"
-                        CommandParameter="Browse">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MainViewModel.SelectedItem.DoesOriginalImageExist, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                            HorizontalAlignment="Right"
+                            Command="{Binding AddCommand}"
+                            CommandParameter="Browse" />
 
                 </StackPanel>
                 <!--Size Mode-->
@@ -182,10 +180,10 @@
                         <ControlTemplate x:Key="ResizerRectTemplate" TargetType="ContentControl">
                             <Grid>
                                 <Control Template="{StaticResource ResizeDecoratorTemplate}"
-                                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
                                 <views:DragThumb Template="{StaticResource DragThumbTemplate}"
-                                DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                Cursor="SizeAll"/>
+                                                 DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                 Cursor="SizeAll"/>
                             </Grid>
                         </ControlTemplate>
 
